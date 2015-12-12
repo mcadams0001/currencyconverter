@@ -8,16 +8,16 @@
 	<aop:aspectj-autoproxy/>
 	<context:annotation-config/>
 
-	<bean id="settingService" class="org.adam.currency.services.SettingServiceImpl" />
+	<bean id="settingService" class="org.adam.currency.service.SettingServiceImpl" />
 
     <bean id="restTemplate" class="org.springframework.web.client.RestTemplate">
         <constructor-arg>
             <bean class="org.springframework.http.client.HttpComponentsClientHttpRequestFactory">
-                <property name="connectTimeout" value="#{settingService.connectTimeout()}"/>
-                <property name="readTimeout" value="#{settingService.connectTimeout()}"/>
+                <property name="connectTimeout" value="#{settingService.getConnectionTimeout()}"/>
+                <property name="readTimeout" value="#{settingService.getConnectionTimeout()}"/>
             </bean>
         </constructor-arg>
     </bean>
 
-	<context:component-scan base-package="org.adam.currency.services" />
+	<context:component-scan base-package="org.adam.currency.service" />
 </beans>

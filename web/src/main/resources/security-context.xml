@@ -6,17 +6,34 @@
            http://www.springframework.org/schema/security
            http://www.springframework.org/schema/security/spring-security.xsd">
 
+    <global-method-security pre-post-annotations="enabled" />
+
     <http pattern="/version" security="none"/>
     <http pattern="/css/**" security="none"/>
     <http pattern="/js/**" security="none"/>
     <http pattern="/images/**" security="none"/>
+    <http pattern="/login**" security="none"/>
+    <http pattern="/register**" security="none"/>
 
-    <http auto-config="true" >
+    <http auto-config="false" >
         <intercept-url pattern="/**" access="hasRole('ROLE_USER')" />
-        <form-login  login-processing-url="/login" authentication-failure-url="/accessDenied" />
+        <intercept-url pattern="/login.html" access="permitAll"/>
+        <intercept-url pattern="/register.html" access="permitAll"/>
+        <form-login login-processing-url="/login.html"
+                    always-use-default-target="true"
+                    default-target-url="/"
+                    authentication-failure-url="/login.html?error"/>
+        <!--<logout invalidate-session="true" logout-url="/logout.html" logout-success-url="/login.html" delete-cookies="JSESSIONID"/>-->
+      <!--  <session-management invalid-session-url="/login.html?time=1">
+            <concurrency-control max-sessions="1" expired-url="/login.html?time=1" error-if-maximum-exceeded="true"/>
+        </session-management>
+        <session-management invalid-session-url="/invalidSession.html" />-->
+        <csrf disabled="true"/>
     </http>
 
-    <authentication-manager alias="authenticationManager"/>
+    <authentication-manager alias="authenticationManager">
+        <authentication-provider user-service-ref="userDetailsService"/>
+    </authentication-manager>
 
     <beans:bean class="org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler"/>
 </beans:beans>

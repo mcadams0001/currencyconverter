@@ -12,6 +12,7 @@ public class Address implements Serializable {
     @Id
     @SequenceGenerator(name = "ADDRESS_ID_GEN", sequenceName = "ADDRESS_ID_SEQ", allocationSize = 1)
     @GeneratedValue(generator = "ADDRESS_ID_GEN")
+    @Column(name = "ADDRESS_ID")
     private Long id;
 
     @Column(name = "STREET")
@@ -42,6 +43,26 @@ public class Address implements Serializable {
         this.country = country;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public String getStreet() {
+        return street;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public String getPostCode() {
+        return postCode;
+    }
+
+    public Country getCountry() {
+        return country;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -68,5 +89,15 @@ public class Address implements Serializable {
                 .append(postCode)
                 .append(country)
                 .toHashCode();
+    }
+
+    @Override
+    public String toString() {
+        return "Address{" +
+                "street='" + street + '\'' +
+                ", city='" + city + '\'' +
+                ", postCode='" + postCode + '\'' +
+                ", country=" + country +
+                '}';
     }
 }

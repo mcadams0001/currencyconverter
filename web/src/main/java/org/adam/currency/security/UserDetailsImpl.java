@@ -24,13 +24,13 @@ public class UserDetailsImpl implements UserDetails {
     @Override
     public Collection<GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> roles = new ArrayList<>();
-        user.getRoles().stream().map(Role::getName).map(RoleNameEnum::name).forEach(roleName -> roles.add(new SimpleGrantedAuthority(roleName)));
+        user.getRoles().stream().filter(u->u.getName() != null).map(Role::getName).map(RoleNameEnum::name).forEach(roleName -> roles.add(new SimpleGrantedAuthority(roleName)));
         return roles;
     }
 
     @Override
     public String getPassword() {
-        return null;
+        return user.getPassword();
     }
 
     @Override

@@ -37,78 +37,6 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>com.samaxes.maven</groupId>
-                <artifactId>minify-maven-plugin</artifactId>
-                <version>1.6.2</version>
-                <executions>
-                    <execution>
-                        <id>minify-rurency</id>
-                        <phase>prepare-package</phase>
-                        <configuration>
-                            <charset>UTF-8</charset>
-                            <cssSourceDir>css</cssSourceDir>
-                            <cssSourceFiles>
-                                <cssSourceFile>jquery-ui.css</cssSourceFile>
-                                <cssSourceFile>jquery.dataTables.css</cssSourceFile>
-                                <cssSourceFile>currency-custom.css</cssSourceFile>
-                            </cssSourceFiles>
-                            <cssFinalFile>currency.css</cssFinalFile>
-                            <jsSourceDir>js</jsSourceDir>
-                            <jsSourceFiles>
-                                <jsSourceFile>jquery/jquery.min.js</jsSourceFile>
-                                <jsSourceFile>jquery/jquery.noconflict.js</jsSourceFile>
-                                <jsSourceFile>jquery/jquery-ui.min.js</jsSourceFile>
-                                <jsSourceFile>jquery/jquery-dateFormat.js</jsSourceFile>
-                                <jsSourceFile>jquery/jquery.form-3.51.0.js</jsSourceFile>
-                                <jsSourceFile>jquery/jquery.bgiframe-3.0.1.js</jsSourceFile>
-                                <jsSourceFile>jquery/jquery.metadata.js</jsSourceFile>
-                                <!--<jsSourceFile>jquery/jquery.hotkeys.js</jsSourceFile>
-                                     <jsSourceFile>jquery/bootstrap.min.js</jsSourceFile>
-                                     <jsSourceFile>jquery/bootstrap-wysiwyg.js</jsSourceFile>-->
-                                <jsSourceFile>jquery/jquery.dataTables.js</jsSourceFile>
-                                <jsSourceFile>jquery/jquery.dataTables.RangeFilter.js</jsSourceFile>
-                                <jsSourceFile>jquery/jquery.fileDownload.js</jsSourceFile>
-                                <jsSourceFile>jquery/jquery.blockUI.js</jsSourceFile>
-                                <jsSourceFile>jquery/moment.js</jsSourceFile>
-                                <jsSourceFile>handlebars/handlebars.runtime-v1.3.0.js</jsSourceFile>
-                                <jsSourceFile>handlebars/handlebars.operator.js</jsSourceFile>
-                                <jsSourceFile>handlebars/helpers.js</jsSourceFile>
-                            </jsSourceFiles>
-                            <jsFinalFile>currency.js</jsFinalFile>
-                        </configuration>
-                        <goals>
-                            <goal>minify</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>com.github.jknack</groupId>
-                <artifactId>handlebars-maven-plugin</artifactId>
-                <version>1.3.1</version>
-                <executions>
-                    <execution>
-                        <id>precompile-handlebars</id>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>precompile</goal>
-                        </goals>
-                        <configuration>
-                            <output>${basedir}/src/main/webapp/js/handlebars/helpers.js</output>
-                            <prefix>${basedir}/src/main/templates</prefix>
-                            <suffix>.hbs</suffix>
-                            <minimize>false</minimize>
-                            <includeRuntime>false</includeRuntime>
-                            <amd>false</amd>
-                            <encoding>UTF-8</encoding>
-                            <templates>
-                                <template>form</template>
-                            </templates>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
                 <groupId>org.eclipse.jetty</groupId>
                 <artifactId>jetty-maven-plugin</artifactId>
                 <version>${jetty.version}</version>
@@ -120,16 +48,16 @@
                         <jettyEnvXml>${project.basedir}/target/classes/jetty-env.xml</jettyEnvXml>
                     </webApp>
                     <httpConnector>
-                        <port>7001</port>
+                        <port>8080</port>
                     </httpConnector>
-                    <stopKey />
-                    <stopPort />
+                    <stopKey/>
+                    <stopPort/>
                 </configuration>
                 <dependencies>
                     <dependency>
-                        <groupId>com.oracle</groupId>
-                        <artifactId>ojdbc6</artifactId>
-                        <version>11.2.0.1.0</version>
+                        <groupId>com.h2database</groupId>
+                        <artifactId>h2</artifactId>
+                        <version>${h2.version}</version>
                     </dependency>
                     <dependency>
                         <groupId>org.eclipse.jetty</groupId>
@@ -411,13 +339,16 @@
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
-            <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-dbcp2</artifactId>
-            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-validator</groupId>
+            <artifactId>commons-validator</artifactId>
         </dependency>
 
         <dependency>
@@ -437,7 +368,6 @@
 
 
     </dependencies>
-
 
 
 </project>

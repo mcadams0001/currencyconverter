@@ -13,6 +13,7 @@ public class Role implements Serializable {
     @Id
     @SequenceGenerator(name = "ROLE_ID_GEN", sequenceName = "ROLE_ID_SEQ", allocationSize = 1)
     @GeneratedValue(generator = "ROLE_ID_GEN")
+    @Column(name = "ROLE_ID")
     private Long id;
 
     @Column(name = "ROLE_NAME")

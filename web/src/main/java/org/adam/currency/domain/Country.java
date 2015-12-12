@@ -10,7 +10,7 @@ import javax.persistence.Table;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "COUNTRY")
+@Table(name = "COUNTRIES")
 public class Country implements Serializable{
 
     @Id
@@ -20,12 +20,16 @@ public class Country implements Serializable{
     @Column(name = "COUNTRY_NAME")
     private String name;
 
+    @Column(name = "POST_CODE_REGEXP")
+    private String postCodeRegExp;
+
     public Country() {
     }
 
-    public Country(String code, String name) {
+    public Country(String code, String name, String postCodeRegExp) {
         this.code = code;
         this.name = name;
+        this.postCodeRegExp = postCodeRegExp;
     }
 
     public String getCode() {
@@ -34,6 +38,10 @@ public class Country implements Serializable{
 
     public String getName() {
         return name;
+    }
+
+    public String getPostCodeRegExp() {
+        return postCodeRegExp;
     }
 
     @Override

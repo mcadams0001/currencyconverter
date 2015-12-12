@@ -5,6 +5,7 @@ import org.adam.currency.domain.Country;
 public class CountryBuilder {
     private String code;
     private String name;
+    private String postCodeRegExp;
 
     public CountryBuilder withCode(String code){
         this.code = code;
@@ -16,7 +17,12 @@ public class CountryBuilder {
         return this;
     }
 
+    public CountryBuilder withPostCodeRegExp(String postCodeRegExp) {
+        this.postCodeRegExp = postCodeRegExp;
+        return this;
+    }
+
     public Country build() {
-        return new Country(code, name);
+        return new Country(code, name, postCodeRegExp);
     }
 }

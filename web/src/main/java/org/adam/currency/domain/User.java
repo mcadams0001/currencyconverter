@@ -1,11 +1,14 @@
 package org.adam.currency.domain;
 
+import org.adam.currency.helper.CollectionHelper;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,10 +20,14 @@ public class User {
     @Id
     @SequenceGenerator(name = "USER_ID_GEN", sequenceName = "USER_ID_SEQ", allocationSize = 1)
     @GeneratedValue(generator = "USER_ID_GEN")
+    @Column(name = "USER_ID")
     private Long id;
 
     @Column(name = "USER_NAME")
     private String name;
+
+    @Column(name = "PASSWORD")
+    private String password;
 
     @Column(name = "FIRST_NAME")
     private String firstName;
@@ -30,6 +37,9 @@ public class User {
 
     @Column(name = "EMAIL_ADDRESS")
     private String emailAddress;
+
+    @Column(name = "BIRTH_DATE")
+    private LocalDate birthDate;
 
     @LazyCollection(LazyCollectionOption.FALSE)
     @ManyToMany(cascade = {CascadeType.REFRESH}, targetEntity = Role.class)
@@ -44,16 +54,17 @@ public class User {
      * Default constructor used by Hibernate.
      */
     public User() {
-        //Does nothing.
+        this.roles = new ArrayList<>();
     }
 
-    public User(Long id, String name, String firstName, String lastName, String emailAddress, List<Role> roles, Address address) {
+    public User(Long id, String name, String password, String firstName, String lastName, String emailAddress, List<Role> roles, Address address) {
         this.id = id;
         this.name = name;
+        this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.emailAddress = emailAddress;
-        this.roles = roles;
+        this.roles = CollectionHelper.defensiveCopy(roles);
         this.address = address;
     }
 
@@ -63,6 +74,10 @@ public class User {
 
     public String getName() {
         return name;
+    }
+
+    public String getPassword() {
+        return password;
     }
 
     public String getFirstName() {
@@ -78,7 +93,7 @@ public class User {
     }
 
     public List<Role> getRoles() {
-        return roles;
+        return CollectionHelper.defensiveCopy(roles);
     }
 
     public Address getAddress() {
@@ -96,6 +111,7 @@ public class User {
         return new EqualsBuilder()
                 .append(id, user.id)
                 .append(name, user.name)
+                .append(password, user.password)
                 .append(firstName, user.firstName)
                 .append(lastName, user.lastName)
                 .append(emailAddress, user.emailAddress)
@@ -108,6 +124,7 @@ public class User {
         return new HashCodeBuilder(17, 37)
                 .append(id)
                 .append(name)
+                .append(password)
                 .append(firstName)
                 .append(lastName)
                 .append(emailAddress)

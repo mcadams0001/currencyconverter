@@ -1,5 +1,8 @@
 package org.adam.currency.service;
 
+import org.adam.currency.command.UserCommand;
+import org.adam.currency.common.RoleNameEnum;
+import org.adam.currency.domain.Role;
 import org.adam.currency.domain.User;
 
 /**
@@ -7,4 +10,6 @@ import org.adam.currency.domain.User;
  */
 public interface UserService {
     User findUserByName(String name);
+    void createUser(UserCommand command);
+    Role findRoleByName(RoleNameEnum name);
 }

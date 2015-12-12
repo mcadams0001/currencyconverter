@@ -4,16 +4,14 @@ import org.adam.currency.common.SettingField;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "SETTINGS")
 public class Setting {
     @Id
     @Column(name = "NAME")
+    @Enumerated(EnumType.STRING)
     private SettingField name;
 
     @Column(name = "VAL")

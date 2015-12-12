@@ -3,10 +3,12 @@ package org.adam.currency.service;
 import org.adam.currency.repository.GenericRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 import java.util.List;
 
+@Transactional
 @Service("genericService")
 public class GenericServiceImpl implements GenericService {
     @Autowired
