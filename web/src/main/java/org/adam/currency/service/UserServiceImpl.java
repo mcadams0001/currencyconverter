@@ -8,6 +8,7 @@ import org.adam.currency.domain.Address;
 import org.adam.currency.domain.Country;
 import org.adam.currency.domain.Role;
 import org.adam.currency.domain.User;
+import org.adam.currency.helper.DateHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,11 +31,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void createUser(UserCommand command) {
+    public User createUser(UserCommand command) {
         Role defaultRole = findRoleByName(RoleNameEnum.ROLE_USER);
         Address address = toAddress(command);
         genericService.save(address);
-        genericService.save(toUser(command, defaultRole, address));
+        User user = toUser(command, defaultRole, address);
+        genericService.save(user);
+        return user;
     }
 
     @Override
@@ -48,9 +51,11 @@ public class UserServiceImpl implements UserService {
     }
 
     private User toUser(UserCommand command, Role defaultRole, Address address) {
-        return new UserBuilder().withName(command.getUserName()).withEmailAddress(command.getEmail())
+        return new UserBuilder().withName(command.getName()).withEmailAddress(command.getEmail())
                 .withFirstName(command.getFirstName()).withLastName(command.getLastName())
-                .withPassword(command.getPassword()).withRoles(Collections.singletonList(defaultRole))
+                .withPassword(command.getPassword())
+                .withBirthDate(DateHelper.stringToDateTime(command.getBirthDate()))
+                .withRoles(Collections.singletonList(defaultRole))
                 .withAddress(address).build();
 
     }

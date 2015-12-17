@@ -5,6 +5,7 @@ import org.adam.currency.fixture.CountryFixture;
 import org.adam.currency.fixture.UserFixture;
 import org.adam.currency.service.CountryService;
 import org.adam.currency.service.UserService;
+import org.apache.log4j.Level;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,9 +21,9 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class UserRegistrationValidatorTest {
+public class UserCommandValidatorTest {
 
-    private UserRegistrationValidator validator;
+    private UserCommandValidator validator;
 
     @Mock
     private UserService mockUserService;
@@ -32,7 +33,8 @@ public class UserRegistrationValidatorTest {
 
     @Before
     public void beforeTest() throws Exception {
-        validator = new UserRegistrationValidator(mockUserService, mockCountryService);
+        UserCommandValidator.LOGGER.setLevel(Level.OFF);
+        validator = new UserCommandValidator(mockUserService, mockCountryService);
     }
 
     @Test
@@ -52,7 +54,7 @@ public class UserRegistrationValidatorTest {
         BindException errors = new BindException(command, "command");
         when(mockCountryService.findByCode(anyString())).thenReturn(CountryFixture.UK);
         validator.validate(command, errors);
-        verify(mockUserService).findUserByName(command.getUserName());
+        verify(mockUserService).findUserByName(command.getName());
         verify(mockCountryService).findByCode(command.getCountry());
         assertThat(errors.hasErrors(), equalTo(false));
     }
@@ -64,25 +66,25 @@ public class UserRegistrationValidatorTest {
         when(mockUserService.findUserByName(anyString())).thenReturn(UserFixture.TEST_USER);
         when(mockCountryService.findByCode(anyString())).thenReturn(CountryFixture.UK);
         validator.validate(command, errors);
-        verify(mockUserService).findUserByName(command.getUserName());
+        verify(mockUserService).findUserByName(command.getName());
         verify(mockCountryService).findByCode(command.getCountry());
         assertThat(errors.getErrorCount(), equalTo(1));
-        assertThat(errors.hasFieldErrors("userName"), equalTo(true));
-        assertThat(errors.getFieldError("userName").getCode(), equalTo("error.userName.already.exists"));
+        assertThat(errors.hasFieldErrors("name"), equalTo(true));
+        assertThat(errors.getFieldError("name").getCode(), equalTo("error.name.already.exists"));
     }
 
     @Test
     public void shouldRejectEmptyUserName() throws Exception {
         UserCommand command = createValidCommand();
-        command.setUserName("");
+        command.setName("");
         BindException errors = new BindException(command, "command");
         when(mockCountryService.findByCode(anyString())).thenReturn(CountryFixture.UK);
         validator.validate(command, errors);
-        verify(mockUserService, never()).findUserByName(command.getUserName());
+        verify(mockUserService, never()).findUserByName(command.getName());
         verify(mockCountryService).findByCode(command.getCountry());
         assertThat(errors.getErrorCount(), equalTo(1));
-        assertThat(errors.hasFieldErrors("userName"), equalTo(true));
-        assertThat(errors.getFieldError("userName").getCode(), equalTo("error.value.cannot.be.blank"));
+        assertThat(errors.hasFieldErrors("name"), equalTo(true));
+        assertThat(errors.getFieldError("name").getCode(), equalTo("error.blank"));
     }
 
     @Test
@@ -93,11 +95,11 @@ public class UserRegistrationValidatorTest {
         BindException errors = new BindException(command, "command");
         when(mockCountryService.findByCode(anyString())).thenReturn(CountryFixture.UK);
         validator.validate(command, errors);
-        verify(mockUserService).findUserByName(command.getUserName());
+        verify(mockUserService).findUserByName(command.getName());
         verify(mockCountryService).findByCode(command.getCountry());
         assertThat(errors.getErrorCount(), equalTo(1));
         assertThat(errors.hasFieldErrors("password"), equalTo(true));
-        assertThat(errors.getFieldError("password").getCode(), equalTo("error.value.cannot.be.blank"));
+        assertThat(errors.getFieldError("password").getCode(), equalTo("error.blank"));
     }
 
     @Test
@@ -108,7 +110,7 @@ public class UserRegistrationValidatorTest {
         BindException errors = new BindException(command, "command");
         when(mockCountryService.findByCode(anyString())).thenReturn(CountryFixture.UK);
         validator.validate(command, errors);
-        verify(mockUserService).findUserByName(command.getUserName());
+        verify(mockUserService).findUserByName(command.getName());
         verify(mockCountryService).findByCode(command.getCountry());
         assertThat(errors.getErrorCount(), equalTo(1));
         assertThat(errors.hasFieldErrors("password"), equalTo(true));
@@ -123,7 +125,7 @@ public class UserRegistrationValidatorTest {
         BindException errors = new BindException(command, "command");
         when(mockCountryService.findByCode(anyString())).thenReturn(CountryFixture.UK);
         validator.validate(command, errors);
-        verify(mockUserService).findUserByName(command.getUserName());
+        verify(mockUserService).findUserByName(command.getName());
         verify(mockCountryService).findByCode(command.getCountry());
         assertThat(errors.getErrorCount(), equalTo(1));
         assertThat(errors.hasFieldErrors("repeatPassword"), equalTo(true));
@@ -139,13 +141,13 @@ public class UserRegistrationValidatorTest {
         when(mockUserService.findUserByName(anyString())).thenReturn(null);
         when(mockCountryService.findByCode(anyString())).thenReturn(CountryFixture.UK);
         validator.validate(command, errors);
-        verify(mockUserService).findUserByName(command.getUserName());
+        verify(mockUserService).findUserByName(command.getName());
         verify(mockCountryService).findByCode(command.getCountry());
         assertThat(errors.getErrorCount(), equalTo(2));
         assertThat(errors.hasFieldErrors("firstName"), equalTo(true));
-        assertThat(errors.getFieldError("firstName").getCode(), equalTo("error.value.cannot.be.blank"));
+        assertThat(errors.getFieldError("firstName").getCode(), equalTo("error.blank"));
         assertThat(errors.hasFieldErrors("lastName"), equalTo(true));
-        assertThat(errors.getFieldError("lastName").getCode(), equalTo("error.value.cannot.be.blank"));
+        assertThat(errors.getFieldError("lastName").getCode(), equalTo("error.blank"));
     }
 
     @Test
@@ -155,11 +157,11 @@ public class UserRegistrationValidatorTest {
         BindException errors = new BindException(command, "command");
         when(mockCountryService.findByCode(anyString())).thenReturn(CountryFixture.UK);
         validator.validate(command, errors);
-        verify(mockUserService).findUserByName(command.getUserName());
+        verify(mockUserService).findUserByName(command.getName());
         verify(mockCountryService).findByCode(command.getCountry());
         assertThat(errors.getErrorCount(), equalTo(1));
         assertThat(errors.hasFieldErrors("email"), equalTo(true));
-        assertThat(errors.getFieldError("email").getCode(), equalTo("error.value.cannot.be.blank"));
+        assertThat(errors.getFieldError("email").getCode(), equalTo("error.blank"));
     }
 
     @Test
@@ -169,12 +171,41 @@ public class UserRegistrationValidatorTest {
         BindException errors = new BindException(command, "command");
         when(mockCountryService.findByCode(anyString())).thenReturn(CountryFixture.UK);
         validator.validate(command, errors);
-        verify(mockUserService).findUserByName(command.getUserName());
+        verify(mockUserService).findUserByName(command.getName());
         verify(mockCountryService).findByCode(command.getCountry());
         assertThat(errors.getErrorCount(), equalTo(1));
         assertThat(errors.hasFieldErrors("email"), equalTo(true));
         assertThat(errors.getFieldError("email").getCode(), equalTo("error.email.not.valid"));
     }
+
+    @Test
+    public void shouldRejectEmptyBirthDate() throws Exception {
+        UserCommand command = createValidCommand();
+        command.setBirthDate("");
+        BindException errors = new BindException(command, "command");
+        when(mockCountryService.findByCode(anyString())).thenReturn(CountryFixture.UK);
+        validator.validate(command, errors);
+        verify(mockUserService).findUserByName(command.getName());
+        verify(mockCountryService).findByCode(command.getCountry());
+        assertThat(errors.getErrorCount(), equalTo(1));
+        assertThat(errors.hasFieldErrors("birthDate"), equalTo(true));
+        assertThat(errors.getFieldError("birthDate").getCode(), equalTo("error.blank"));
+    }
+
+    @Test
+    public void shouldRejectInvalidBirthDate() throws Exception {
+        UserCommand command = createValidCommand();
+        command.setBirthDate("10-10-2999");
+        BindException errors = new BindException(command, "command");
+        when(mockCountryService.findByCode(anyString())).thenReturn(CountryFixture.UK);
+        validator.validate(command, errors);
+        verify(mockUserService).findUserByName(command.getName());
+        verify(mockCountryService).findByCode(command.getCountry());
+        assertThat(errors.getErrorCount(), equalTo(1));
+        assertThat(errors.hasFieldErrors("birthDate"), equalTo(true));
+        assertThat(errors.getFieldError("birthDate").getCode(), equalTo("error.invalid.date.format"));
+    }
+
 
     @Test
     public void shouldRejectEmptyStreet() throws Exception {
@@ -183,11 +214,11 @@ public class UserRegistrationValidatorTest {
         BindException errors = new BindException(command, "command");
         when(mockCountryService.findByCode(anyString())).thenReturn(CountryFixture.UK);
         validator.validate(command, errors);
-        verify(mockUserService).findUserByName(command.getUserName());
+        verify(mockUserService).findUserByName(command.getName());
         verify(mockCountryService).findByCode(command.getCountry());
         assertThat(errors.getErrorCount(), equalTo(1));
         assertThat(errors.hasFieldErrors("street"), equalTo(true));
-        assertThat(errors.getFieldError("street").getCode(), equalTo("error.value.cannot.be.blank"));
+        assertThat(errors.getFieldError("street").getCode(), equalTo("error.blank"));
     }
 
     @Test
@@ -197,11 +228,11 @@ public class UserRegistrationValidatorTest {
         BindException errors = new BindException(command, "command");
         when(mockCountryService.findByCode(anyString())).thenReturn(CountryFixture.UK);
         validator.validate(command, errors);
-        verify(mockUserService).findUserByName(command.getUserName());
+        verify(mockUserService).findUserByName(command.getName());
         verify(mockCountryService).findByCode(command.getCountry());
         assertThat(errors.getErrorCount(), equalTo(1));
         assertThat(errors.hasFieldErrors("city"), equalTo(true));
-        assertThat(errors.getFieldError("city").getCode(), equalTo("error.value.cannot.be.blank"));
+        assertThat(errors.getFieldError("city").getCode(), equalTo("error.blank"));
     }
 
     @Test
@@ -211,7 +242,7 @@ public class UserRegistrationValidatorTest {
         BindException errors = new BindException(command, "command");
         when(mockCountryService.findByCode(anyString())).thenReturn(CountryFixture.UK);
         validator.validate(command, errors);
-        verify(mockUserService).findUserByName(command.getUserName());
+        verify(mockUserService).findUserByName(command.getName());
         verify(mockCountryService, never()).findByCode(command.getCountry());
         assertThat(errors.getErrorCount(), equalTo(1));
         assertThat(errors.hasFieldErrors("country"), equalTo(true));
@@ -225,7 +256,7 @@ public class UserRegistrationValidatorTest {
         BindException errors = new BindException(command, "command");
         when(mockCountryService.findByCode(anyString())).thenReturn(null);
         validator.validate(command, errors);
-        verify(mockUserService).findUserByName(command.getUserName());
+        verify(mockUserService).findUserByName(command.getName());
         verify(mockCountryService).findByCode(command.getCountry());
         assertThat(errors.getErrorCount(), equalTo(1));
         assertThat(errors.hasFieldErrors("country"), equalTo(true));
@@ -239,11 +270,11 @@ public class UserRegistrationValidatorTest {
         BindException errors = new BindException(command, "command");
         when(mockCountryService.findByCode(anyString())).thenReturn(CountryFixture.UK);
         validator.validate(command, errors);
-        verify(mockUserService).findUserByName(command.getUserName());
+        verify(mockUserService).findUserByName(command.getName());
         verify(mockCountryService).findByCode(command.getCountry());
         assertThat(errors.getErrorCount(), equalTo(1));
         assertThat(errors.hasFieldErrors("postCode"), equalTo(true));
-        assertThat(errors.getFieldError("postCode").getCode(), equalTo("error.value.cannot.be.blank"));
+        assertThat(errors.getFieldError("postCode").getCode(), equalTo("error.blank"));
     }
 
     @Test
@@ -253,7 +284,7 @@ public class UserRegistrationValidatorTest {
         BindException errors = new BindException(command, "command");
         when(mockCountryService.findByCode(anyString())).thenReturn(CountryFixture.UK);
         validator.validate(command, errors);
-        verify(mockUserService).findUserByName(command.getUserName());
+        verify(mockUserService).findUserByName(command.getName());
         verify(mockCountryService).findByCode(command.getCountry());
         assertThat(errors.getErrorCount(), equalTo(1));
         assertThat(errors.hasFieldErrors("postCode"), equalTo(true));
@@ -268,7 +299,7 @@ public class UserRegistrationValidatorTest {
         BindException errors = new BindException(command, "command");
         when(mockCountryService.findByCode(anyString())).thenReturn(CountryFixture.UK);
         validator.validate(command, errors);
-        verify(mockUserService).findUserByName(command.getUserName());
+        verify(mockUserService).findUserByName(command.getName());
         verify(mockCountryService, never()).findByCode(command.getCountry());
         assertThat(errors.getErrorCount(), equalTo(1));
         assertThat(errors.hasFieldErrors("country"), equalTo(true));
@@ -283,7 +314,7 @@ public class UserRegistrationValidatorTest {
         BindException errors = new BindException(command, "command");
         when(mockCountryService.findByCode(anyString())).thenReturn(null);
         validator.validate(command, errors);
-        verify(mockUserService).findUserByName(command.getUserName());
+        verify(mockUserService).findUserByName(command.getName());
         verify(mockCountryService).findByCode(command.getCountry());
         assertThat(errors.getErrorCount(), equalTo(1));
         assertThat(errors.hasFieldErrors("country"), equalTo(true));
@@ -293,12 +324,13 @@ public class UserRegistrationValidatorTest {
     private UserCommand createValidCommand() {
         UserCommand command = new UserCommand();
         User user = UserFixture.TEST_USER;
-        command.setUserName(user.getName());
+        command.setName(user.getName());
         command.setPassword(user.getPassword());
         command.setRepeatPassword(user.getPassword());
         command.setEmail(user.getEmailAddress());
         command.setFirstName(user.getFirstName());
         command.setLastName(user.getLastName());
+        command.setBirthDate("01-Apr-1981");
         command.setCity(user.getAddress().getCity());
         command.setStreet(user.getAddress().getStreet());
         command.setPostCode(user.getAddress().getPostCode());

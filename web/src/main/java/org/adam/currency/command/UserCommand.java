@@ -4,23 +4,24 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 public class UserCommand {
-    private String userName;
+    private String name;
     private String password;
     private String repeatPassword;
     private String firstName;
     private String lastName;
     private String email;
+    private String birthDate;
     private String street;
     private String city;
     private String postCode;
     private String country;
 
-    public String getUserName() {
-        return userName;
+    public String getName() {
+        return name;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getPassword() {
@@ -95,37 +96,47 @@ public class UserCommand {
         this.lastName = lastName;
     }
 
+    public String getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(String birthDate) {
+        this.birthDate = birthDate;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
 
         if (o == null || getClass() != o.getClass()) return false;
 
-        UserCommand that = (UserCommand) o;
+        UserCommand command = (UserCommand) o;
 
         return new EqualsBuilder()
-                .append(userName, that.userName)
-                .append(password, that.password)
-                .append(repeatPassword, that.repeatPassword)
-                .append(firstName, that.firstName)
-                .append(lastName, that.lastName)
-                .append(email, that.email)
-                .append(street, that.street)
-                .append(city, that.city)
-                .append(postCode, that.postCode)
-                .append(country, that.country)
+                .append(name, command.name)
+                .append(password, command.password)
+                .append(repeatPassword, command.repeatPassword)
+                .append(firstName, command.firstName)
+                .append(lastName, command.lastName)
+                .append(email, command.email)
+                .append(birthDate, command.birthDate)
+                .append(street, command.street)
+                .append(city, command.city)
+                .append(postCode, command.postCode)
+                .append(country, command.country)
                 .isEquals();
     }
 
     @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 37)
-                .append(userName)
+                .append(name)
                 .append(password)
                 .append(repeatPassword)
                 .append(firstName)
                 .append(lastName)
                 .append(email)
+                .append(birthDate)
                 .append(street)
                 .append(city)
                 .append(postCode)

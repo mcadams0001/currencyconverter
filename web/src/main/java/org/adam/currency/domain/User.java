@@ -43,7 +43,7 @@ public class User {
 
     @LazyCollection(LazyCollectionOption.FALSE)
     @ManyToMany(cascade = {CascadeType.REFRESH}, targetEntity = Role.class)
-    @JoinTable(name = "USER_ROLE", joinColumns = @JoinColumn(name = "USER_ID"), inverseJoinColumns = @JoinColumn(name = "ROLE_ID"))
+    @JoinTable(name = "USER_ROLES", joinColumns = @JoinColumn(name = "USER_ID"), inverseJoinColumns = @JoinColumn(name = "ROLE_ID"))
     private List<Role> roles;
 
     @ManyToOne
@@ -57,13 +57,14 @@ public class User {
         this.roles = new ArrayList<>();
     }
 
-    public User(Long id, String name, String password, String firstName, String lastName, String emailAddress, List<Role> roles, Address address) {
+    public User(Long id, String name, String password, String firstName, String lastName, String emailAddress, LocalDate birthDate, List<Role> roles, Address address) {
         this.id = id;
         this.name = name;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.emailAddress = emailAddress;
+        this.birthDate = birthDate;
         this.roles = CollectionHelper.defensiveCopy(roles);
         this.address = address;
     }
@@ -92,6 +93,10 @@ public class User {
         return emailAddress;
     }
 
+    public LocalDate getBirthDate() {
+        return birthDate;
+    }
+
     public List<Role> getRoles() {
         return CollectionHelper.defensiveCopy(roles);
     }
@@ -115,6 +120,7 @@ public class User {
                 .append(firstName, user.firstName)
                 .append(lastName, user.lastName)
                 .append(emailAddress, user.emailAddress)
+                .append(birthDate, user.birthDate)
                 .append(address, user.address)
                 .isEquals();
     }
@@ -128,7 +134,10 @@ public class User {
                 .append(firstName)
                 .append(lastName)
                 .append(emailAddress)
+                .append(birthDate)
                 .append(address)
                 .toHashCode();
     }
+
+
 }

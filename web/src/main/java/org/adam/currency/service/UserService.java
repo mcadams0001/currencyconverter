@@ -10,6 +10,6 @@ import org.adam.currency.domain.User;
  */
 public interface UserService {
     User findUserByName(String name);
-    void createUser(UserCommand command);
+    User createUser(UserCommand command);
     Role findRoleByName(RoleNameEnum name);
 }

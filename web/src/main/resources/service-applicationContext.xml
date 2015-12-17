@@ -8,6 +8,10 @@
 	<aop:aspectj-autoproxy/>
 	<context:annotation-config/>
 
+    <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+        <property name="basename" value="cc"/>
+    </bean>
+
 	<bean id="settingService" class="org.adam.currency.service.SettingServiceImpl" />
 
     <bean id="restTemplate" class="org.springframework.web.client.RestTemplate">

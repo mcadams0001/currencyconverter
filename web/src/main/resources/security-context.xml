@@ -17,7 +17,6 @@
 
     <http auto-config="false" >
         <intercept-url pattern="/**" access="hasRole('ROLE_USER')" />
-        <intercept-url pattern="/login.html" access="permitAll"/>
         <intercept-url pattern="/register.html" access="permitAll"/>
         <form-login login-processing-url="/login.html"
                     always-use-default-target="true"

@@ -1,33 +1,33 @@
 package org.adam.currency.command;
 
-import org.adam.currency.common.Constants;
 import org.adam.currency.domain.Country;
+import org.adam.currency.helper.DateHelper;
 import org.adam.currency.service.CountryService;
 import org.adam.currency.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.EmailValidator;
-import org.apache.commons.validator.util.ValidatorUtils;
 import org.apache.log4j.Logger;
 import org.springframework.validation.Errors;
+import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class UserRegistrationValidator implements Validator {
-    public static final Logger LOGGER = Logger.getLogger(UserRegistrationValidator.class);
+public class UserCommandValidator implements Validator {
+    public static final Logger LOGGER = Logger.getLogger(UserCommandValidator.class);
 
     private UserService userService;
     private CountryService countryService;
 
-    public UserRegistrationValidator(UserService userService, CountryService countryService) {
+    public UserCommandValidator(UserService userService, CountryService countryService) {
         this.userService = userService;
         this.countryService = countryService;
     }
 
     @Override
     public boolean supports(Class<?> aClass) {
-        return aClass.equals(UserCommand.class);
+        return UserCommand.class.equals(aClass);
     }
 
     @Override
@@ -35,31 +35,36 @@ public class UserRegistrationValidator implements Validator {
         UserCommand command = (UserCommand) o;
         validateUserName(errors, command);
         validatePassword(errors, command);
-        validateFirstAndLastName(errors, command);
+        validateFirstAndLastName(errors);
         validateEmailAddress(errors, command);
+        validateBirthDate(errors, command);
         validateAddress(errors, command);
+    }
+
+    private void validateBirthDate(Errors errors, UserCommand command) {
+        if(StringUtils.isBlank(command.getBirthDate())) {
+            errors.rejectValue("birthDate", "error.blank");
+        } else if(!DateHelper.isCorrectDate(command.getBirthDate())) {
+            errors.rejectValue("birthDate", "error.invalid.date.format", new Object[]{DateHelper.APPLICATION_DATE_FORMAT}, null);
+        }
     }
 
     private void validateEmailAddress(Errors errors, UserCommand command) {
         if (StringUtils.isBlank(command.getEmail())) {
-            errors.rejectValue("email", "error.value.cannot.be.blank");
+            errors.rejectValue("email", "error.blank");
         } else if (!EmailValidator.getInstance().isValid(command.getEmail())) {
             errors.rejectValue("email", "error.email.not.valid");
         }
     }
 
-    private void validateFirstAndLastName(Errors errors, UserCommand command) {
-        if (StringUtils.isBlank(command.getFirstName())) {
-            errors.rejectValue("firstName", "error.value.cannot.be.blank");
-        }
-        if (StringUtils.isBlank(command.getLastName())) {
-            errors.rejectValue("lastName", "error.value.cannot.be.blank");
-        }
+    private void validateFirstAndLastName(Errors errors) {
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "firstName", "error.blank");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "lastName", "error.blank");
     }
 
     private void validatePassword(Errors errors, UserCommand command) {
         if (StringUtils.isEmpty(command.getPassword())) {
-            errors.rejectValue("password", "error.value.cannot.be.blank");
+            errors.rejectValue("password", "error.blank");
         } else if(command.getPassword().length() < 8) {
             errors.rejectValue("password", "error.password.too.short", new Object[]{"8"}, null);
         } else if (!command.getPassword().equals(command.getRepeatPassword())) {
@@ -68,20 +73,16 @@ public class UserRegistrationValidator implements Validator {
     }
 
     private void validateUserName(Errors errors, UserCommand command) {
-        if (StringUtils.isEmpty(command.getUserName())) {
-            errors.rejectValue("userName", "error.value.cannot.be.blank");
-        } else if (userService.findUserByName(command.getUserName()) != null) {
-            errors.rejectValue("userName", "error.userName.already.exists");
+        if (StringUtils.isEmpty(command.getName())) {
+            errors.rejectValue("name", "error.blank");
+        } else if (userService.findUserByName(command.getName()) != null) {
+            errors.rejectValue("name", "error.name.already.exists");
         }
     }
 
     private void validateAddress(Errors errors, UserCommand command) {
-        if (StringUtils.isBlank(command.getStreet())) {
-            errors.rejectValue("street", "error.value.cannot.be.blank");
-        }
-        if (StringUtils.isBlank(command.getCity())) {
-            errors.rejectValue("city", "error.value.cannot.be.blank");
-        }
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "street", "error.blank");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "city", "error.blank");
         Country country = validateCountry(errors, command);
         validatePostCode(errors, country, command.getPostCode());
 
@@ -104,7 +105,7 @@ public class UserRegistrationValidator implements Validator {
 
     private void validatePostCode(Errors errors, Country country, String postCode) {
         if (StringUtils.isBlank(postCode)) {
-            errors.rejectValue("postCode", "error.value.cannot.be.blank");
+            errors.rejectValue("postCode", "error.blank");
             return;
         }
         if (country == null || StringUtils.isEmpty(country.getPostCodeRegExp())) {

@@ -29,4 +29,10 @@ public class UserServiceImplTest {
         verify(mockGenericService).findByName(User.class, "name", "test_user");
         assertThat(user, sameInstance(expectedUser));
     }
+
+    @Test
+    public void shouldCreateUser() throws Exception {
+
+    }
+
 }

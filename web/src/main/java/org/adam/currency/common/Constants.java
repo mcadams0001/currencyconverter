@@ -10,7 +10,6 @@ public interface Constants {
     interface Parameters {
         String COMMAND = "command";
         String COUNTRIES = "countries";
+        String USER = "user";
     }
-
-    String SELECT_VALUE = "-- Please Select --";
 }
