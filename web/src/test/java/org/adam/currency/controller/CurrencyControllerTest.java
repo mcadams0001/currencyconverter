@@ -1,10 +1,12 @@
 package org.adam.currency.controller;
 
+import org.adam.currency.builder.CurrencyDTOBuilder;
 import org.adam.currency.builder.CurrencyResponseBuilder;
 import org.adam.currency.command.CurrencyCommand;
 import org.adam.currency.common.Constants;
 import org.adam.currency.domain.Currency;
 import org.adam.currency.domain.User;
+import org.adam.currency.dto.CurrencyDTO;
 import org.adam.currency.dto.CurrencyResponse;
 import org.adam.currency.fixture.CurrencyFixture;
 import org.adam.currency.fixture.UserFixture;
@@ -76,12 +78,12 @@ public class CurrencyControllerTest {
         command.setTo("EUR");
         command.setAmount("125.50");
         command.setDate(LocalDate.of(2016, 1, 30));
-        CurrencyResponse response = new CurrencyResponseBuilder().withSuccess(true).withResult(125.50d).withQuote(0.7d).withTimestamp(LocalDateTime.of(2016, 1, 30, 19, 14, 30)).build();
+        CurrencyDTO response = new CurrencyDTOBuilder().withSuccess(true).withResult(125.50d).withQuote(0.7d).withTimestamp(LocalDateTime.of(2016, 1, 30, 19, 14, 30)).build();
         when(mockCurrencyService.findAll()).thenReturn(CurrencyFixture.CURRENCIES);
         when(mockCurrencyService.convertCurrency(anyString(), anyString(), anyString(), isA(LocalDate.class))).thenReturn(response);
         ResponseEntity<String> responseEntity = controller.convert(command, mockRequest);
         verify(mockCurrencyService).convertCurrency(command.getFrom(), command.getTo(), command.getAmount(), command.getDate());
         assertThat(responseEntity.getStatusCode(), equalTo(HttpStatus.OK));
-        assertThat(responseEntity.getBody(), equalTo("{\r\n  \"success\" : \"true\",\r\n  \"result\" : \"125.5\",\r\n  \"info\" : {\r\n    \"quote\" : \"0.7\",\r\n    \"timestamp\" : \"1454181270\"\r\n  },\r\n  \"error\" : {\r\n    \"code\" : null,\r\n    \"info\" : null\r\n  }\r\n}"));
+        assertThat(responseEntity.getBody(), equalTo("{\r\n  \"success\" : \"true\",\r\n  \"quote\" : \"0.7\",\r\n  \"result\" : \"125.5\",\r\n  \"timestamp\" : \"30-Jan-2016 19:14:30\",\r\n  \"error\" : null\r\n}"));
     }
 }

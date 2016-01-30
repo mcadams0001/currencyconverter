@@ -16,6 +16,7 @@ import java.util.regex.Pattern;
 public final class DateHelper {
     public static final String APPLICATION_DATE_FORMAT = "dd-MMM-yyyy";
     public static final String SERVICE_DATE_FORMAT = "yyyy-MM-dd";
+    public static final String DATE_TIME_FORMAT = "dd-MMM-yyyy HH:mm:ss";
     public static final Pattern DATE_PATTERN = Pattern.compile("\\d{2}-\\w{3}-\\d{4}");
 
     private DateHelper() {
@@ -57,6 +58,15 @@ public final class DateHelper {
      */
     public static String dateToString(LocalDate date) {
         return DateTimeFormatter.ofPattern(SERVICE_DATE_FORMAT).format(date);
+    }
+
+    /**
+     * Formats local date time to a DATE_TIME_FORMAT string.
+     * @param localDateTime instance to be formatted.
+     * @return string with formated date and time.
+     */
+    public static String localDateTimeToString(LocalDateTime localDateTime) {
+        return DateTimeFormatter.ofPattern(DATE_TIME_FORMAT).format(localDateTime);
     }
 
     /**

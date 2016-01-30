@@ -6,8 +6,10 @@ import org.adam.currency.common.CallTypeEnum;
 import org.adam.currency.common.SettingField;
 import org.adam.currency.domain.Currency;
 import org.adam.currency.domain.History;
+import org.adam.currency.dto.CurrencyDTO;
 import org.adam.currency.dto.CurrencyResponse;
 import org.adam.currency.helper.DateHelper;
+import org.adam.currency.helper.ResponseTransformer;
 import org.adam.currency.repository.GenericRepository;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,20 +46,24 @@ public class CurrencyServiceImpl implements CurrencyService {
     }
 
     @Override
-    public CurrencyResponse convertCurrency(String from, String to, String amount, LocalDate date) {
+    public CurrencyDTO convertCurrency(String from, String to, String amount, LocalDate date) {
         Currency currencyFrom = getCurrencyByCode(from);
         Currency currencyTo = getCurrencyByCode(to);
         CurrencyResponse response = getResultFromDatabase(amount, date, currencyFrom, currencyTo);
-        if (response != null) {
-            return response;
+        if (response == null) {
+            response = getResultsFromWebService(amount, date, currencyFrom, currencyTo);
         }
+        return new ResponseTransformer().transform(response);
 
+    }
+
+    private CurrencyResponse getResultsFromWebService(String amount, LocalDate date, Currency currencyFrom, Currency currencyTo) {
+        CurrencyResponse response;
         response = invokeService(currencyFrom.getCode(), currencyTo.getCode(), amount, date);
         if (response != null && response.getSuccess()) {
             historyService.saveHistory(currencyFrom, currencyTo, amount, date, response, CallTypeEnum.WEB_SERVICE);
         }
         return response;
-
     }
 
     private CurrencyResponse getResultFromDatabase(String amount, LocalDate date, Currency currencyFrom, Currency currencyTo) {

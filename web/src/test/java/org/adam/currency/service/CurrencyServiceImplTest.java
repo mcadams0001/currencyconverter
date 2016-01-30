@@ -2,6 +2,7 @@ package org.adam.currency.service;
 
 import org.adam.currency.common.SettingField;
 import org.adam.currency.domain.Currency;
+import org.adam.currency.dto.CurrencyDTO;
 import org.adam.currency.dto.CurrencyResponse;
 import org.adam.currency.fixture.CurrencyFixture;
 import org.adam.currency.fixture.SettingFixture;
@@ -16,7 +17,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -86,14 +86,14 @@ public class CurrencyServiceImplTest {
         when(mockRestTemplate.getForObject(anyString(), eq(String.class))).thenReturn(RESPONSE);
         when(mockGenericRepository.findById(eq(Currency.class), eq("GBP"))).thenReturn(CurrencyFixture.GBP);
         when(mockGenericRepository.findById(eq(Currency.class), eq("EUR"))).thenReturn(CurrencyFixture.EUR);
-        CurrencyResponse currencyResponse = service.convertCurrency("GBP", "EUR", "120.0", LocalDate.of(2016, 1, 30));
+        CurrencyDTO currencyResponse = service.convertCurrency("GBP", "EUR", "120.0", LocalDate.of(2016, 1, 30));
         verify(mockSettingService).getSetting(SettingField.CURRENCY_SERVICE_URL);
         verify(mockSettingService).getSetting(SettingField.ACCESS_KEY);
         verify(mockRestTemplate).getForObject(anyString(), eq(String.class));
-        assertThat(currencyResponse.getInfo().getQuote(), equalTo(0.658443));
-        assertThat(currencyResponse.getInfo().getTimestamp(), equalTo(LocalDateTime.of(2016, 1, 30, 18, 54, 30)));
+        assertThat(currencyResponse.getQuote(), equalTo(0.658443));
+        assertThat(currencyResponse.getTimestamp(), equalTo(LocalDateTime.of(2016, 1, 30, 18, 54, 30)));
         assertThat(currencyResponse.getResult(), equalTo(6.58443));
-        assertThat(currencyResponse.getSuccess(), equalTo(true));
+        assertThat(currencyResponse.isSuccess(), equalTo(true));
     }
 
     @Test
@@ -103,15 +103,15 @@ public class CurrencyServiceImplTest {
         when(mockRestTemplate.getForObject(anyString(), eq(String.class))).thenReturn(ERROR_RESPONSE);
         when(mockGenericRepository.findById(eq(Currency.class), eq("GBP"))).thenReturn(CurrencyFixture.GBP);
         when(mockGenericRepository.findById(eq(Currency.class), eq("EUR"))).thenReturn(CurrencyFixture.EUR);
-        CurrencyResponse currencyResponse = service.convertCurrency("GBP", "EUR", "120.0", LocalDate.of(2016, 1, 30));
+        CurrencyDTO currencyResponse = service.convertCurrency("GBP", "EUR", "120.0", LocalDate.of(2016, 1, 30));
         verify(mockSettingService).getSetting(SettingField.CURRENCY_SERVICE_URL);
         verify(mockSettingService).getSetting(SettingField.ACCESS_KEY);
         verify(mockRestTemplate).getForObject(anyString(), eq(String.class));
-        assertThat(currencyResponse.getInfo().getQuote(), nullValue());
-        assertThat(currencyResponse.getInfo().getTimestamp(), nullValue());
+        assertThat(currencyResponse.getQuote(), nullValue());
+        assertThat(currencyResponse.getTimestamp(), nullValue());
         assertThat(currencyResponse.getResult(), nullValue());
-        assertThat(currencyResponse.getSuccess(), equalTo(false));
-        assertThat(currencyResponse.getError().getInfo(), equalTo("Your monthly usage limit has been reached. Please upgrade your subscription plan."));
+        assertThat(currencyResponse.isSuccess(), equalTo(false));
+        assertThat(currencyResponse.getError(), equalTo("Your monthly usage limit has been reached. Please upgrade your subscription plan."));
     }
 
     @Test
@@ -122,11 +122,11 @@ public class CurrencyServiceImplTest {
         when(mockRestTemplate.getForObject(anyString(), eq(String.class))).thenThrow(new RestClientException("Call failure"));
         when(mockGenericRepository.findById(eq(Currency.class), eq("GBP"))).thenReturn(CurrencyFixture.GBP);
         when(mockGenericRepository.findById(eq(Currency.class), eq("EUR"))).thenReturn(CurrencyFixture.EUR);
-        CurrencyResponse currencyResponse = service.convertCurrency("GBP", "EUR", "120.0", LocalDate.of(2016, 1, 30));
+        CurrencyDTO currencyResponse = service.convertCurrency("GBP", "EUR", "120.0", LocalDate.of(2016, 1, 30));
         verify(mockSettingService).getSetting(SettingField.CURRENCY_SERVICE_URL);
         verify(mockSettingService).getSetting(SettingField.ACCESS_KEY);
         verify(mockRestTemplate).getForObject(anyString(), eq(String.class));
-        assertThat(currencyResponse.getError().getInfo(), equalTo(CurrencyService.MSG_SERVICE_UNAVAILABLE));
+        assertThat(currencyResponse.getError(), equalTo(CurrencyService.MSG_SERVICE_UNAVAILABLE));
     }
 
 

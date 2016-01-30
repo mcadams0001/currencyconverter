@@ -4,6 +4,7 @@ import org.adam.currency.command.CurrencyCommand;
 import org.adam.currency.command.CurrencyCommandValidator;
 import org.adam.currency.common.Constants;
 import org.adam.currency.domain.User;
+import org.adam.currency.dto.CurrencyDTO;
 import org.adam.currency.dto.CurrencyResponse;
 import org.adam.currency.helper.HttpServletHelper;
 import org.adam.currency.security.PrincipalHelper;
@@ -51,7 +52,7 @@ public class CurrencyController {
         if (errors.hasErrors()) {
             return new ResponseEntity<>(HttpStatus.OK);
         }
-        CurrencyResponse currencyResponse = currencyService.convertCurrency(command.getFrom(), command.getTo(), command.getAmount(), command.getDate());
+        CurrencyDTO currencyResponse = currencyService.convertCurrency(command.getFrom(), command.getTo(), command.getAmount(), command.getDate());
         return new ResponseEntity<>(HttpServletHelper.jsonResponse(currencyResponse), httpHeaders, HttpStatus.OK);
     }
 }
