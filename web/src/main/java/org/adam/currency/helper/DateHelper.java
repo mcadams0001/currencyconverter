@@ -83,13 +83,13 @@ public final class DateHelper {
     }
 
     /**
-     * Convert timestamp represented in seconds to LocalDateTime
+     * Convert timestamp represented in seconds to LocalDateTime in CET time zone (from where the service originates).
      * @param timestamp the timestamp in seconds.
      * @return an instance of LocalDateTime.
      */
     public static LocalDateTime timestampToLocalDateTime(long timestamp) {
         if (timestamp == 0)
             return null;
-        return LocalDateTime.ofInstant(Instant.ofEpochSecond(timestamp), TimeZone.getDefault().toZoneId());
+        return LocalDateTime.ofInstant(Instant.ofEpochSecond(timestamp), TimeZone.getTimeZone("CET").toZoneId());
     }
 }
