@@ -4,6 +4,7 @@ import org.junit.Test;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.nullValue;
@@ -45,8 +46,11 @@ public class DateHelperTest {
 
     @Test
     public void shouldConvertTimeStampToLocalDateTime() throws Exception {
+        LocalDateTime expected = LocalDateTime.of(2015, 4, 26, 18, 15, 15);
+        expected.atZone(ZoneId.of("GMT"));
         LocalDateTime localDateTime = DateHelper.timestampToLocalDateTime(1430068515L);
-        assertThat(localDateTime, equalTo(LocalDateTime.of(2015, 4, 26, 18, 15, 15)));
+        localDateTime.atZone(ZoneId.of("GMT"));
+        assertThat(localDateTime, equalTo(expected));
     }
 
     @Test

@@ -53,6 +53,8 @@ public class CurrencyControllerTest {
 
     private User user = UserFixture.TEST_USER;
 
+    private static final String SEPARATOR = System.getProperty("line.separator");
+
     @Before
     public void setUp() throws Exception {
         UserDetailsImpl userDetails = new UserDetailsImpl(user);
@@ -84,6 +86,6 @@ public class CurrencyControllerTest {
         ResponseEntity<String> responseEntity = controller.convert(command, mockRequest);
         verify(mockCurrencyService).convertCurrency(command.getFrom(), command.getTo(), command.getAmount(), command.getDate());
         assertThat(responseEntity.getStatusCode(), equalTo(HttpStatus.OK));
-        assertThat(responseEntity.getBody(), equalTo("{\r\n  \"success\" : \"true\",\r\n  \"quote\" : \"0.7\",\r\n  \"result\" : \"125.5\",\r\n  \"timestamp\" : \"30-Jan-2016 19:14:30\",\r\n  \"error\" : null\r\n}"));
+        assertThat(responseEntity.getBody(), equalTo("{" + SEPARATOR + "  \"success\" : \"true\"," + SEPARATOR + "  \"quote\" : \"0.7\"," + SEPARATOR + "  \"result\" : \"125.5\"," + SEPARATOR + "  \"timestamp\" : \"30-Jan-2016 19:14:30\"," + SEPARATOR + "  \"error\" : null" + SEPARATOR + "}"));
     }
 }
