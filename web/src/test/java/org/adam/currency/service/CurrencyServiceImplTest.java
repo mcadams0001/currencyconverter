@@ -9,6 +9,7 @@ import org.adam.currency.fixture.SettingFixture;
 import org.adam.currency.repository.GenericRepository;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -20,6 +21,7 @@ import org.springframework.web.client.RestTemplate;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.TimeZone;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
@@ -69,6 +71,11 @@ public class CurrencyServiceImplTest {
 
     @Mock
     private RestTemplate mockRestTemplate;
+
+    @Before
+    public void setUp() throws Exception {
+        TimeZone.setDefault(TimeZone.getTimeZone("GMT"));
+    }
 
     @Test
     public void testFindAll() throws Exception {

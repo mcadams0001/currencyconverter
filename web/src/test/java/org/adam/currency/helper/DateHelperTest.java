@@ -1,16 +1,24 @@
 package org.adam.currency.helper;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.TimeZone;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.*;
 
 public class DateHelperTest {
+
+    @Before
+    public void setUp() throws Exception {
+        TimeZone.setDefault(TimeZone.getTimeZone("GMT"));
+    }
+
 
     @Test
     public void testStringToDateTime() throws Exception {
@@ -46,7 +54,7 @@ public class DateHelperTest {
 
     @Test
     public void shouldConvertTimeStampToLocalDateTime() throws Exception {
-        LocalDateTime expected = LocalDateTime.of(2015, 4, 26, 19, 15, 15);
+        LocalDateTime expected = LocalDateTime.of(2015, 4, 26, 17, 15, 15);
         LocalDateTime localDateTime = DateHelper.timestampToLocalDateTime(1430068515L);
         assertThat(localDateTime, equalTo(expected));
     }

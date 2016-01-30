@@ -1,6 +1,7 @@
 package org.adam.currency.helper;
 
 import com.fasterxml.jackson.core.JsonGenerator;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -8,6 +9,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.time.LocalDateTime;
+import java.util.TimeZone;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
@@ -18,6 +20,11 @@ public class LocalDateTimeSerializerTest {
 
     @Mock
     private JsonGenerator mockJsonGenerator;
+
+    @Before
+    public void setUp() throws Exception {
+        TimeZone.setDefault(TimeZone.getTimeZone("GMT"));
+    }
 
     @Test
     public void testSerialize() throws Exception {

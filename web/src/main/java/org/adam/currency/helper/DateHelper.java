@@ -90,6 +90,6 @@ public final class DateHelper {
     public static LocalDateTime timestampToLocalDateTime(long timestamp) {
         if (timestamp == 0)
             return null;
-        return LocalDateTime.ofInstant(Instant.ofEpochSecond(timestamp), TimeZone.getTimeZone("CET").toZoneId());
+        return LocalDateTime.ofInstant(Instant.ofEpochSecond(timestamp), TimeZone.getDefault().toZoneId());
     }
 }

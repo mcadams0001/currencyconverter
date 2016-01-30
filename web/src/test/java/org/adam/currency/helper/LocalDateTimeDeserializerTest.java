@@ -1,12 +1,14 @@
 package org.adam.currency.helper;
 
 import com.fasterxml.jackson.core.JsonParser;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.time.LocalDateTime;
+import java.util.TimeZone;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.*;
@@ -17,6 +19,12 @@ public class LocalDateTimeDeserializerTest {
 
     @Mock
     private JsonParser mockJsonParser;
+
+    @Before
+    public void setUp() throws Exception {
+        TimeZone.setDefault(TimeZone.getTimeZone("GMT"));
+    }
+
 
     @Test
     public void testDeserialize() throws Exception {
