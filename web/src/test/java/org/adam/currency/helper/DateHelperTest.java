@@ -47,9 +47,8 @@ public class DateHelperTest {
     @Test
     public void shouldConvertTimeStampToLocalDateTime() throws Exception {
         LocalDateTime expected = LocalDateTime.of(2015, 4, 26, 18, 15, 15);
-        expected.atZone(ZoneId.of("GMT"));
+        expected.atZone(ZoneId.systemDefault());
         LocalDateTime localDateTime = DateHelper.timestampToLocalDateTime(1430068515L);
-        localDateTime.atZone(ZoneId.of("GMT"));
         assertThat(localDateTime, equalTo(expected));
     }
 
