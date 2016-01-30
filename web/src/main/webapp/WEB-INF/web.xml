@@ -56,11 +56,6 @@
     </servlet-mapping>
 
     <servlet-mapping>
-        <servlet-name>DispatcherServlet</servlet-name>
-        <url-pattern>/rest/*</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
         <servlet-name>versionServlet</servlet-name>
         <url-pattern>/version</url-pattern>
     </servlet-mapping>

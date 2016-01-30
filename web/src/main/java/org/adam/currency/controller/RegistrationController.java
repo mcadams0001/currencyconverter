@@ -46,6 +46,7 @@ public class RegistrationController {
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public String registerUser(@Valid @ModelAttribute(value = "command") UserCommand command, BindingResult bindingResult, ModelMap modelMap) {
         if(bindingResult.hasErrors()) {
+            modelMap.put(Constants.Parameters.COUNTRIES, countryService.findAll());
             return "register";
         }
         User user = userService.createUser(command);

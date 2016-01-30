@@ -17,9 +17,9 @@
         <maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
         <timestamp>${maven.build.timestamp}</timestamp>
         <compiler.backend.version>1.8</compiler.backend.version>
-        <spring.version>4.2.3.RELEASE</spring.version>
+        <spring.version>4.2.4.RELEASE</spring.version>
         <spring.security.version>4.0.3.RELEASE</spring.security.version>
-        <hibernate.version>5.0.2.Final</hibernate.version>
+        <hibernate.version>5.0.7.Final</hibernate.version>
         <h2.version>1.4.187</h2.version>
         <jackson.version>2.5.2</jackson.version>
         <jetty.version>9.3.6.v20151106</jetty.version>
@@ -236,6 +236,11 @@
             <dependency>
                 <groupId>org.hibernate</groupId>
                 <artifactId>hibernate-core</artifactId>
+                <version>${hibernate.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.hibernate</groupId>
+                <artifactId>hibernate-java8</artifactId>
                 <version>${hibernate.version}</version>
             </dependency>
             <dependency>

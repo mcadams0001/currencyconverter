@@ -6,7 +6,7 @@
            http://www.springframework.org/schema/security
            http://www.springframework.org/schema/security/spring-security.xsd">
 
-    <global-method-security pre-post-annotations="enabled" />
+    <global-method-security pre-post-annotations="enabled"/>
 
     <http pattern="/version" security="none"/>
     <http pattern="/css/**" security="none"/>
@@ -15,23 +15,30 @@
     <http pattern="/login**" security="none"/>
     <http pattern="/register**" security="none"/>
 
-    <http auto-config="false" >
-        <intercept-url pattern="/**" access="hasRole('ROLE_USER')" />
+    <http auto-config="true">
+        <intercept-url pattern="/**" access="hasRole('ROLE_USER')"/>
         <intercept-url pattern="/register.html" access="permitAll"/>
-        <form-login login-processing-url="/login.html"
+        <intercept-url pattern="/login.html" access="permitAll"/>
+        <form-login login-page="/login.html"
+                    username-parameter="j_username"
+                    password-parameter="j_password"
+                    login-processing-url="/j_spring_security_check"
                     always-use-default-target="true"
-                    default-target-url="/"
+                    default-target-url="/index.html"
                     authentication-failure-url="/login.html?error"/>
-        <!--<logout invalidate-session="true" logout-url="/logout.html" logout-success-url="/login.html" delete-cookies="JSESSIONID"/>-->
-      <!--  <session-management invalid-session-url="/login.html?time=1">
+        <logout invalidate-session="true" logout-url="/j_spring_security_logout" logout-success-url="/login.html"
+                delete-cookies="JSESSIONID"/>
+        <session-management invalid-session-url="/login.html?time=1">
             <concurrency-control max-sessions="1" expired-url="/login.html?time=1" error-if-maximum-exceeded="true"/>
         </session-management>
-        <session-management invalid-session-url="/invalidSession.html" />-->
+        <session-management invalid-session-url="/login.html"/>
         <csrf disabled="true"/>
     </http>
 
     <authentication-manager alias="authenticationManager">
-        <authentication-provider user-service-ref="userDetailsService"/>
+        <authentication-provider user-service-ref="userDetailsService">
+            <password-encoder ref="bcryptEncoder"/>
+        </authentication-provider>
     </authentication-manager>
 
     <beans:bean class="org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler"/>

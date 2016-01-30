@@ -3,6 +3,7 @@ package org.adam.currency.helper;
 import org.junit.Test;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.nullValue;
@@ -29,4 +30,25 @@ public class DateHelperTest {
         assertThat(DateHelper.isCorrectDate(null), equalTo(false));
         assertThat(DateHelper.isCorrectDate("abc"), equalTo(false));
     }
+
+    @Test
+    public void shouldFormatDate() throws Exception {
+        LocalDate localDate = LocalDate.of(2016, 1, 30);
+        assertThat(DateHelper.dateToString(localDate), equalTo("2016-01-30"));
+    }
+
+    @Test
+    public void shouldReturnTimeStamp() throws Exception {
+        LocalDateTime localDateTime = LocalDateTime.of(2016, 1, 30, 18, 54, 30);
+        assertThat(DateHelper.localDateTimeToLong(localDateTime), equalTo(1454180070L));
+    }
+
+    @Test
+    public void shouldConvertTimeStampToLocalDateTime() throws Exception {
+        LocalDateTime localDateTime = DateHelper.timestampToLocalDateTime(1430068515L);
+        assertThat(localDateTime, equalTo(LocalDateTime.of(2015, 4, 26, 18, 15, 15)));
+    }
+
+
+
 }

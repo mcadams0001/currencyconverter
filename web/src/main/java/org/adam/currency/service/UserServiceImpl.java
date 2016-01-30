@@ -10,6 +10,7 @@ import org.adam.currency.domain.Role;
 import org.adam.currency.domain.User;
 import org.adam.currency.helper.DateHelper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +25,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private CountryService countryService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public User findUserByName(String name) {
@@ -41,6 +45,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Role findRoleByName(RoleNameEnum name) {
         return genericService.findByName(Role.class, "name", name);
     }
@@ -53,7 +58,7 @@ public class UserServiceImpl implements UserService {
     private User toUser(UserCommand command, Role defaultRole, Address address) {
         return new UserBuilder().withName(command.getName()).withEmailAddress(command.getEmail())
                 .withFirstName(command.getFirstName()).withLastName(command.getLastName())
-                .withPassword(command.getPassword())
+                .withPassword(passwordEncoder.encode(command.getPassword()))
                 .withBirthDate(DateHelper.stringToDateTime(command.getBirthDate()))
                 .withRoles(Collections.singletonList(defaultRole))
                 .withAddress(address).build();

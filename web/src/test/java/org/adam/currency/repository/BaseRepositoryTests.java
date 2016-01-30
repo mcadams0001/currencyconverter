@@ -1,9 +1,6 @@
 package org.adam.currency.repository;
 
-import org.adam.currency.fixture.CountryFixture;
-import org.adam.currency.fixture.CurrencyFixture;
-import org.adam.currency.fixture.RoleFixture;
-import org.adam.currency.fixture.SettingFixture;
+import org.adam.currency.fixture.*;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -51,7 +48,8 @@ public class BaseRepositoryTests extends AbstractTransactionalJUnit4SpringContex
         CountryFixture.COUNTRIES.forEach(session::save);
         CurrencyFixture.CURRENCIES.forEach(session::save);
         RoleFixture.ROLES.forEach(session::save);
-
+        AddressFixture.ADDRESSES.forEach(session::save);
+        UserFixture.USERS.forEach(session::save);
         session.flush();
     }
 }

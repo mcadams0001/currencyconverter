@@ -11,5 +11,6 @@ public interface Constants {
         String COMMAND = "command";
         String COUNTRIES = "countries";
         String USER = "user";
+        String CURRENCIES = "currencies";
     }
 }

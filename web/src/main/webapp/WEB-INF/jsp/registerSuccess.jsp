@@ -2,8 +2,10 @@
 <html>
 <head>
     <title>Registration Completed</title>
+    <%@include file="include.jspf" %>
 </head>
 <body>
-Registration has been completed successfully.
+<div class="success">Registration has been completed successfully.</div>
+<a href="/index.html">Login</a>
 </body>
 </html>
