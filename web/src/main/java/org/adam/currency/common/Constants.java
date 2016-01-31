@@ -12,5 +12,7 @@ public interface Constants {
         String COUNTRIES = "countries";
         String USER = "user";
         String CURRENCIES = "currencies";
+        String VIEW_NAME = "viewName";
+        String HISTORY = "history";
     }
 }

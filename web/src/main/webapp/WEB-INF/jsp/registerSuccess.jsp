@@ -5,7 +5,9 @@
     <%@include file="include.jspf" %>
 </head>
 <body>
-<div class="success">Registration has been completed successfully.</div>
-<a href="/index.html">Login</a>
+<div class="container">
+    <h1>Registration</h1>
+    <div class="success">Registration has been completed successfully. Please navigate to <a href="/index.html">login</a> page.</div>
+</div>
 </body>
 </html>

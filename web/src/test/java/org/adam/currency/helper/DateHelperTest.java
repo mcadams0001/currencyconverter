@@ -65,6 +65,13 @@ public class DateHelperTest {
         assertThat(DateHelper.localDateTimeToString(localDateTime), equalTo("30-Jan-2016 18:54:30"));
     }
 
+    @Test
+    public void shouldConvertLocalDateToApplicationFormat() throws Exception {
+        LocalDate localDate = LocalDate.of(2016, 1, 30);
+        assertThat(DateHelper.localDateToAppString(localDate), equalTo("30-Jan-2016"));
+    }
+
+
 
 
 

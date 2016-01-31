@@ -112,7 +112,7 @@ public class UserCommandValidator implements Validator {
             return;
         }
         Pattern pattern = Pattern.compile(country.getPostCodeRegExp());
-        Matcher matcher = pattern.matcher(postCode);
+        Matcher matcher = pattern.matcher(postCode.toUpperCase());
         if (!matcher.matches()) {
             errors.rejectValue("postCode", "error.invalid.postCode");
         }

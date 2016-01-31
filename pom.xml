@@ -23,7 +23,6 @@
         <h2.version>1.4.187</h2.version>
         <jackson.version>2.5.2</jackson.version>
         <jetty.version>9.3.6.v20151106</jetty.version>
-        <db.schema.name>CURRENCY_CONVERTER</db.schema.name>
     </properties>
 
     <profiles>

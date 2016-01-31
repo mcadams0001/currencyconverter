@@ -127,6 +127,14 @@ public class History {
         this.timeStamp = timeStamp;
     }
 
+    public void setCallType(CallTypeEnum callType) {
+        this.callType = callType;
+    }
+
+    public CallTypeEnum getCallType() {
+        return callType;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

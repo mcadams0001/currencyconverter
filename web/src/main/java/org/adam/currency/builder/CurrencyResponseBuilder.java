@@ -48,6 +48,7 @@ public class CurrencyResponseBuilder {
         response.setSuccess(success);
         CurrencyError error = new CurrencyError();
         error.setInfo(errorMessage);
+        response.setError(error);
         return  response;
     }
 

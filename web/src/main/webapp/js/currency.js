@@ -3,14 +3,25 @@ var currency = new Currency();
 function Currency() {
 
     this.initialize = function() {
-        common.loadHandleBarPage("/currency.html", "")
+        common.loadHandleBarPage("currency.html", "formContainer", currency.handleAfterInitialization, null);
+        currency.loadHistory();
+    };
+
+    this.loadHistory = function() {
+        common.loadHandleBarPage("history.html", "historyContainer", null, null);
+    };
+
+    this.handleAfterInitialization = function(context) {
+        currency.setupAjaxForm();
     };
 
     this.showProgress = function(enable) {
         if(enable) {
             $('#resultProgress').show();
+            $('#submitContainer').hide();
         } else {
             $('#resultProgress').hide();
+            $('#submitContainer').show();
         }
     };
 
@@ -27,10 +38,11 @@ function Currency() {
     this.handleSuccess = function (response, textStatus, jqXHR) {
         currency.showProgress(false);
         var context = JSON.parse(jqXHR.responseText);
-        if(context.status === true) {
-            common.loadTemplate("currencyResult", context, result);
+        if(context.success === true) {
+            common.loadTemplate("currencyResult", context, "resultContainer");
+            currency.loadHistory();
         } else {
-            $('#result').html(context.error);
+            $('#error').html(context.error);
         }
         return true;
     };

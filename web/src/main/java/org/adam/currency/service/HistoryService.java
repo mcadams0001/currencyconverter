@@ -11,6 +11,6 @@ import java.util.List;
 
 public interface HistoryService {
     History findBy(Currency currencyFrom, Currency currencyTo, LocalDate date);
-    List<History> findByUser(User user, int limit);
-    void saveHistory(Currency currencyFrom, Currency currencyTo, String amount, LocalDate date, CurrencyResponse currencyResponse, CallTypeEnum webService);
+    List<History> findByUser(User user);
+    History saveHistory(User user, Currency currencyFrom, Currency currencyTo, Double amount, LocalDate date, CurrencyResponse currencyResponse, CallTypeEnum webService);
 }

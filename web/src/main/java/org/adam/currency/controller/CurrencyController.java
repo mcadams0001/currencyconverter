@@ -3,13 +3,17 @@ package org.adam.currency.controller;
 import org.adam.currency.command.CurrencyCommand;
 import org.adam.currency.command.CurrencyCommandValidator;
 import org.adam.currency.common.Constants;
+import org.adam.currency.domain.History;
 import org.adam.currency.domain.User;
 import org.adam.currency.dto.CurrencyResponseDTO;
+import org.adam.currency.dto.HistoryDTO;
 import org.adam.currency.helper.CurrencyTransformer;
+import org.adam.currency.helper.HistoryTransformer;
 import org.adam.currency.helper.HttpServletHelper;
 import org.adam.currency.helper.UserTransformer;
 import org.adam.currency.security.PrincipalHelper;
 import org.adam.currency.service.CurrencyService;
+import org.adam.currency.service.HistoryService;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -27,8 +31,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @PreAuthorize("hasRole('ROLE_USER')")
@@ -36,6 +39,9 @@ public class CurrencyController {
 
     @Autowired
     private CurrencyService currencyService;
+
+    @Autowired
+    private HistoryService historyService;
 
     @RequestMapping(value = "/index", method = RequestMethod.GET)
     public ModelAndView displayCurrencies(Principal principal) {
@@ -51,6 +57,7 @@ public class CurrencyController {
         HttpHeaders httpHeaders = HttpServletHelper.createJsonResponseHeaders(request);
         Map<String, Object> model = new HashMap<>();
         model.put(Constants.Parameters.CURRENCIES, CollectionUtils.collect(currencyService.findAll(), new CurrencyTransformer()));
+        model.put(Constants.Parameters.VIEW_NAME, "currencyForm");
         return new ResponseEntity<>(HttpServletHelper.jsonResponse(model), httpHeaders, HttpStatus.OK);
     }
 
@@ -65,7 +72,23 @@ public class CurrencyController {
         if (errors.hasErrors()) {
             return new ResponseEntity<>(HttpStatus.OK);
         }
-        CurrencyResponseDTO currencyResponse = currencyService.convertCurrency(user, command.getFrom(), command.getTo(), command.getAmount(), command.getDate());
+        CurrencyResponseDTO currencyResponse = currencyService.convertCurrency(user, command.getFrom(), command.getTo(), Double.parseDouble(command.getAmount()), Optional.ofNullable(command.getDate()));
         return new ResponseEntity<>(HttpServletHelper.jsonResponse(currencyResponse), httpHeaders, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/history", method = RequestMethod.GET)
+    public ResponseEntity<String> displayHistory(Principal principal, HttpServletRequest request) {
+        HttpHeaders httpHeaders = HttpServletHelper.createJsonResponseHeaders(request);
+        User user = PrincipalHelper.getUserFromPrincipal(principal);
+        List<History> historyList = historyService.findByUser(user);
+        Map<String, Object> model = new HashMap<>();
+        Collection<HistoryDTO> historyDTOCollection = CollectionUtils.collect(historyList, new HistoryTransformer());
+        model.put(Constants.Parameters.HISTORY, historyDTOCollection);
+        model.put(Constants.Parameters.VIEW_NAME, getHistoryView(historyDTOCollection));
+        return new ResponseEntity<>(HttpServletHelper.jsonResponse(model), httpHeaders, HttpStatus.OK);
+    }
+
+    String getHistoryView(Collection<HistoryDTO> historyDTOCollection) {
+        return historyDTOCollection.size() > 0 ? "currencyHistory" : "currencyHistoryEmpty";
     }
 }

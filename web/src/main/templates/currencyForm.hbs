@@ -1,14 +1,40 @@
-<form id="convertCurrencyForm" action="/convertCurrency.html" method="post">
-    <input id="amount" name="amount" value="{{command.amount}}" class="form-control"/>
-    <select id="from" name="from" class="form-control">
-        {{#each currencies}}
-        <option value="{{code}}">{{name}}</option>
-        {{/each}}
-    </select>
-    <select id="to" name="to" class="form-control">
-        {{#each currencies}}
-        <option value="{{code}}">{{name}}</option>
-        {{/each}}
-    </select>
-    <input type="hidden" name="{{_csrf.parameterName}}" value="{{_csrf.token}}"/>
+<form id="convertCurrencyForm" action="convert.html" method="post">
+    <table class="registrationTable">
+        <tr>
+            <td>Amount</td>
+            <td><input id="amount" name="amount" value="" class="form-control"/></td>
+        </tr>
+        <tr>
+            <td>From currency:</td>
+            <td>
+                <select id="from" name="from" class="form-control">
+                    {{#each currencies}}
+                        <option value="{{code}}">{{name}}</option>
+                    {{/each}}
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>To currency:</td>
+            <td>
+                <select id="to" name="to" class="form-control">
+                    {{#each currencies}}
+                        <option value="{{code}}">{{name}}</option>
+                    {{/each}}
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <span id="submitContainer">
+                    <input type="submit" class="btn btn-primary" value="Convert"/>
+                </span>
+                <span id="resultProgress" style="display:none">
+                    <img src="/images/ajax-loader.gif"/>
+                </span>
+            </td>
+        </tr>
+    </table>
+    <div id="error" class="error"></div>
 </form>

@@ -6,6 +6,7 @@ import org.adam.currency.dto.CurrencyResponseDTO;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Currency Service.
@@ -29,5 +30,5 @@ public interface CurrencyService {
      * @param date the date for which the request is send.
      * @return web service response represented as Currency DTO.
      */
-    CurrencyResponseDTO convertCurrency(User user, String from, String to, String amount, LocalDate date);
+    CurrencyResponseDTO convertCurrency(User user, String from, String to, double amount, Optional<LocalDate> date);
 }

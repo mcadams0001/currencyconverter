@@ -1,5 +1,6 @@
 package org.adam.currency.builder;
 
+import org.adam.currency.common.CallTypeEnum;
 import org.adam.currency.domain.Currency;
 import org.adam.currency.domain.History;
 import org.adam.currency.domain.User;
@@ -16,6 +17,20 @@ public class HistoryBuilder {
     private Double rate;
     private Double result;
     private LocalDateTime createDate;
+    private LocalDateTime timeStamp;
+    private CallTypeEnum callType;
+
+    public HistoryBuilder withCallType(CallTypeEnum callType){
+        this.callType = callType;
+        return this;
+    }
+
+
+    public HistoryBuilder withTimeStamp(LocalDateTime timestamp){
+        this.timeStamp = timestamp;
+        return this;
+    }
+
 
     public HistoryBuilder withCurrencyFrom(Currency currencyFrom){
         this.currencyFrom = currencyFrom;
@@ -68,6 +83,8 @@ public class HistoryBuilder {
         history.setResult(result);
         history.setUser(user);
         history.setCreateDate(createDate);
+        history.setTimeStamp(timeStamp);
+        history.setCallType(callType);
         return history;
     }
 

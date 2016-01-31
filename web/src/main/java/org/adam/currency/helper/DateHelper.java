@@ -40,6 +40,14 @@ public final class DateHelper {
         }
     }
 
+    public static String localDateToAppString(LocalDate localDate) {
+        try {
+            return DateTimeFormatter.ofPattern(APPLICATION_DATE_FORMAT).format(localDate);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
     /**
      * Checks the correctness of the date represented as string with format APPLICATION_DATE_FORMAT
      *

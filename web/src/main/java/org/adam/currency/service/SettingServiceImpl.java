@@ -43,6 +43,6 @@ public class SettingServiceImpl implements SettingService {
 
     @Override
     public int getConnectionTimeout() {
-        return getIntSetting(SettingField.CONNECTION_TIMEOUT);
+        return getIntSetting(SettingField.CONNECTION_TIMEOUT) * 1000;
     }
 }

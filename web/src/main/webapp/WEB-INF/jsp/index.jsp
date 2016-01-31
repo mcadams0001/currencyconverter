@@ -5,18 +5,20 @@
     <title>Currency Converter</title>
     <%@include file="include.jspf" %>
 </head>
-<body>
+<body onload="handleLoadCompleted()">
 <div class="container">
-<%@include file="logout.jspf"%>
-    <div id="error"></div>
-    <div id="formContainer"></div>
-    <div id="resultContainer">
-        <div id="result"></div>
-        <div id="resultProgress" style="display:none">
-            <img src="/images/ajax-loader.gif"/>
-        </div>
+    <div id="logoutContainer" style="display: block; float: right">
+        <%@include file="logout.jspf"%>
     </div>
-
+    <h1>Currency Converter</h1>
+    <div id="formContainer" class="container"></div>
+    <div id="resultContainer"></div>
+    <div id="historyContainer"></div>
 </div>
+<script type="application/javascript">
+    function handleLoadCompleted() {
+        currency.initialize();
+    }
+</script>
 </body>
 </html>

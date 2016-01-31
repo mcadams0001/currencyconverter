@@ -9,7 +9,7 @@ import org.adam.currency.helper.DoubleSerializer;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-@JsonIgnoreProperties({"terms", "privacy", "query"})
+@JsonIgnoreProperties({"terms", "privacy", "source"})
 public class CurrencyResponse {
     @JsonSerialize(using = BooleanSerializer.class)
     private Boolean success;

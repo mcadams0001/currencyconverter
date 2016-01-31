@@ -1,0 +1,26 @@
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>From Currency</th>
+        <th>To Currency</th>
+        <th>As of date</th>
+        <th>Amount</th>
+        <th>Rate</th>
+        <th>Result</th>
+        <th>Rate Time</th>
+    </tr>
+    </thead>
+    <tbody>
+    {{#each historyList}}
+        <tr>
+            <td>{{currencyFrom.name}}</td>
+            <td>{{currencyTo.name}}</td>
+            <td>{{date}}</td>
+            <td>{{amount}}</td>
+            <td>{{rate}}</td>
+            <td>{{result}}</td>
+            <td>{{timestamp}}</td>
+        </tr>
+    {{/each}}
+    </tbody>
+</table>

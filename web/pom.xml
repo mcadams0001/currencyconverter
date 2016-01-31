@@ -74,7 +74,8 @@
             <plugin>
                 <groupId>com.github.jknack</groupId>
                 <artifactId>handlebars-maven-plugin</artifactId>
-                <version>4.0.3</version>
+                <!--<version>4.0.3</version>-->
+                <version>1.3.1</version>
                 <executions>
                     <execution>
                         <id>precompile-handlebars</id>
@@ -87,11 +88,14 @@
                             <prefix>${basedir}/src/main/templates</prefix>
                             <suffix>.hbs</suffix>
                             <minimize>false</minimize>
+                            <includeRuntime>false</includeRuntime>
                             <amd>false</amd>
                             <encoding>UTF-8</encoding>
                             <templates>
                                 <template>currencyResult</template>
                                 <template>currencyForm</template>
+                                <template>currencyHistory</template>
+                                <template>currencyHistoryEmpty</template>
                             </templates>
                         </configuration>
                     </execution>
