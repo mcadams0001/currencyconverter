@@ -77,7 +77,7 @@ public class CurrencyControllerTest {
         ResponseEntity<String> responseEntity = controller.displayForm(mockRequest);
         verify(mockCurrencyService).findAll();
         assertThat(responseEntity.getStatusCode(), equalTo(HttpStatus.OK));
-        assertThat(responseEntity.getBody(), equalTo("{\r\n  \"currencies\" : [ {\r\n    \"code\" : \"EUR\",\r\n    \"name\" : \"Euro\",\r\n    \"country\" : \"Germany\"\r\n  }, {\r\n    \"code\" : \"USD\",\r\n    \"name\" : \"US Dollar\",\r\n    \"country\" : \"United States\"\r\n  }, {\r\n    \"code\" : \"GBP\",\r\n    \"name\" : \"British Pound\",\r\n    \"country\" : \"United Kingdom\"\r\n  } ]\r\n}"));
+        assertThat(responseEntity.getBody(), equalTo("{" + SEPARATOR + "  \"currencies\" : [ {" + SEPARATOR + "    \"code\" : \"EUR\"," + SEPARATOR + "    \"name\" : \"Euro\"," + SEPARATOR + "    \"country\" : \"Germany\"" + SEPARATOR + "  }, {" + SEPARATOR + "    \"code\" : \"USD\"," + SEPARATOR + "    \"name\" : \"US Dollar\"," + SEPARATOR + "    \"country\" : \"United States\"" + SEPARATOR + "  }, {" + SEPARATOR + "    \"code\" : \"GBP\"," + SEPARATOR + "    \"name\" : \"British Pound\"," + SEPARATOR + "    \"country\" : \"United Kingdom\"" + SEPARATOR + "  } ]" + SEPARATOR + "}"));
     }
 
 
