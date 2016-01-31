@@ -9,10 +9,10 @@ import org.adam.currency.domain.History;
 import org.adam.currency.domain.User;
 import org.adam.currency.dto.CurrencyResponseDTO;
 import org.adam.currency.dto.CurrencyResponse;
+import org.adam.currency.helper.CurrencyTransformer;
 import org.adam.currency.helper.DateHelper;
 import org.adam.currency.helper.ResponseTransformer;
 import org.adam.currency.repository.GenericRepository;
-import org.apache.commons.io.output.StringBuilderWriter;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -53,34 +53,50 @@ public class CurrencyServiceImpl implements CurrencyService {
         Currency currencyFrom = getCurrencyByCode(from);
         Currency currencyTo = getCurrencyByCode(to);
         LocalDate date = selectedDate.orElse(LocalDate.now());
-        CurrencyResponse response = getResultFromDatabase(user, amount, date, currencyFrom, currencyTo);
+        CurrencyResponse response = getResultForPastDaysFromDatabase(user, amount, date, currencyFrom, currencyTo);
         if (response == null) {
-            response = getResultsFromWebService(user, amount, date, currencyFrom, currencyTo);
+            response = getResultsFromWebService(user, amount, currencyFrom, currencyTo);
         }
-        return new ResponseTransformer().transform(response);
+        return toCurrencyResponseDTO(response, amount, currencyFrom, currencyTo);
 
     }
 
-    private CurrencyResponse getResultsFromWebService(User user, double amount, LocalDate date, Currency currencyFrom, Currency currencyTo) {
-        CurrencyResponse response;
-        response = invokeService(currencyFrom.getCode(), currencyTo.getCode(), amount);
+    CurrencyResponseDTO toCurrencyResponseDTO(CurrencyResponse response, double amount, Currency currencyFrom, Currency currencyTo) {
+        CurrencyTransformer currencyTransformer = new CurrencyTransformer();
+        CurrencyResponseDTO dto = new ResponseTransformer().transform(response);
+        dto.setAmount(amount);
+        dto.setCurrencyFrom(currencyTransformer.transform(currencyFrom));
+        dto.setCurrencyTo(currencyTransformer.transform(currencyTo));
+        return dto;
+    }
+
+    private CurrencyResponse getResultsFromWebService(User user, double amount, Currency currencyFrom, Currency currencyTo) {
+        History history = historyService.findRecent(currencyFrom, currencyTo);
+        if(history != null) {
+            return createResponseFromHistory(user, amount, LocalDate.now(), currencyFrom, currencyTo, history);
+        }
+        CurrencyResponse response = invokeService(currencyFrom.getCode(), currencyTo.getCode(), amount);
         if (response != null && response.getSuccess()) {
-            historyService.saveHistory(user, currencyFrom, currencyTo, amount, date, response, CallTypeEnum.WEB_SERVICE);
+            historyService.saveHistory(user, currencyFrom, currencyTo, amount, LocalDate.now(), response, CallTypeEnum.WEB_SERVICE);
         }
         return response;
     }
 
-    private CurrencyResponse getResultFromDatabase(User user, double amount, LocalDate date, Currency currencyFrom, Currency currencyTo) {
+    private CurrencyResponse getResultForPastDaysFromDatabase(User user, double amount, LocalDate date, Currency currencyFrom, Currency currencyTo) {
         if (!isPastDate(date)) {
             return null;
         }
         History history = historyService.findBy(currencyFrom, currencyTo, date);
         if (history != null) {
-            CurrencyResponse response = new CurrencyResponseBuilder().withResult(history.getRate() * amount).withQuote(history.getRate()).withTimestamp(history.getTimeStamp()).build();
-            historyService.saveHistory(user, currencyFrom, currencyTo, amount, date, response, CallTypeEnum.DATABASE);
-            return response;
+            return createResponseFromHistory(user, amount, date, currencyFrom, currencyTo, history);
         }
-        return null;
+        return CurrencyResponse.createError("Historical exchange rate for " + currencyFrom.getCode() + " and " + currencyTo.getCode() + " for " + DateHelper.localDateToAppString(date) + " is not available");
+    }
+
+    private CurrencyResponse createResponseFromHistory(User user, double amount, LocalDate date, Currency currencyFrom, Currency currencyTo, History history) {
+        CurrencyResponse response = new CurrencyResponseBuilder().withResult(history.getRate() * amount).withQuote(history.getRate()).withTimestamp(history.getTimeStamp()).build();
+        historyService.saveHistory(user, currencyFrom, currencyTo, amount, date, response, CallTypeEnum.DATABASE);
+        return response;
     }
 
     private boolean isPastDate(LocalDate date) {
@@ -114,7 +130,7 @@ public class CurrencyServiceImpl implements CurrencyService {
         try {
             Map<String, Object> map = mapper.readValue(response, HashMap.class);
             Boolean success = (Boolean) map.get("success");
-            if(!Boolean.TRUE.equals(success)) {
+            if (!Boolean.TRUE.equals(success)) {
                 return failureResponse(map);
             }
             return successResponse(currencyFrom, currencyTo, amount, map);
@@ -135,23 +151,20 @@ public class CurrencyServiceImpl implements CurrencyService {
         double quote = getQuote(quotes, currencyFrom, currencyTo);
         return new CurrencyResponseBuilder()
                 .withSuccess(true)
-                .withTimestamp(DateHelper.timestampToLocalDateTime(Long.valueOf((Integer)map.get("timestamp"))))
+                .withTimestamp(DateHelper.timestampToLocalDateTime(Long.valueOf((Integer) map.get("timestamp"))))
                 .withQuote(quote)
-                .withResult(calculateResult(amount,quote))
+                .withResult(calculateResult(amount, quote))
                 .build();
     }
 
     double getQuote(Map<String, Double> quotes, String currencyFrom, String currencyTo) {
-        if(!"USD".equalsIgnoreCase(currencyFrom) && !"USD".equalsIgnoreCase(currencyTo)) {
-            return new BigDecimal(quotes.get("USD" + currencyFrom)).divide(new BigDecimal(quotes.get("USD" + currencyTo)), 9, BigDecimal.ROUND_CEILING).doubleValue();
-        }
-        else if("USD".equalsIgnoreCase(currencyFrom) && "USD".equalsIgnoreCase(currencyTo)) {
+        if (!"USD".equalsIgnoreCase(currencyFrom) && !"USD".equalsIgnoreCase(currencyTo)) {
+            return new BigDecimal(quotes.get("USD" + currencyTo)).divide(new BigDecimal(quotes.get("USD" + currencyFrom)), 9, BigDecimal.ROUND_CEILING).doubleValue();
+        } else if ("USD".equalsIgnoreCase(currencyFrom) && "USD".equalsIgnoreCase(currencyTo)) {
             return 1.0d;
-        }
-        else if("USD".equalsIgnoreCase(currencyFrom)) {
+        } else if ("USD".equalsIgnoreCase(currencyFrom)) {
             return quotes.get("USD" + currencyTo);
-        }
-        else if("USD".equalsIgnoreCase(currencyTo)) {
+        } else if ("USD".equalsIgnoreCase(currencyTo)) {
             return 1.0 / quotes.get("USD" + currencyFrom);
         }
         return 0.0d;

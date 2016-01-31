@@ -5,6 +5,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "ADDRESS")
@@ -28,6 +29,9 @@ public class Address implements Serializable {
     @JoinColumn(name = "COUNTRY_CODE")
     private Country country;
 
+    @Column(name = "CREATE_DATE")
+    private LocalDateTime createDate;
+
     /**
      * Default constructor used by Hibernate.
      */
@@ -35,12 +39,13 @@ public class Address implements Serializable {
         //Does nothing.
     }
 
-    public Address(Long id, String street, String city, String postCode, Country country) {
+    public Address(Long id, String street, String city, String postCode, Country country, LocalDateTime createDate) {
         this.id = id;
         this.street = street;
         this.city = city;
         this.postCode = postCode;
         this.country = country;
+        this.createDate = createDate;
     }
 
     public Long getId() {
@@ -61,6 +66,10 @@ public class Address implements Serializable {
 
     public Country getCountry() {
         return country;
+    }
+
+    public LocalDateTime getCreateDate() {
+        return createDate;
     }
 
     @Override

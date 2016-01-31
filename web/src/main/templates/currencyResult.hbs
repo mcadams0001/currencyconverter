@@ -1,2 +1,19 @@
-{{amount}} {{currencyFrom.code}} = {{result}} {{currencyTo.code}}
-(Current exchange rate 1 {{currencyFrom.code}} = {{quote}} {{currencyTo.code}} as of {{timestamp}})
+<table style="padding-top: 50px; padding-bottom: 50px">
+    <tr>
+        <td>
+            <span style="font-size: x-large">
+                {{double amount}} <b>{{currencyFrom.code}}</b> = {{double result}} <b>{{currencyTo.code}}</b>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2"></td>
+    </tr>
+    <tr>
+        <td>
+            <span style="color: #31708f">
+                (Current exchange rate 1.00 {{currencyFrom.code}} = {{exrate quote}} {{currencyTo.code}} as of {{timestamp}})
+            </span>
+        </td>
+    </tr>
+</table>

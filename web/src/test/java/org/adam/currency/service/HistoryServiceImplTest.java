@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.sameInstance;
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.anyInt;
@@ -51,8 +52,17 @@ public class HistoryServiceImplTest {
         History history = service.findBy(CurrencyFixture.GBP, CurrencyFixture.EUR, LocalDate.of(2016, 1, 30));
         verify(mockHistoryRepository).findBy(CurrencyFixture.GBP, CurrencyFixture.EUR, LocalDate.of(2016, 1, 30));
         assertThat(history, sameInstance(expectedHistory));
-
     }
+
+    @Test
+    public void shouldFindRecent() throws Exception {
+        History expectedHistory = new History();
+        when(mockHistoryRepository.findRecent(isA(Currency.class), isA(Currency.class))).thenReturn(expectedHistory);
+        History history = service.findRecent(CurrencyFixture.GBP, CurrencyFixture.EUR);
+        verify(mockHistoryRepository).findRecent(CurrencyFixture.GBP, CurrencyFixture.EUR);
+        assertThat(history, sameInstance(expectedHistory));
+    }
+
 
     @Test
     public void testFindByUser() throws Exception {
@@ -84,6 +94,7 @@ public class HistoryServiceImplTest {
         assertThat(history.getResult(), equalTo(response.getResult()));
         assertThat(history.getTimeStamp(), equalTo(response.getInfo().getTimestamp()));
         assertThat(history.getCallType(), equalTo(callType));
+        assertThat(history.getCreateDate(), notNullValue());
     }
 
 }

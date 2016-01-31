@@ -14,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 
 @Transactional
@@ -52,7 +53,7 @@ public class UserServiceImpl implements UserService {
 
     private Address toAddress(UserCommand command) {
         Country country = countryService.findByCode(command.getCountry());
-        return new AddressBuilder().withStreet(command.getStreet()).withCity(command.getCity()).withPostCode(command.getPostCode()).withCountry(country).build();
+        return new AddressBuilder().withStreet(command.getStreet()).withCity(command.getCity()).withPostCode(command.getPostCode()).withCountry(country).withCreateDate(LocalDateTime.now()).build();
     }
 
     private User toUser(UserCommand command, Role defaultRole, Address address) {
@@ -61,7 +62,9 @@ public class UserServiceImpl implements UserService {
                 .withPassword(passwordEncoder.encode(command.getPassword()))
                 .withBirthDate(DateHelper.stringToDateTime(command.getBirthDate()))
                 .withRoles(Collections.singletonList(defaultRole))
-                .withAddress(address).build();
+                .withAddress(address)
+                .withCreateDate(LocalDateTime.now())
+                .build();
 
     }
 

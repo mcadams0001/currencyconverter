@@ -14,7 +14,6 @@ import org.adam.currency.fixture.UserFixture;
 import org.adam.currency.security.UserDetailsImpl;
 import org.adam.currency.service.CurrencyService;
 import org.adam.currency.service.HistoryService;
-import org.apache.commons.collections4.CollectionUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -37,9 +36,7 @@ import java.util.Optional;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Matchers.anyDouble;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.isA;
+import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -105,7 +102,7 @@ public class CurrencyControllerTest {
         ResponseEntity<String> responseEntity = controller.convert(mockAuthentication, command, mockRequest);
         verify(mockCurrencyService).convertCurrency(user, command.getFrom(), command.getTo(), Double.parseDouble(command.getAmount()), Optional.of(command.getDate()));
         assertThat(responseEntity.getStatusCode(), equalTo(HttpStatus.OK));
-        assertThat(responseEntity.getBody(), equalTo("{" + SEPARATOR + "  \"success\" : \"true\"," + SEPARATOR + "  \"quote\" : \"0.7\"," + SEPARATOR + "  \"result\" : \"125.5\"," + SEPARATOR + "  \"timestamp\" : \"30-Jan-2016 19:14:30\"," + SEPARATOR + "  \"error\" : null" + SEPARATOR + "}"));
+        assertThat(responseEntity.getBody(), equalTo("{\r\n  \"success\" : \"true\",\r\n  \"quote\" : \"0.7\",\r\n  \"result\" : \"125.5\",\r\n  \"timestamp\" : \"30-Jan-2016 19:14:30\",\r\n  \"error\" : null,\r\n  \"currencyFrom\" : null,\r\n  \"currencyTo\" : null,\r\n  \"amount\" : null\r\n}".replace("\r\n",SEPARATOR)));
     }
 
     @Test
@@ -113,7 +110,7 @@ public class CurrencyControllerTest {
         when(mockHistoryService.findByUser(isA(User.class))).thenReturn(Collections.singletonList(HistoryFixture.GBP_EUR_2016_1_30));
         ResponseEntity<String> responseEntity = controller.displayHistory(mockAuthentication, mockRequest);
         verify(mockHistoryService).findByUser(user);
-        assertThat(responseEntity.getBody(), equalTo("{\r\n  \"viewName\" : \"currencyHistory\",\r\n  \"history\" : [ {\r\n    \"id\" : null,\r\n    \"currencyFrom\" : {\r\n      \"code\" : \"GBP\",\r\n      \"name\" : \"British Pound\",\r\n      \"country\" : \"United Kingdom\"\r\n    },\r\n    \"currencyTo\" : {\r\n      \"code\" : \"EUR\",\r\n      \"name\" : \"Euro\",\r\n      \"country\" : \"Germany\"\r\n    },\r\n    \"date\" : \"30-Jan-2016\",\r\n    \"rate\" : \"0.658443\",\r\n    \"timeStamp\" : \"30-Jan-2016 18:54:30\",\r\n    \"result\" : \"300.0\",\r\n    \"amount\" : \"200.0\"\r\n  } ]\r\n}".replace("\r\n", SEPARATOR)));
+        assertThat(responseEntity.getBody(), equalTo("{\r\n  \"viewName\" : \"currencyHistory\",\r\n  \"historyList\" : [ {\r\n    \"id\" : null,\r\n    \"currencyFrom\" : {\r\n      \"code\" : \"GBP\",\r\n      \"name\" : \"British Pound\",\r\n      \"country\" : \"United Kingdom\"\r\n    },\r\n    \"currencyTo\" : {\r\n      \"code\" : \"EUR\",\r\n      \"name\" : \"Euro\",\r\n      \"country\" : \"Germany\"\r\n    },\r\n    \"date\" : \"30-Jan-2016\",\r\n    \"rate\" : \"0.658443\",\r\n    \"timeStamp\" : \"30-Jan-2016 18:54:30\",\r\n    \"result\" : \"300.0\",\r\n    \"amount\" : \"200.0\"\r\n  } ]\r\n}".replace("\r\n", SEPARATOR)));
     }
 
     @Test

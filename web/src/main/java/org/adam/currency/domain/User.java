@@ -8,6 +8,7 @@ import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,6 +51,9 @@ public class User {
     @JoinColumn(name = "ADDRESS_ID")
     private Address address;
 
+    @Column(name = "CREATE_DATE")
+    private LocalDateTime createDate;
+
     /**
      * Default constructor used by Hibernate.
      */
@@ -57,7 +61,7 @@ public class User {
         this.roles = new ArrayList<>();
     }
 
-    public User(Long id, String name, String password, String firstName, String lastName, String emailAddress, LocalDate birthDate, List<Role> roles, Address address) {
+    public User(Long id, String name, String password, String firstName, String lastName, String emailAddress, LocalDate birthDate, List<Role> roles, Address address, LocalDateTime createDate) {
         this.id = id;
         this.name = name;
         this.password = password;
@@ -65,6 +69,7 @@ public class User {
         this.lastName = lastName;
         this.emailAddress = emailAddress;
         this.birthDate = birthDate;
+        this.createDate = createDate;
         this.roles = CollectionHelper.defensiveCopy(roles);
         this.address = address;
     }
@@ -103,6 +108,10 @@ public class User {
 
     public Address getAddress() {
         return address;
+    }
+
+    public LocalDateTime getCreateDate() {
+        return createDate;
     }
 
     @Override

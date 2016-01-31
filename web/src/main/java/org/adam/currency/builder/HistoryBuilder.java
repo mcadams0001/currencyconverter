@@ -16,7 +16,7 @@ public class HistoryBuilder {
     private LocalDate date;
     private Double rate;
     private Double result;
-    private LocalDateTime createDate;
+    private LocalDateTime createDate = LocalDateTime.now();
     private LocalDateTime timeStamp;
     private CallTypeEnum callType;
 

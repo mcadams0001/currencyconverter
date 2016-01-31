@@ -7,6 +7,7 @@ import org.adam.currency.domain.Role;
 import org.adam.currency.domain.User;
 import org.adam.currency.fixture.CountryFixture;
 import org.adam.currency.fixture.RoleFixture;
+import org.adam.currency.fixture.UserFixture;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -16,10 +17,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
 
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.sameInstance;
+import static org.hamcrest.Matchers.hasItem;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -42,7 +47,7 @@ public class UserServiceImplTest {
 
     @Test
     public void testFindUserByName() throws Exception {
-        User expectedUser = new User();
+        User expectedUser = UserFixture.TEST_USER;
         when(mockGenericService.findByName(User.class, "name", "test_user")).thenReturn(expectedUser);
         User user = userService.findUserByName("test_user");
         verify(mockGenericService).findByName(User.class, "name", "test_user");
@@ -77,7 +82,7 @@ public class UserServiceImplTest {
     @Test
     public void shouldFindRoleByName() throws Exception {
         RoleNameEnum roleName = RoleNameEnum.ROLE_USER;
-        when(mockGenericService.findByName(isA(Class.class), anyString(), anyString())).thenReturn(RoleFixture.ROLE_USER);
+        when(mockGenericService.findByName(eq(Role.class), anyString(), anyString())).thenReturn(RoleFixture.ROLE_USER);
         Role role = userService.findRoleByName(roleName);
         verify(mockGenericService).findByName(Role.class, "name", roleName);
         assertThat(role, notNullValue());

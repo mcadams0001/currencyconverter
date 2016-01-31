@@ -3,9 +3,8 @@
     <tr>
         <th>From Currency</th>
         <th>To Currency</th>
-        <th>As of date</th>
-        <th>Amount</th>
         <th>Rate</th>
+        <th>Amount</th>
         <th>Result</th>
         <th>Rate Time</th>
     </tr>
@@ -13,13 +12,12 @@
     <tbody>
     {{#each historyList}}
         <tr>
-            <td>{{currencyFrom.name}}</td>
-            <td>{{currencyTo.name}}</td>
-            <td>{{date}}</td>
-            <td>{{amount}}</td>
-            <td>{{rate}}</td>
-            <td>{{result}}</td>
-            <td>{{timestamp}}</td>
+            <td><b>{{currencyFrom.code}}</b>&nbsp;{{currencyFrom.name}}</td>
+            <td><b>{{currencyTo.code}}</b>&nbsp;{{currencyTo.name}}</td>
+            <td style="text-align: right">{{exrate rate}}</td>
+            <td>{{double amount}} <b>{{currencyFrom.code}}</b></td>
+            <td>{{double result}} <b>{{currencyTo.code}}</b></td>
+            <td>{{timeStamp}}</td>
         </tr>
     {{/each}}
     </tbody>

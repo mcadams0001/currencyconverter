@@ -21,6 +21,11 @@ public class CurrencyResponseDTO {
 
     private String error;
 
+    private CurrencyDTO currencyFrom;
+    private CurrencyDTO currencyTo;
+    @JsonSerialize(using = DoubleSerializer.class)
+    private Double amount;
+
     public boolean isSuccess() {
         return success;
     }
@@ -61,6 +66,40 @@ public class CurrencyResponseDTO {
         this.error = error;
     }
 
+    public CurrencyDTO getCurrencyFrom() {
+        return currencyFrom;
+    }
+
+    public void setCurrencyFrom(CurrencyDTO currencyFrom) {
+        this.currencyFrom = currencyFrom;
+    }
+
+    public CurrencyDTO getCurrencyTo() {
+        return currencyTo;
+    }
+
+    public void setCurrencyTo(CurrencyDTO currencyTo) {
+        this.currencyTo = currencyTo;
+    }
+
+    public Double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Double amount) {
+        this.amount = amount;
+    }
+
+
+    @Override
+    public String toString() {
+        return "CurrencyResponseDTO{" +
+                "success=" + success +
+                ", quote=" + quote +
+                ", result=" + result +
+                '}';
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -75,6 +114,9 @@ public class CurrencyResponseDTO {
                 .append(result, that.result)
                 .append(timestamp, that.timestamp)
                 .append(error, that.error)
+                .append(currencyFrom, that.currencyFrom)
+                .append(currencyTo, that.currencyTo)
+                .append(amount, that.amount)
                 .isEquals();
     }
 
@@ -86,15 +128,9 @@ public class CurrencyResponseDTO {
                 .append(result)
                 .append(timestamp)
                 .append(error)
+                .append(currencyFrom)
+                .append(currencyTo)
+                .append(amount)
                 .toHashCode();
-    }
-
-    @Override
-    public String toString() {
-        return "CurrencyResponseDTO{" +
-                "success=" + success +
-                ", quote=" + quote +
-                ", result=" + result +
-                '}';
     }
 }

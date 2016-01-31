@@ -13,6 +13,6 @@ public interface Constants {
         String USER = "user";
         String CURRENCIES = "currencies";
         String VIEW_NAME = "viewName";
-        String HISTORY = "history";
+        String HISTORY = "historyList";
     }
 }

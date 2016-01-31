@@ -3,8 +3,36 @@ var currency = new Currency();
 function Currency() {
 
     this.initialize = function() {
-        common.loadHandleBarPage("currency.html", "formContainer", currency.handleAfterInitialization, null);
+        currency.loadForm();
         currency.loadHistory();
+    };
+
+    this.validateInputs = function() {
+        var status = true;
+        var currencyFrom = $('#from').val();
+        var currencyTo = $('#to').val();
+        var asOfDate = $('#asOfdate').val();
+        var errorMsg = '';
+        if(currencyFrom === currencyTo) {
+            status = false;
+            errorMsg = 'Please select different from and to currencies.<br/>';
+        }
+        if(!common.isValidDouble($('#amount').val())) {
+            status = false;
+            errorMsg += 'Please provide a numeric amount.<br/>';
+        }
+        if(asOfDate != '' && !common.isValidDate(asOfDate)) {
+            status = false;
+            errorMsg += 'Please provide date in valid format dd-MMM-yyyy';
+        }
+        if(status === false) {
+            $('#error').html(errorMsg);
+        }
+        return status;
+    };
+
+    this.loadForm = function() {
+        common.loadHandleBarPage("currency.html", "formContainer", currency.handleAfterInitialization, null);
     };
 
     this.loadHistory = function() {
@@ -13,6 +41,7 @@ function Currency() {
 
     this.handleAfterInitialization = function(context) {
         currency.setupAjaxForm();
+        common.dateFieldPicker('asOfDate');
     };
 
     this.showProgress = function(enable) {
@@ -26,6 +55,10 @@ function Currency() {
     };
 
     this.handleBeforeSubmit = function() {
+        $('#error').html("");
+        if(!currency.validateInputs()) {
+            return false;
+        }
         currency.showProgress(true);
         return true;
     };
@@ -38,7 +71,7 @@ function Currency() {
     this.handleSuccess = function (response, textStatus, jqXHR) {
         currency.showProgress(false);
         var context = JSON.parse(jqXHR.responseText);
-        if(context.success === true) {
+        if(context.success === "true") {
             common.loadTemplate("currencyResult", context, "resultContainer");
             currency.loadHistory();
         } else {

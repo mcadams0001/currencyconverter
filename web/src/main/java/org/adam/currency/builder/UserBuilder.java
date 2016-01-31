@@ -5,6 +5,7 @@ import org.adam.currency.domain.Role;
 import org.adam.currency.domain.User;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +22,13 @@ public class UserBuilder {
     private LocalDate birthDate;
     private List<Role> roles = new ArrayList<>();
     private Address address;
+    private LocalDateTime createDate = LocalDateTime.now();
+
+    public UserBuilder withCreateDate(LocalDateTime createDate){
+        this.createDate = createDate;
+        return this;
+    }
+
 
     public UserBuilder withId(Long id) {
         this.id = id;
@@ -70,7 +78,7 @@ public class UserBuilder {
     }
 
     public User build() {
-        return new User(id, name, password, firstName, lastName, emailAddress, birthDate, roles, address);
+        return new User(id, name, password, firstName, lastName, emailAddress, birthDate, roles, address, createDate);
     }
 
 }

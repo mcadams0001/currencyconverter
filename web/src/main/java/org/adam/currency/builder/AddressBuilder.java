@@ -3,6 +3,8 @@ package org.adam.currency.builder;
 import org.adam.currency.domain.Address;
 import org.adam.currency.domain.Country;
 
+import java.time.LocalDateTime;
+
 /**
  * Address Builder
  */
@@ -12,6 +14,13 @@ public class AddressBuilder {
     private String city;
     private String postCode;
     private Country country;
+    private LocalDateTime createDate = LocalDateTime.now();
+
+    public AddressBuilder withCreateDate(LocalDateTime createDate){
+        this.createDate = createDate;
+        return this;
+    }
+
 
     public AddressBuilder withId(Long id){
         this.id = id;
@@ -39,6 +48,6 @@ public class AddressBuilder {
     }
 
     public Address build() {
-        return new Address(id, street, city, postCode, country);
+        return new Address(id, street, city, postCode, country, createDate);
     }
 }

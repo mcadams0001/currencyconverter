@@ -2,14 +2,14 @@
     <table class="registrationTable">
         <tr>
             <td>Amount</td>
-            <td><input id="amount" name="amount" value="" class="form-control"/></td>
+            <td><input id="amount" name="amount" value="" class="form-control" placeholder="0.00"/></td>
         </tr>
         <tr>
             <td>From currency:</td>
             <td>
                 <select id="from" name="from" class="form-control">
                     {{#each currencies}}
-                        <option value="{{code}}">{{name}}</option>
+                        <option value="{{code}}">{{code}} - {{name}}</option>
                     {{/each}}
                 </select>
             </td>
@@ -19,9 +19,15 @@
             <td>
                 <select id="to" name="to" class="form-control">
                     {{#each currencies}}
-                        <option value="{{code}}">{{name}}</option>
+                        <option value="{{code}}">{{code}} - {{name}}</option>
                     {{/each}}
                 </select>
+            </td>
+        </tr>
+        <tr>
+            <td>As of date:</td>
+            <td>
+                <input type="date" name="date" id="asOfdate" class="form-control" placeholder="dd-MMM-yyyy (optional)"/>
             </td>
         </tr>
         <tr>

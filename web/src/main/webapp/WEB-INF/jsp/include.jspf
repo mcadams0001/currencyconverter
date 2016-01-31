@@ -8,6 +8,7 @@
 <script type="text/javascript" src="/js/jquery/jquery.form.min.js"></script>
 <script type="text/javascript" src="/js/handlebars/handlebars-v3.0.0.js"></script>
 <script type="text/javascript" src="/js/handlebars/handlebars.runtime-v1.3.0.js"></script>
+<script type="text/javascript" src="/js/handlebars/handlebars.operator.js"></script>
 <script type="text/javascript" src="/js/handlebars/helpers.js"></script>
 <script type="text/javascript" src="/js/common.js"></script>
 <script type="text/javascript" src="/js/currency.js"></script>

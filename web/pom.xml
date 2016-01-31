@@ -119,6 +119,7 @@
                     <sourceIncludes>
                         <include>**/jquery-1.12.0.min.js</include>
                         <include>**/jquery-ui.min.js</include>
+                        <include>common.js</include>
                         <include>currency.js</include>
                     </sourceIncludes>
                     <specIncludes>

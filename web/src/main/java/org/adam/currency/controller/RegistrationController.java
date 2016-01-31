@@ -38,8 +38,8 @@ public class RegistrationController {
     @RequestMapping(value = "/register", method = RequestMethod.GET)
     public ModelAndView showForm() {
         ModelAndView mav = new ModelAndView("register");
-        mav.addObject(Constants.Parameters.COMMAND, new UserCommand());
-        mav.addObject(Constants.Parameters.COUNTRIES, countryService.findAll());
+            mav.addObject(Constants.Parameters.COMMAND, new UserCommand());
+            mav.addObject(Constants.Parameters.COUNTRIES, countryService.findAll());
         return mav;
     }
 

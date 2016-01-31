@@ -13,9 +13,9 @@
         </c:if>
         <h2 class="form-signin-heading">Please sign in</h2>
         <label for="userName">Username</label>
-        <input type="text" id="userName" name="j_username" max="50" class="form-control"/>
+        <input type="text" id="userName" name="j_username" max="50" class="form-control" placeholder="Username"/>
         <label for="password">Password</label>
-        <input type="password" id="password" name="j_password" max="20" class="form-control"/>
+        <input type="password" id="password" name="j_password" max="20" class="form-control" placeholder="Password"/>
         <input type="submit" value="Login" class="btn btn-primary btn-block"/>
         <a href="register.html">Register</a>
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
