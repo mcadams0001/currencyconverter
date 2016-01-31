@@ -2,10 +2,12 @@ package org.adam.currency.service;
 
 import org.adam.currency.common.SettingField;
 import org.adam.currency.domain.Currency;
-import org.adam.currency.dto.CurrencyDTO;
+import org.adam.currency.domain.User;
+import org.adam.currency.dto.CurrencyResponseDTO;
 import org.adam.currency.dto.CurrencyResponse;
 import org.adam.currency.fixture.CurrencyFixture;
 import org.adam.currency.fixture.SettingFixture;
+import org.adam.currency.fixture.UserFixture;
 import org.adam.currency.repository.GenericRepository;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -72,6 +74,8 @@ public class CurrencyServiceImplTest {
     @Mock
     private RestTemplate mockRestTemplate;
 
+    private User user = UserFixture.TEST_USER;
+
     @Before
     public void setUp() throws Exception {
         TimeZone.setDefault(TimeZone.getTimeZone("GMT"));
@@ -93,7 +97,7 @@ public class CurrencyServiceImplTest {
         when(mockRestTemplate.getForObject(anyString(), eq(String.class))).thenReturn(RESPONSE);
         when(mockGenericRepository.findById(eq(Currency.class), eq("GBP"))).thenReturn(CurrencyFixture.GBP);
         when(mockGenericRepository.findById(eq(Currency.class), eq("EUR"))).thenReturn(CurrencyFixture.EUR);
-        CurrencyDTO currencyResponse = service.convertCurrency("GBP", "EUR", "120.0", LocalDate.of(2016, 1, 30));
+        CurrencyResponseDTO currencyResponse = service.convertCurrency(user, "GBP", "EUR", "120.0", LocalDate.of(2016, 1, 30));
         verify(mockSettingService).getSetting(SettingField.CURRENCY_SERVICE_URL);
         verify(mockSettingService).getSetting(SettingField.ACCESS_KEY);
         verify(mockRestTemplate).getForObject(anyString(), eq(String.class));
@@ -110,7 +114,7 @@ public class CurrencyServiceImplTest {
         when(mockRestTemplate.getForObject(anyString(), eq(String.class))).thenReturn(ERROR_RESPONSE);
         when(mockGenericRepository.findById(eq(Currency.class), eq("GBP"))).thenReturn(CurrencyFixture.GBP);
         when(mockGenericRepository.findById(eq(Currency.class), eq("EUR"))).thenReturn(CurrencyFixture.EUR);
-        CurrencyDTO currencyResponse = service.convertCurrency("GBP", "EUR", "120.0", LocalDate.of(2016, 1, 30));
+        CurrencyResponseDTO currencyResponse = service.convertCurrency(user, "GBP", "EUR", "120.0", LocalDate.of(2016, 1, 30));
         verify(mockSettingService).getSetting(SettingField.CURRENCY_SERVICE_URL);
         verify(mockSettingService).getSetting(SettingField.ACCESS_KEY);
         verify(mockRestTemplate).getForObject(anyString(), eq(String.class));
@@ -129,7 +133,7 @@ public class CurrencyServiceImplTest {
         when(mockRestTemplate.getForObject(anyString(), eq(String.class))).thenThrow(new RestClientException("Call failure"));
         when(mockGenericRepository.findById(eq(Currency.class), eq("GBP"))).thenReturn(CurrencyFixture.GBP);
         when(mockGenericRepository.findById(eq(Currency.class), eq("EUR"))).thenReturn(CurrencyFixture.EUR);
-        CurrencyDTO currencyResponse = service.convertCurrency("GBP", "EUR", "120.0", LocalDate.of(2016, 1, 30));
+        CurrencyResponseDTO currencyResponse = service.convertCurrency(user, "GBP", "EUR", "120.0", LocalDate.of(2016, 1, 30));
         verify(mockSettingService).getSetting(SettingField.CURRENCY_SERVICE_URL);
         verify(mockSettingService).getSetting(SettingField.ACCESS_KEY);
         verify(mockRestTemplate).getForObject(anyString(), eq(String.class));

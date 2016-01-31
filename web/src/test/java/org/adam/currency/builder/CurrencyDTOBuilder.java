@@ -1,6 +1,6 @@
 package org.adam.currency.builder;
 
-import org.adam.currency.dto.CurrencyDTO;
+import org.adam.currency.dto.CurrencyResponseDTO;
 
 import java.time.LocalDateTime;
 
@@ -36,8 +36,8 @@ public class CurrencyDTOBuilder {
         return this;
     }
 
-    public CurrencyDTO build() {
-        CurrencyDTO dto = new CurrencyDTO();
+    public CurrencyResponseDTO build() {
+        CurrencyResponseDTO dto = new CurrencyResponseDTO();
         dto.setSuccess(success);
         dto.setTimestamp(timestamp);
         dto.setQuote(quote);

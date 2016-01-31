@@ -1,0 +1,14 @@
+<form id="convertCurrencyForm" action="/convertCurrency.html" method="post">
+    <input id="amount" name="amount" value="{{command.amount}}" class="form-control"/>
+    <select id="from" name="from" class="form-control">
+        {{#each currencies}}
+        <option value="{{code}}">{{name}}</option>
+        {{/each}}
+    </select>
+    <select id="to" name="to" class="form-control">
+        {{#each currencies}}
+        <option value="{{code}}">{{name}}</option>
+        {{/each}}
+    </select>
+    <input type="hidden" name="{{_csrf.parameterName}}" value="{{_csrf.token}}"/>
+</form>

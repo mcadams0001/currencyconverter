@@ -2,14 +2,16 @@ var currency = new Currency();
 
 function Currency() {
 
-    this.convert = function() {
-        var fromCurrency = $('#fromCurrency').val();
-        var toCurrency = $('#toCurrency').val();
-        var amount = $('#amount').val();
+    this.initialize = function() {
+        common.loadHandleBarPage("/currency.html", "")
     };
 
     this.showProgress = function(enable) {
-
+        if(enable) {
+            $('#resultProgress').show();
+        } else {
+            $('#resultProgress').hide();
+        }
     };
 
     this.handleBeforeSubmit = function() {
@@ -25,7 +27,11 @@ function Currency() {
     this.handleSuccess = function (response, textStatus, jqXHR) {
         currency.showProgress(false);
         var context = JSON.parse(jqXHR.responseText);
-
+        if(context.status === true) {
+            common.loadTemplate("currencyResult", context, result);
+        } else {
+            $('#result').html(context.error);
+        }
         return true;
     };
 

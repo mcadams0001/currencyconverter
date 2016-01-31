@@ -6,7 +6,8 @@ import org.adam.currency.common.CallTypeEnum;
 import org.adam.currency.common.SettingField;
 import org.adam.currency.domain.Currency;
 import org.adam.currency.domain.History;
-import org.adam.currency.dto.CurrencyDTO;
+import org.adam.currency.domain.User;
+import org.adam.currency.dto.CurrencyResponseDTO;
 import org.adam.currency.dto.CurrencyResponse;
 import org.adam.currency.helper.DateHelper;
 import org.adam.currency.helper.ResponseTransformer;
@@ -46,7 +47,7 @@ public class CurrencyServiceImpl implements CurrencyService {
     }
 
     @Override
-    public CurrencyDTO convertCurrency(String from, String to, String amount, LocalDate date) {
+    public CurrencyResponseDTO convertCurrency(User user, String from, String to, String amount, LocalDate date) {
         Currency currencyFrom = getCurrencyByCode(from);
         Currency currencyTo = getCurrencyByCode(to);
         CurrencyResponse response = getResultFromDatabase(amount, date, currencyFrom, currencyTo);

@@ -1,0 +1,3 @@
+describe('Class Currency', function () {
+
+});

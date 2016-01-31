@@ -9,17 +9,14 @@
 <div class="container">
 <%@include file="logout.jspf"%>
     <div id="error"></div>
-    <form:form id="convertCurrencyForm" action="/convertCurrency.html" method="post">
-        <form:input path="amount" cssClass="form-control"/>
-        <form:select path="from" cssClass="form-control">
-            <form:options items="${currencies}" itemValue="code" itemLabel="name"/>
-        </form:select>
-        <form:select path="to" cssClass="form-control">
-            <form:options items="${currencies}" itemValue="code" itemLabel="name"/>
-        </form:select>
-        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-    </form:form>
-    <div id="result"></div>
+    <div id="formContainer"></div>
+    <div id="resultContainer">
+        <div id="result"></div>
+        <div id="resultProgress" style="display:none">
+            <img src="/images/ajax-loader.gif"/>
+        </div>
+    </div>
+
 </div>
 </body>
 </html>

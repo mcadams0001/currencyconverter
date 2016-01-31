@@ -1,8 +1,8 @@
 package org.adam.currency.service;
 
 import org.adam.currency.domain.Currency;
-import org.adam.currency.dto.CurrencyDTO;
-import org.adam.currency.dto.CurrencyResponse;
+import org.adam.currency.domain.User;
+import org.adam.currency.dto.CurrencyResponseDTO;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -21,11 +21,13 @@ public interface CurrencyService {
 
     /**
      *
+     *
+     * @param user user performing the conversion.
      * @param from currency code of source currency.
      * @param to currency code to which the conversion is performed.
      * @param amount amount to be converted.
      * @param date the date for which the request is send.
      * @return web service response represented as Currency DTO.
      */
-    CurrencyDTO convertCurrency(String from, String to, String amount, LocalDate date);
+    CurrencyResponseDTO convertCurrency(User user, String from, String to, String amount, LocalDate date);
 }

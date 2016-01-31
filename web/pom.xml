@@ -71,6 +71,60 @@
                     </dependency>
                 </dependencies>
             </plugin>
+            <plugin>
+                <groupId>com.github.jknack</groupId>
+                <artifactId>handlebars-maven-plugin</artifactId>
+                <version>4.0.3</version>
+                <executions>
+                    <execution>
+                        <id>precompile-handlebars</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>precompile</goal>
+                        </goals>
+                        <configuration>
+                            <output>${basedir}/src/main/webapp/js/handlebars/helpers.js</output>
+                            <prefix>${basedir}/src/main/templates</prefix>
+                            <suffix>.hbs</suffix>
+                            <minimize>false</minimize>
+                            <amd>false</amd>
+                            <encoding>UTF-8</encoding>
+                            <templates>
+                                <template>currencyResult</template>
+                                <template>currencyForm</template>
+                            </templates>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>com.github.searls</groupId>
+                <artifactId>jasmine-maven-plugin</artifactId>
+                <version>2.0</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <jsSrcDir>src/main/webapp/js</jsSrcDir>
+                    <jsTestSrcDir>src/test/webapp/js/spec</jsTestSrcDir>
+                    <sourceIncludes>
+                        <include>**/jquery-1.12.0.min.js</include>
+                        <include>**/jquery-ui.min.js</include>
+                        <include>currency.js</include>
+                    </sourceIncludes>
+                    <specIncludes>
+                        <include>**/jasmine-jquery.js</include>
+                        <include>**/mock-ajax.js</include>
+                        <include>*Spec.js</include>
+                    </specIncludes>
+                    <haltOnFailure>true</haltOnFailure>
+                </configuration>
+            </plugin>
         </plugins>
         <resources>
             <resource>

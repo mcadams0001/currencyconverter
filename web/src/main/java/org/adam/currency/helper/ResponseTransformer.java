@@ -1,13 +1,13 @@
 package org.adam.currency.helper;
 
-import org.adam.currency.dto.CurrencyDTO;
+import org.adam.currency.dto.CurrencyResponseDTO;
 import org.adam.currency.dto.CurrencyResponse;
 import org.apache.commons.collections4.Transformer;
 
-public class ResponseTransformer implements Transformer<CurrencyResponse, CurrencyDTO> {
+public class ResponseTransformer implements Transformer<CurrencyResponse, CurrencyResponseDTO> {
     @Override
-    public CurrencyDTO transform(CurrencyResponse currencyResponse) {
-        CurrencyDTO dto = new CurrencyDTO();
+    public CurrencyResponseDTO transform(CurrencyResponse currencyResponse) {
+        CurrencyResponseDTO dto = new CurrencyResponseDTO();
         if(currencyResponse == null) {
             return dto;
         }
