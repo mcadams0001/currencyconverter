@@ -45,7 +45,7 @@
             </tr>
             <tr>
                 <td><label for="birthDate">Birth date</label></td>
-                <td><form:input path="birthDate" value="" maxlength="" htmlEscape="true" cssClass="form-control" placeholder="dd-MMM-yyyy"/></td>
+                <td class="form-inline"><form:input path="birthDate" value="" maxlength="" htmlEscape="true" cssClass="form-control" placeholder="dd-MMM-yyyy"/></td>
                 <td><form:errors path="birthDate" cssClass="error"/></td>
             </tr>
             <tr>

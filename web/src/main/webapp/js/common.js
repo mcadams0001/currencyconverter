@@ -46,6 +46,7 @@ function Common() {
 
     this.dateFieldPicker = function (elementId) {
         $("#" + elementId).datepicker({
+            autoSize: true,
             dateFormat: 'd-M-yy',
             showOn: "button",
             buttonImage: "/images/calendar.gif",

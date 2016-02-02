@@ -17,7 +17,7 @@ public final class DateHelper {
     public static final String APPLICATION_DATE_FORMAT = "dd-MMM-yyyy";
     public static final String SERVICE_DATE_FORMAT = "yyyy-MM-dd";
     public static final String DATE_TIME_FORMAT = "dd-MMM-yyyy HH:mm:ss";
-    public static final Pattern DATE_PATTERN = Pattern.compile("\\d{2}-\\w{3}-\\d{4}");
+    public static final Pattern DATE_PATTERN = Pattern.compile("\\d{1,2}-\\w{3}-\\d{4}");
 
     private DateHelper() {
 

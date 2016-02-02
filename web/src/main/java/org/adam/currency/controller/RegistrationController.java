@@ -38,14 +38,14 @@ public class RegistrationController {
     @RequestMapping(value = "/register", method = RequestMethod.GET)
     public ModelAndView showForm() {
         ModelAndView mav = new ModelAndView("register");
-            mav.addObject(Constants.Parameters.COMMAND, new UserCommand());
-            mav.addObject(Constants.Parameters.COUNTRIES, countryService.findAll());
+        mav.addObject(Constants.Parameters.COMMAND, new UserCommand());
+        mav.addObject(Constants.Parameters.COUNTRIES, countryService.findAll());
         return mav;
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public String registerUser(@Valid @ModelAttribute(value = "command") UserCommand command, BindingResult bindingResult, ModelMap modelMap) {
-        if(bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors()) {
             modelMap.put(Constants.Parameters.COUNTRIES, countryService.findAll());
             return "register";
         }

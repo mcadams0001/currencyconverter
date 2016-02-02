@@ -41,7 +41,7 @@ function Currency() {
 
     this.handleAfterInitialization = function(context) {
         currency.setupAjaxForm();
-        common.dateFieldPicker('asOfDate');
+        common.dateFieldPicker('asOfdate');
     };
 
     this.showProgress = function(enable) {
