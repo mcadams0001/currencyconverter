@@ -12,7 +12,7 @@
     </div>
     <h1>Currency Converter</h1>
     <div id="formContainer" class="container"></div>
-    <div id="resultContainer"></div>
+    <div id="resultContainer" style="padding-bottom: 20px"></div>
     <div id="historyContainer"></div>
 </div>
 <script type="application/javascript">
