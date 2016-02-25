@@ -29,7 +29,7 @@
         <logout invalidate-session="true" logout-url="/j_spring_security_logout" logout-success-url="/login.html"
                 delete-cookies="JSESSIONID"/>
         <session-management invalid-session-url="/login.html?time=1">
-            <concurrency-control max-sessions="1" expired-url="/login.html?time=1" error-if-maximum-exceeded="true"/>
+            <concurrency-control max-sessions="1" expired-url="/login.html?time=1" error-if-maximum-exceeded="true" session-registry-alias="sessionRegistry"/>
         </session-management>
         <session-management invalid-session-url="/login.html"/>
         <csrf disabled="true"/>

@@ -43,6 +43,7 @@
                 <configuration>
                     <scanIntervalSeconds>9999</scanIntervalSeconds>
                     <reload>manual</reload>
+                    <jettyXml>${project.basedir}/target/classes/jetty-jmx.xml</jettyXml>
                     <webApp>
                         <descriptor>${project.basedir}/src/main/webapp/WEB-INF/web.xml</descriptor>
                         <jettyEnvXml>${project.basedir}/target/classes/jetty-env.xml</jettyEnvXml>
