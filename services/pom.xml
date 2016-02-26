@@ -9,129 +9,11 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>currency-web</artifactId>
-    <packaging>war</packaging>
-    <build>
-        <finalName>currency-web</finalName>
-        <plugins>
-            <plugin>
-                <artifactId>maven-war-plugin</artifactId>
-                <version>2.6</version>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <addClasspath>true</addClasspath>
-                            <classpathPrefix>lib/</classpathPrefix>
-                        </manifest>
-                    </archive>
-                    <webResources>
-                        <resource>
-                            <directory>src/main/webapp</directory>
-                            <filtering>true</filtering>
-                            <includes>
-                                <include>**/web.xml</include>
-                                <include>**/currency.appcache</include>
-                            </includes>
-                        </resource>
-                    </webResources>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.eclipse.jetty</groupId>
-                <artifactId>jetty-maven-plugin</artifactId>
-                <version>${jetty.version}</version>
-                <configuration>
-                    <scanIntervalSeconds>9999</scanIntervalSeconds>
-                    <reload>manual</reload>
-                    <jettyXml>${project.basedir}/target/classes/jetty-jmx.xml</jettyXml>
-                    <webApp>
-                        <descriptor>${project.basedir}/src/main/webapp/WEB-INF/web.xml</descriptor>
-                        <jettyEnvXml>${project.basedir}/target/classes/jetty-env.xml</jettyEnvXml>
-                    </webApp>
-                    <httpConnector>
-                        <port>8080</port>
-                    </httpConnector>
-                    <stopKey/>
-                    <stopPort/>
-                </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>com.h2database</groupId>
-                        <artifactId>h2</artifactId>
-                        <version>${h2.version}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.eclipse.jetty</groupId>
-                        <artifactId>jetty-util</artifactId>
-                        <version>${jetty.version}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.eclipse.jetty</groupId>
-                        <artifactId>jetty-server</artifactId>
-                        <version>${jetty.version}</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
-            <plugin>
-                <groupId>com.github.jknack</groupId>
-                <artifactId>handlebars-maven-plugin</artifactId>
-                <!--<version>4.0.3</version>-->
-                <version>1.3.1</version>
-                <executions>
-                    <execution>
-                        <id>precompile-handlebars</id>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>precompile</goal>
-                        </goals>
-                        <configuration>
-                            <output>${basedir}/src/main/webapp/js/handlebars/helpers.js</output>
-                            <prefix>${basedir}/src/main/templates</prefix>
-                            <suffix>.hbs</suffix>
-                            <minimize>false</minimize>
-                            <includeRuntime>false</includeRuntime>
-                            <amd>false</amd>
-                            <encoding>UTF-8</encoding>
-                            <templates>
-                                <template>currencyResult</template>
-                                <template>currencyForm</template>
-                                <template>currencyHistory</template>
-                                <template>currencyHistoryEmpty</template>
-                            </templates>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
+    <artifactId>currency-services</artifactId>
+    <packaging>jar</packaging>
 
-            <plugin>
-                <groupId>com.github.searls</groupId>
-                <artifactId>jasmine-maven-plugin</artifactId>
-                <version>2.0</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>test</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <jsSrcDir>src/main/webapp/js</jsSrcDir>
-                    <jsTestSrcDir>src/test/webapp/js/spec</jsTestSrcDir>
-                    <sourceIncludes>
-                        <include>**/jquery-1.12.0.min.js</include>
-                        <include>**/jquery-ui.min.js</include>
-                        <include>common.js</include>
-                        <include>currency.js</include>
-                    </sourceIncludes>
-                    <specIncludes>
-                        <include>**/jasmine-jquery.js</include>
-                        <include>**/mock-ajax.js</include>
-                        <include>*Spec.js</include>
-                    </specIncludes>
-                    <haltOnFailure>true</haltOnFailure>
-                </configuration>
-            </plugin>
-        </plugins>
+    <build>
+        <finalName>currency-services</finalName>
         <resources>
             <resource>
                 <filtering>true</filtering>
@@ -169,24 +51,26 @@
                 </includes>
             </testResource>
         </testResources>
-
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.6</version>
+                <configuration>
+                    <forceCreation>true</forceCreation>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>test-jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
     </build>
 
     <dependencies>
-        <dependency>
-            <groupId>org.adam.currency</groupId>
-            <artifactId>currency-services</artifactId>
-            <version>${project.version}</version>
-            <type>jar</type>
-        </dependency>
-        <dependency>
-            <groupId>org.adam.currency</groupId>
-            <artifactId>currency-services</artifactId>
-            <version>${project.version}</version>
-            <type>test-jar</type>
-            <scope>test</scope>
-        </dependency>
-
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -318,22 +202,17 @@
 
         <dependency>
             <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-webmvc</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
         </dependency>
 
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context-support</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
         </dependency>
 
         <dependency>
@@ -346,47 +225,10 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-config</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>commons-logging</groupId>
-                    <artifactId>commons-logging</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-taglibs</artifactId>
-        </dependency>
 
         <dependency>
             <groupId>net.sf.ehcache</groupId>
             <artifactId>ehcache-core</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>javax.servlet.jsp</groupId>
-            <artifactId>javax.servlet.jsp-api</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>javax.servlet.jsp.jstl</groupId>
-            <artifactId>javax.servlet.jsp.jstl-api</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>taglibs</groupId>
-            <artifactId>standard</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-            <scope>provided</scope>
         </dependency>
 
         <dependency>
@@ -456,6 +298,5 @@
         </dependency>
 
     </dependencies>
-
 
 </project>

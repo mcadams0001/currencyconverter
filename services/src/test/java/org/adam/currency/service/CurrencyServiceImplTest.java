@@ -17,6 +17,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
+import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.web.client.RestClientException;
@@ -148,7 +149,7 @@ public class CurrencyServiceImplTest {
         when(mockHistoryService.findBy(isA(Currency.class), isA(Currency.class), isA(LocalDate.class))).thenReturn(HistoryFixture.GBP_EUR_2016_1_30);
         CurrencyResponseDTO currencyResponse = service.convertCurrency(user, "GBP", "EUR", 120.0d, Optional.of(asOfDate));
         verify(mockHistoryService).findBy(isA(Currency.class), isA(Currency.class), isA(LocalDate.class));
-        verify(mockHistoryService).saveHistory(eq(user), eq(CurrencyFixture.GBP), eq(CurrencyFixture.EUR), eq(120.0d), eq(asOfDate), isA(CurrencyResponse.class), eq(CallTypeEnum.DATABASE));
+        verify(mockHistoryService).saveHistory(eq(user), Matchers.eq(CurrencyFixture.GBP), Matchers.eq(CurrencyFixture.EUR), eq(120.0d), eq(asOfDate), isA(CurrencyResponse.class), eq(CallTypeEnum.DATABASE));
         verify(mockSettingService, never()).getSetting(SettingField.CURRENCY_SERVICE_URL);
         verify(mockSettingService, never()).getSetting(SettingField.ACCESS_KEY);
         verify(mockRestTemplate, never()).getForObject(anyString(), eq(String.class));
