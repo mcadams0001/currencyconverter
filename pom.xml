@@ -24,7 +24,7 @@
         <h2.version>1.4.187</h2.version>
         <jackson.version>2.6.4</jackson.version>
         <jetty.version>9.3.6.v20151106</jetty.version>
-        <phantomjs.binary>${project.basedir}\target\phantomjs-maven-plugin\phantomjs-2.1.1-windows\bin\phantomjs.exe</phantomjs.binary>
+        <phantomjs.binary>${project.basedir}/target/phantomjs-maven-plugin/phantomjs-2.1.1-linux-x86_64/bin/phantomjs</phantomjs.binary>
     </properties>
 
     <profiles>
@@ -49,12 +49,12 @@
         </profile>
         <profile>
             <id>ci</id>
-            <properties>
-                <phantomjs.binary>${project.basedir}/target/phantomjs-maven-plugin/phantomjs-2.1.1-linux-x86_64/bin/phantomjs</phantomjs.binary>
-            </properties>
         </profile>
         <profile>
             <id>adam</id>
+            <properties>
+                <phantomjs.binary>${project.basedir}\target\phantomjs-maven-plugin\phantomjs-2.1.1-windows\bin\phantomjs.exe</phantomjs.binary>
+            </properties>
         </profile>
     </profiles>
     <dependencyManagement>
