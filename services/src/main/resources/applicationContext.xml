@@ -13,7 +13,7 @@
     </bean>
     <import resource="classpath:data-applicationContext.xml"/>
     <import resource="classpath:service-applicationContext.xml"/>
-    <import resource="../../../../web/src/main/resources/jmx-context.xml"/>
+    <!--<import resource="../../../../web/src/main/resources/jmx-context.xml"/>-->
     <import resource="classpath:mvc-applicationContext.xml"/>
     <import resource="classpath:security-context.xml"/>
 </beans>
