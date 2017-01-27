@@ -30,7 +30,6 @@
                             <filtering>true</filtering>
                             <includes>
                                 <include>**/web.xml</include>
-                                <include>**/currency.appcache</include>
                             </includes>
                         </resource>
                     </webResources>
@@ -75,8 +74,7 @@
             <plugin>
                 <groupId>com.github.jknack</groupId>
                 <artifactId>handlebars-maven-plugin</artifactId>
-                <!--<version>4.0.3</version>-->
-                <version>1.3.1</version>
+                <version>4.0.6</version>
                 <executions>
                     <execution>
                         <id>precompile-handlebars</id>
@@ -89,7 +87,6 @@
                             <prefix>${basedir}/src/main/templates</prefix>
                             <suffix>.hbs</suffix>
                             <minimize>false</minimize>
-                            <includeRuntime>false</includeRuntime>
                             <amd>false</amd>
                             <encoding>UTF-8</encoding>
                             <templates>
@@ -121,7 +118,7 @@
             <plugin>
                 <groupId>com.github.searls</groupId>
                 <artifactId>jasmine-maven-plugin</artifactId>
-                <version>2.1</version>
+                <version>2.2</version>
                 <executions>
                     <execution>
                         <goals>
@@ -133,7 +130,7 @@
                     <jsSrcDir>src/main/webapp/js</jsSrcDir>
                     <jsTestSrcDir>src/test/webapp/js/spec</jsTestSrcDir>
                     <sourceIncludes>
-                        <include>**/jquery-1.12.0.min.js</include>
+                        <include>**/jquery-3.1.1.js</include>
                         <include>**/jquery-ui.min.js</include>
                         <include>common.js</include>
                         <include>currency.js</include>

@@ -15,6 +15,7 @@ import org.adam.currency.helper.ResponseTransformer;
 import org.adam.currency.repository.GenericRepository;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestClientException;
@@ -42,6 +43,10 @@ public class CurrencyServiceImpl implements CurrencyService {
 
     @Autowired
     private RestTemplate restTemplate;
+
+    @Autowired
+    @Qualifier("accessKey")
+    private String accessKey;
 
     @Override
     public List<Currency> findAll() {
@@ -120,7 +125,6 @@ public class CurrencyServiceImpl implements CurrencyService {
 
     String getUrl(String from, String to) {
         String serviceUrl = settingService.getSetting(SettingField.CURRENCY_SERVICE_URL);
-        String accessKey = settingService.getSetting(SettingField.ACCESS_KEY);
         return String.format(serviceUrl, accessKey, from + "," + to);
     }
 

@@ -4,7 +4,6 @@ package org.adam.currency.common;
  * Enumerated settings in use.
  */
 public enum SettingField {
-    ACCESS_KEY,
     CURRENCY_SERVICE_URL,
     HISTORY_SHOW_LAST("10"),
     CONNECTION_TIMEOUT("30");
