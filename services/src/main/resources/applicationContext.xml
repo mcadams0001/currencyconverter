@@ -11,9 +11,6 @@
     <bean id="appVersion" class="java.lang.String">
         <constructor-arg value="${project.version}"/>
     </bean>
-    <bean id="accessKey" class="java.lang.String">
-        <constructor-arg index="0" value="${ACCESS_KEY}"/>
-    </bean>
     <import resource="classpath:data-applicationContext.xml"/>
     <import resource="classpath:service-applicationContext.xml"/>
     <!--<import resource="../../../../web/src/main/resources/jmx-context.xml"/>-->

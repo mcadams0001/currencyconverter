@@ -7,8 +7,8 @@ import org.adam.currency.common.SettingField;
 import org.adam.currency.domain.Currency;
 import org.adam.currency.domain.History;
 import org.adam.currency.domain.User;
-import org.adam.currency.dto.CurrencyResponseDTO;
 import org.adam.currency.dto.CurrencyResponse;
+import org.adam.currency.dto.CurrencyResponseDTO;
 import org.adam.currency.helper.CurrencyTransformer;
 import org.adam.currency.helper.DateHelper;
 import org.adam.currency.helper.ResponseTransformer;
@@ -16,7 +16,7 @@ import org.adam.currency.repository.GenericRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestClientException;
@@ -25,7 +25,10 @@ import org.springframework.web.client.RestTemplate;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @Service("currencyService")
 @Transactional
@@ -45,8 +48,7 @@ public class CurrencyServiceImpl implements CurrencyService {
     @Autowired
     private RestTemplate restTemplate;
 
-    @Autowired
-    @Qualifier("accessKey")
+    @Value("#{systemProperties['ACCESS_KEY']}")
     private String accessKey;
 
     @Override
@@ -78,7 +80,7 @@ public class CurrencyServiceImpl implements CurrencyService {
 
     private CurrencyResponse getResultsFromWebService(User user, double amount, Currency currencyFrom, Currency currencyTo) {
         History history = historyService.findRecent(currencyFrom, currencyTo);
-        if(history != null) {
+        if (history != null) {
             return createResponseFromHistory(user, amount, LocalDate.now(), currencyFrom, currencyTo, history);
         }
         CurrencyResponse response = invokeService(currencyFrom.getCode(), currencyTo.getCode(), amount);
