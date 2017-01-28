@@ -5,20 +5,17 @@ import org.adam.currency.fixture.CountryFixture;
 import org.adam.currency.fixture.UserFixture;
 import org.adam.currency.service.CountryService;
 import org.adam.currency.service.UserService;
-import org.apache.log4j.Level;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.validation.BindException;
 
 import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class UserCommandValidatorTest {
@@ -33,7 +30,6 @@ public class UserCommandValidatorTest {
 
     @Before
     public void beforeTest() throws Exception {
-        UserCommandValidator.LOGGER.setLevel(Level.OFF);
         validator = new UserCommandValidator(mockUserService, mockCountryService);
     }
 
@@ -240,7 +236,6 @@ public class UserCommandValidatorTest {
         UserCommand command = createValidCommand();
         command.setCountry("");
         BindException errors = new BindException(command, "command");
-        when(mockCountryService.findByCode(anyString())).thenReturn(CountryFixture.UK);
         validator.validate(command, errors);
         verify(mockUserService).findUserByName(command.getName());
         verify(mockCountryService, never()).findByCode(command.getCountry());
@@ -297,7 +292,6 @@ public class UserCommandValidatorTest {
         command.setPostCode("ABC");
         command.setCountry("");
         BindException errors = new BindException(command, "command");
-        when(mockCountryService.findByCode(anyString())).thenReturn(CountryFixture.UK);
         validator.validate(command, errors);
         verify(mockUserService).findUserByName(command.getName());
         verify(mockCountryService, never()).findByCode(command.getCountry());

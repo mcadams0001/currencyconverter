@@ -931,7 +931,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  // Maps a given level value to the `methodMap` indexes above.
 	  lookupLevel: function lookupLevel(level) {
 	    if (typeof level === 'string') {
-	      var levelMap = _utils.indexOf(logger.methodMap, level.toLowerCase());
+	      var levelMap = _utils.indexOf(LoggerFactory.methodMap, level.toLowerCase());
 	      if (levelMap >= 0) {
 	        level = levelMap;
 	      } else {
@@ -944,10 +944,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  // Can be overridden in the host environment
 	  log: function log(level) {
-	    level = logger.lookupLevel(level);
+	    level = LoggerFactory.lookupLevel(level);
 
-	    if (typeof console !== 'undefined' && logger.lookupLevel(logger.level) <= level) {
-	      var method = logger.methodMap[level];
+	    if (typeof console !== 'undefined' && LoggerFactory.lookupLevel(LoggerFactory.level) <= level) {
+	      var method = LoggerFactory.methodMap[level];
 	      if (!console[method]) {
 	        // eslint-disable-line no-console
 	        method = 'log';

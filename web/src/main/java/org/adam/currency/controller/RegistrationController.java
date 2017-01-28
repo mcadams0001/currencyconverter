@@ -6,7 +6,8 @@ import org.adam.currency.common.Constants;
 import org.adam.currency.domain.User;
 import org.adam.currency.service.CountryService;
 import org.adam.currency.service.UserService;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -22,7 +23,7 @@ import javax.validation.Valid;
 
 @Controller
 public class RegistrationController {
-    public static final Logger LOGGER = Logger.getLogger(RegistrationController.class);
+    public static final Logger LOGGER = LoggerFactory.getLogger(RegistrationController.class);
 
     @Autowired
     private CountryService countryService;

@@ -13,7 +13,8 @@ import org.adam.currency.helper.CurrencyTransformer;
 import org.adam.currency.helper.DateHelper;
 import org.adam.currency.helper.ResponseTransformer;
 import org.adam.currency.repository.GenericRepository;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -29,7 +30,7 @@ import java.util.*;
 @Service("currencyService")
 @Transactional
 public class CurrencyServiceImpl implements CurrencyService {
-    public static final Logger LOGGER = Logger.getLogger(CurrencyServiceImpl.class);
+    public static final Logger LOGGER = LoggerFactory.getLogger(CurrencyServiceImpl.class);
 
 
     @Autowired

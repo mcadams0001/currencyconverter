@@ -2,11 +2,8 @@ package org.adam.currency.repository;
 
 import org.adam.currency.fixture.*;
 import org.apache.commons.dbcp2.BasicDataSource;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.tool.hbm2ddl.SchemaExport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.annotation.Rollback;
@@ -14,7 +11,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.transaction.annotation.Transactional;
 
-@ContextConfiguration(locations = {"classpath:data-applicationContext.xml","classpath:h2-hibernate.xml"})
+@ContextConfiguration(locations = {"classpath:data-applicationContext.xml", "classpath:h2-hibernate.xml"})
 @Rollback
 @Transactional
 public class BaseRepositoryTests extends AbstractTransactionalJUnit4SpringContextTests {
@@ -41,7 +38,6 @@ public class BaseRepositoryTests extends AbstractTransactionalJUnit4SpringContex
     }
 
     public void initialSetup() {
-        Logger.getLogger(SchemaExport.class).setLevel(Level.OFF);
         Session session = getSession();
 
         SettingFixture.SETTINGS.forEach(session::save);

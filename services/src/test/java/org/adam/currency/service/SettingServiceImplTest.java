@@ -3,13 +3,11 @@ package org.adam.currency.service;
 import org.adam.currency.common.SettingField;
 import org.adam.currency.domain.Setting;
 import org.adam.currency.repository.GenericRepository;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
@@ -35,7 +33,6 @@ public class SettingServiceImplTest {
 
     @Test
     public void shouldGetNullIfDefaultValueIsNullForInteger() throws Exception {
-        Logger.getLogger(SettingServiceImpl.class).setLevel(Level.OFF);
         when(mockGenericRepository.findByName(Setting.class, "name", SettingField.CURRENCY_SERVICE_URL)).thenReturn(null);
         int actual = service.getIntSetting(SettingField.CURRENCY_SERVICE_URL);
         verify(mockGenericRepository).findByName(Setting.class, "name", SettingField.CURRENCY_SERVICE_URL);
@@ -44,7 +41,6 @@ public class SettingServiceImplTest {
 
     @Test
     public void shouldGetIntSettingWithDefaultValue() throws Exception {
-        Logger.getLogger(SettingServiceImpl.class).setLevel(Level.OFF);
         when(mockGenericRepository.findByName(Setting.class, "name", SettingField.HISTORY_SHOW_LAST)).thenReturn(null);
         int actual = service.getIntSetting(SettingField.HISTORY_SHOW_LAST);
         verify(mockGenericRepository).findByName(Setting.class, "name", SettingField.HISTORY_SHOW_LAST);

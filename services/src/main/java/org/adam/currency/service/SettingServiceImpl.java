@@ -3,7 +3,8 @@ package org.adam.currency.service;
 import org.adam.currency.common.SettingField;
 import org.adam.currency.domain.Setting;
 import org.adam.currency.repository.GenericRepository;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Transactional
 public class SettingServiceImpl implements SettingService {
-    public static final Logger LOGGER = Logger.getLogger(SettingServiceImpl.class);
+    public static final Logger LOGGER = LoggerFactory.getLogger(SettingServiceImpl.class);
 
     @Autowired
     private GenericRepository genericRepository;

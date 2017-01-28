@@ -7,27 +7,25 @@ import org.adam.currency.domain.User;
 import org.adam.currency.fixture.CountryFixture;
 import org.adam.currency.fixture.RoleFixture;
 import org.adam.currency.fixture.UserFixture;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.CoreMatchers.sameInstance;
+import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.Matchers.hasItem;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Matchers.anyObject;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.eq;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.isA;
 
 @RunWith(MockitoJUnitRunner.class)
 public class UserServiceImplTest {
@@ -59,11 +57,11 @@ public class UserServiceImplTest {
         String encodedPassword = "A1B2C3D4";
         when(mockPasswordEncoder.encode(anyString())).thenReturn(encodedPassword);
         when(mockCountryService.findByCode("UK")).thenReturn(CountryFixture.UK);
-        when(mockGenericService.findByName(isA(Class.class), anyString(), anyString())).thenReturn(RoleFixture.ROLE_USER);
+        when(mockGenericService.findByName(eq(Role.class), anyString(), eq(RoleNameEnum.ROLE_USER))).thenReturn(RoleFixture.ROLE_USER);
         User user = userService.createUser(command);
         verify(mockPasswordEncoder).encode("password1");
         verify(mockCountryService).findByCode("UK");
-        verify(mockGenericService, times(2)).save(anyObject());
+        verify(mockGenericService, times(2)).save(any());
         assertThat(user, notNullValue());
         assertThat(user.getAddress(), notNullValue());
         assertThat(user.getBirthDate(), equalTo(LocalDate.of(2016, 1, 1)));
@@ -81,7 +79,7 @@ public class UserServiceImplTest {
     @Test
     public void shouldFindRoleByName() throws Exception {
         RoleNameEnum roleName = RoleNameEnum.ROLE_USER;
-        when(mockGenericService.findByName(eq(Role.class), anyString(), anyString())).thenReturn(RoleFixture.ROLE_USER);
+        when(mockGenericService.findByName(eq(Role.class), anyString(), eq(RoleNameEnum.ROLE_USER))).thenReturn(RoleFixture.ROLE_USER);
         Role role = userService.findRoleByName(roleName);
         verify(mockGenericService).findByName(Role.class, "name", roleName);
         assertThat(role, notNullValue());

@@ -8,7 +8,7 @@ public class CurrencyCommand {
     private String amount;
     private String from;
     private String to;
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    @DateTimeFormat(pattern = "dd-MMM-yyyy")
     private LocalDate date;
 
     public String getAmount() {

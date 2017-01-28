@@ -6,7 +6,8 @@ import org.adam.currency.service.CountryService;
 import org.adam.currency.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.EmailValidator;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
@@ -15,7 +16,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class UserCommandValidator implements Validator {
-    public static final Logger LOGGER = Logger.getLogger(UserCommandValidator.class);
+    public static final Logger LOGGER = LoggerFactory.getLogger(UserCommandValidator.class);
 
     private UserService userService;
     private CountryService countryService;
