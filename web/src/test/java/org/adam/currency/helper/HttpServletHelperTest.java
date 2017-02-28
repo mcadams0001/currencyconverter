@@ -40,17 +40,17 @@ public class HttpServletHelperTest {
         Map<String, Object> map = new LinkedHashMap<>();
         map.put("currency", CurrencyFixture.EUR);
         String response = HttpServletHelper.jsonResponse(map);
-        assertEquals("{\n" +
-                "  \"currency\" : {\n" +
-                "    \"code\" : \"EUR\",\n" +
-                "    \"name\" : \"Euro\",\n" +
-                "    \"country\" : {\n" +
-                "      \"code\" : \"DEU\",\n" +
-                "      \"name\" : \"Germany\",\n" +
-                "      \"postCodeRegExp\" : null\n" +
-                "    }\n" +
-                "  }\n" +
-                "}", response);
+        assertEquals("{\r\n" +
+                "  \"currency\" : {\r\n" +
+                "    \"code\" : \"EUR\",\r\n" +
+                "    \"name\" : \"Euro\",\r\n" +
+                "    \"country\" : {\r\n" +
+                "      \"code\" : \"DEU\",\r\n" +
+                "      \"name\" : \"Germany\",\r\n" +
+                "      \"postCodeRegExp\" : null\r\n" +
+                "    }\r\n" +
+                "  }\r\n" +
+                "}", response.trim());
     }
 
     @Test
