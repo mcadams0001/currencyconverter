@@ -18,6 +18,8 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class HttpServletHelperTest {
 
+    private static final String SEPARATOR = System.getProperty("line.separator");
+
     @Mock
     private HttpServletRequest mockRequest;
 
@@ -40,16 +42,16 @@ public class HttpServletHelperTest {
         Map<String, Object> map = new LinkedHashMap<>();
         map.put("currency", CurrencyFixture.EUR);
         String response = HttpServletHelper.jsonResponse(map);
-        assertEquals("{\r\n" +
-                "  \"currency\" : {\r\n" +
-                "    \"code\" : \"EUR\",\r\n" +
-                "    \"name\" : \"Euro\",\r\n" +
-                "    \"country\" : {\r\n" +
-                "      \"code\" : \"DEU\",\r\n" +
-                "      \"name\" : \"Germany\",\r\n" +
-                "      \"postCodeRegExp\" : null\r\n" +
-                "    }\r\n" +
-                "  }\r\n" +
+        assertEquals("{" + SEPARATOR +
+                "  \"currency\" : {" + SEPARATOR +
+                "    \"code\" : \"EUR\"," + SEPARATOR +
+                "    \"name\" : \"Euro\"," + SEPARATOR +
+                "    \"country\" : {" + SEPARATOR +
+                "      \"code\" : \"DEU\"," + SEPARATOR +
+                "      \"name\" : \"Germany\"," + SEPARATOR +
+                "      \"postCodeRegExp\" : null" + SEPARATOR +
+                "    }" + SEPARATOR +
+                "  }" + SEPARATOR +
                 "}", response.trim());
     }
 
