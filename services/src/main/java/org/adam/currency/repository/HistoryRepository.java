@@ -27,7 +27,7 @@ public class HistoryRepository {
         criteria.add(Restrictions.eq("date", date));
         criteria.addOrder(Order.desc("createDate"));
         List<History> list = criteria.list();
-        return list.size() > 0 ? list.get(0) : null;
+        return !list.isEmpty() ? list.get(0) : null;
     }
 
     @SuppressWarnings("unchecked")
@@ -39,8 +39,8 @@ public class HistoryRepository {
         criteria.addOrder(Order.desc("createDate"));
         criteria.setMaxResults(1);
         List<History> list = criteria.list();
-        return list.size() > 0 ? list.get(0) : null;
-    };
+        return !list.isEmpty() ? list.get(0) : null;
+    }
 
     @SuppressWarnings("unchecked")
     public List<History> findByUser(User user, int limit) {

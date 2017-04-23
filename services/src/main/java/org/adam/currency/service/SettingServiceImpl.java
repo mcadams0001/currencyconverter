@@ -13,7 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Transactional
 public class SettingServiceImpl implements SettingService {
-    public static final Logger LOGGER = LoggerFactory.getLogger(SettingServiceImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SettingServiceImpl.class);
+    private static final String FAILED_TO_RETRIEVE_SETTING = "Failed to retrieve setting ";
 
     @Autowired
     private GenericRepository genericRepository;
@@ -32,7 +33,7 @@ public class SettingServiceImpl implements SettingService {
         try {
             return Integer.parseInt(setting);
         } catch (NumberFormatException e) {
-            LOGGER.warn("Failed to retrieve setting " + field.name());
+            LOGGER.warn(FAILED_TO_RETRIEVE_SETTING + field.name());
             if (field.isDefaultValueEmpty()) {
                 LOGGER.warn("Failed to retrieve setting " + field.name() + ". Using default value: 0");
                 return 0;

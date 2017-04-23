@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 public class LocalDateSerializer extends JsonSerializer<LocalDate> {
     @Override
-    public void serialize(LocalDate localDate, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException, JsonProcessingException {
+    public void serialize(LocalDate localDate, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
         if(localDate == null) {
             jsonGenerator.writeString("");
             return;

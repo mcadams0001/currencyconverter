@@ -4,8 +4,8 @@ import org.adam.currency.common.CallTypeEnum;
 import org.adam.currency.common.SettingField;
 import org.adam.currency.domain.Currency;
 import org.adam.currency.domain.User;
-import org.adam.currency.dto.CurrencyResponseDTO;
 import org.adam.currency.dto.CurrencyResponse;
+import org.adam.currency.dto.CurrencyResponseDTO;
 import org.adam.currency.fixture.CurrencyFixture;
 import org.adam.currency.fixture.HistoryFixture;
 import org.adam.currency.fixture.SettingFixture;
@@ -27,16 +27,16 @@ import java.util.*;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.anyDouble;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isA;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CurrencyServiceImplTest {
 
-    public static final String RESPONSE = "{\n" +
+    private static final String RESPONSE = "{\n" +
             "  \"success\":true,\n" +
             "  \"terms\":\"https:\\/\\/currencylayer.com\\/terms\",\n" +
             "  \"privacy\":\"https:\\/\\/currencylayer.com\\/privacy\",\n" +
@@ -48,7 +48,7 @@ public class CurrencyServiceImplTest {
             "  }\n" +
             "}";
 
-    public static final String ERROR_RESPONSE = "{\n" +
+    private static final String ERROR_RESPONSE = "{\n" +
             "  \"success\": false,\n" +
             "  \"error\": {\n" +
             "    \"code\": 104,\n" +
@@ -181,7 +181,7 @@ public class CurrencyServiceImplTest {
         CurrencyResponseDTO currencyResponse = service.convertCurrency(user, "GBP", "EUR", 120.0d, Optional.of(asOfDate));
         verify(mockSettingService).getSetting(SettingField.CURRENCY_SERVICE_URL);
         verify(mockRestTemplate).getForObject(anyString(), eq(String.class));
-        assertThat(currencyResponse.getError(), equalTo(CurrencyService.MSG_SERVICE_UNAVAILABLE));
+        assertThat(currencyResponse.getError(), equalTo(CurrencyServiceImpl.MSG_SERVICE_UNAVAILABLE));
     }
 
 
@@ -197,14 +197,14 @@ public class CurrencyServiceImplTest {
     @Test
     public void testParseResponseAndCaptureException() throws Exception {
         CurrencyResponse response = service.parseResponse("abc", "GBP", "EUR", 200.0d);
-        assertThat(response.getError().getInfo(), equalTo(CurrencyService.MSG_INVALID_RESPONSE));
+        assertThat(response.getError().getInfo(), equalTo(CurrencyServiceImpl.MSG_INVALID_RESPONSE));
     }
 
     @Test
     public void shouldConvertCurrencyWhenNoneAreUSD() throws Exception {
         Map<String, Double> quotes = new HashMap<>();
-        quotes.put("USDGBP",0.702050d);
-        quotes.put("USDEUR",0.923318d);
+        quotes.put("USDGBP", 0.702050d);
+        quotes.put("USDEUR", 0.923318d);
         double quote = service.getQuote(quotes, "GBP", "EUR");
         assertThat(quote, equalTo(1.315174133));
     }
@@ -212,8 +212,8 @@ public class CurrencyServiceImplTest {
     @Test
     public void shouldConvertCurrencyWhenSourceIsUSD() throws Exception {
         Map<String, Double> quotes = new HashMap<>();
-        quotes.put("USDGBP",0.702050d);
-        quotes.put("USDEUR",0.923318d);
+        quotes.put("USDGBP", 0.702050d);
+        quotes.put("USDEUR", 0.923318d);
         double quote = service.getQuote(quotes, "USD", "EUR");
         assertThat(quote, equalTo(0.923318d));
     }
@@ -221,12 +221,11 @@ public class CurrencyServiceImplTest {
     @Test
     public void shouldConvertCurrencyWhenTargetIsUSD() throws Exception {
         Map<String, Double> quotes = new HashMap<>();
-        quotes.put("USDGBP",0.702050d);
-        quotes.put("USDEUR",0.923318d);
+        quotes.put("USDGBP", 0.702050d);
+        quotes.put("USDEUR", 0.923318d);
         double quote = service.getQuote(quotes, "EUR", "USD");
-        assertThat(quote, equalTo(1/0.923318d));
+        assertThat(quote, equalTo(1 / 0.923318d));
     }
-
 
 
 }

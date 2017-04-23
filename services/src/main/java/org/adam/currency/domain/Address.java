@@ -36,7 +36,7 @@ public class Address implements Serializable {
      * Default constructor used by Hibernate.
      */
     public Address() {
-        //Does nothing.
+        createDate = LocalDateTime.now();
     }
 
     public Address(Long id, String street, String city, String postCode, Country country, LocalDateTime createDate) {

@@ -12,8 +12,6 @@ import java.util.Optional;
  * Currency Service.
  */
 public interface CurrencyService {
-    String MSG_INVALID_RESPONSE = "Invalid response from the currency service. Please try later.";
-    String MSG_SERVICE_UNAVAILABLE = "Currency service is currently unavailable. Please try later.";
     /**
      * Finds all currencies.
      * @return a list of all currencies.

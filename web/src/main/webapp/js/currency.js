@@ -10,16 +10,17 @@ currency.validateInputs = function() {
     var currencyFrom = $('#from').val();
     var currencyTo = $('#to').val();
     var asOfDate = $('#asOfdate').val();
+    var amount = $('#amount').val();
     var errorMsg = '';
     if(currencyFrom === currencyTo) {
         status = false;
         errorMsg = 'Please select different from and to currencies.<br/>';
     }
-    if(!common.isValidDouble($('#amount').val())) {
+    if(!common.isValidDouble(amount)) {
         status = false;
         errorMsg += 'Please provide a numeric amount.<br/>';
     }
-    if(asOfDate != '' && !common.isValidDate(asOfDate)) {
+    if(asOfDate !== '' && !common.isValidDate(asOfDate)) {
         status = false;
         errorMsg += 'Please provide date in valid format dd-MMM-yyyy';
     }
@@ -37,7 +38,7 @@ currency.loadHistory = function() {
     common.loadHandleBarPage("history.html", "historyContainer", null, null);
 };
 
-currency.handleAfterInitialization = function(context) {
+currency.handleAfterInitialization = function() {
     currency.setupAjaxForm();
     common.dateFieldPicker('asOfdate');
 };
@@ -61,7 +62,7 @@ currency.handleBeforeSubmit = function() {
     return true;
 };
 
-currency.handleError = function(xhr, status, error, $form) {
+currency.handleError = function() {
     currency.showProgress(false);
     return false;
 };

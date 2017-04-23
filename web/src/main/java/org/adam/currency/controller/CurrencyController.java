@@ -90,6 +90,6 @@ public class CurrencyController {
     }
 
     String getHistoryView(Collection<HistoryDTO> historyDTOCollection) {
-        return historyDTOCollection.size() > 0 ? "currencyHistory" : "currencyHistoryEmpty";
+        return !historyDTOCollection.isEmpty() ? "currencyHistory" : "currencyHistoryEmpty";
     }
 }

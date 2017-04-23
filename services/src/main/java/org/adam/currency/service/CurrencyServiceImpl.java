@@ -33,6 +33,8 @@ import java.util.Optional;
 @Service("currencyService")
 @Transactional
 public class CurrencyServiceImpl implements CurrencyService {
+    static final String MSG_INVALID_RESPONSE = "Invalid response from the currency service. Please try later.";
+    static final String MSG_SERVICE_UNAVAILABLE = "Currency service is currently unavailable. Please try later.";
     private static final Logger LOGGER = LoggerFactory.getLogger(CurrencyServiceImpl.class);
 
 
@@ -158,7 +160,7 @@ public class CurrencyServiceImpl implements CurrencyService {
         double quote = getQuote(quotes, currencyFrom, currencyTo);
         return new CurrencyResponseBuilder()
                 .withSuccess(true)
-                .withTimestamp(DateHelper.timestampToLocalDateTime(Long.valueOf((Integer) map.get("timestamp"))))
+                .withTimestamp(DateHelper.timestampToLocalDateTime((Integer) map.get("timestamp")))
                 .withQuote(quote)
                 .withResult(calculateResult(amount, quote))
                 .build();
