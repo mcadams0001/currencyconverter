@@ -1,22 +1,22 @@
 package org.adam.currency.helper;
 
 import org.adam.currency.builder.CurrencyResponseBuilder;
-import org.adam.currency.dto.CurrencyResponseDTO;
 import org.adam.currency.dto.CurrencyResponse;
+import org.adam.currency.dto.CurrencyResponseDTO;
 import org.junit.Test;
 
 import java.time.LocalDateTime;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 public class ResponseTransformerTest {
 
     @Test
     public void testTransform() throws Exception {
-        CurrencyResponse response = new CurrencyResponseBuilder().withTimestamp(LocalDateTime.of(2016,1,30, 19,30,15)).withQuote(0.6).withResult(200.0d).withSuccess(true).build();
-        CurrencyResponseDTO currencyResponseDTO = new ResponseTransformer().transform(response);
+        CurrencyResponse response = new CurrencyResponseBuilder().withTimestamp(LocalDateTime.of(2016, 1, 30, 19, 30, 15)).withQuote(0.6).withResult(200.0d).withSuccess(true).build();
+        CurrencyResponseDTO currencyResponseDTO = new ResponseTransformer().apply(response);
         assertThat(currencyResponseDTO, notNullValue());
         assertThat(currencyResponseDTO.getQuote(), equalTo(response.getInfo().getQuote()));
         assertThat(currencyResponseDTO.getResult(), equalTo(response.getResult()));
@@ -27,7 +27,7 @@ public class ResponseTransformerTest {
 
     @Test
     public void shouldTransformNullResponseToEmptyCurrencyDTO() throws Exception {
-        assertThat(new ResponseTransformer().transform(null), equalTo(new CurrencyResponseDTO()));
+        assertThat(new ResponseTransformer().apply(null), equalTo(new CurrencyResponseDTO()));
     }
 
 }

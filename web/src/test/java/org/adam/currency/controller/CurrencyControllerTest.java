@@ -98,7 +98,7 @@ public class CurrencyControllerTest {
         command.setDate(LocalDate.of(2016, 1, 30));
         CurrencyResponseDTO response = new CurrencyDTOBuilder().withSuccess(true).withResult(125.50d).withQuote(0.7d).withTimestamp(LocalDateTime.of(2016, 1, 30, 19, 14, 30)).build();
         when(mockCurrencyService.findAll()).thenReturn(CurrencyFixture.CURRENCIES);
-        when(mockCurrencyService.convertCurrency(isA(User.class), anyString(), anyString(), anyDouble(), isA(Optional.class))).thenReturn(response);
+        when(mockCurrencyService.convertCurrency(isA(User.class), anyString(), anyString(), anyDouble(), any())).thenReturn(response);
         ResponseEntity<String> responseEntity = controller.convert(mockAuthentication, command, mockRequest);
         verify(mockCurrencyService).convertCurrency(user, command.getFrom(), command.getTo(), Double.parseDouble(command.getAmount()), Optional.of(command.getDate()));
         assertThat(responseEntity.getStatusCode(), equalTo(HttpStatus.OK));

@@ -2,18 +2,19 @@ package org.adam.currency.helper;
 
 import org.adam.currency.domain.History;
 import org.adam.currency.dto.HistoryDTO;
-import org.apache.commons.collections4.Transformer;
 
-public class HistoryTransformer implements Transformer<History, HistoryDTO> {
+import java.util.function.Function;
+
+public class HistoryTransformer implements Function<History, HistoryDTO> {
     @Override
-    public HistoryDTO transform(History history) {
+    public HistoryDTO apply(History history) {
         HistoryDTO dto = new HistoryDTO();
         if (history == null) {
             return dto;
         }
         CurrencyTransformer currencyTransformer = new CurrencyTransformer();
-        dto.setCurrencyFrom(currencyTransformer.transform(history.getCurrencyFrom()));
-        dto.setCurrencyTo(currencyTransformer.transform(history.getCurrencyTo()));
+        dto.setCurrencyFrom(currencyTransformer.apply(history.getCurrencyFrom()));
+        dto.setCurrencyTo(currencyTransformer.apply(history.getCurrencyTo()));
         dto.setResult(history.getResult());
         dto.setRate(history.getRate());
         dto.setAmount(history.getAmount());

@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 public class UserTransformerTest {
 
@@ -15,7 +15,7 @@ public class UserTransformerTest {
     public void testTransform() throws Exception {
         User user = UserFixture.TEST_USER;
         UserTransformer transformer = new UserTransformer();
-        UserDTO dto = transformer.transform(user);
+        UserDTO dto = transformer.apply(user);
         assertThat(dto, notNullValue());
         assertThat(dto.getFirstName(), equalTo(user.getFirstName()));
         assertThat(dto.getLastName(), equalTo(user.getLastName()));
@@ -24,7 +24,7 @@ public class UserTransformerTest {
     @Test
     public void shouldTransformNullIntoDtoInstance() throws Exception {
         UserTransformer transformer = new UserTransformer();
-        UserDTO dto = transformer.transform(null);
+        UserDTO dto = transformer.apply(null);
         assertThat(dto, notNullValue());
     }
 

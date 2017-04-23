@@ -2,14 +2,15 @@ package org.adam.currency.helper;
 
 import org.adam.currency.domain.Currency;
 import org.adam.currency.dto.CurrencyDTO;
-import org.apache.commons.collections4.Transformer;
 
-public class CurrencyTransformer implements Transformer<Currency, CurrencyDTO> {
+import java.util.function.Function;
+
+public class CurrencyTransformer implements Function<Currency, CurrencyDTO> {
 
     @Override
-    public CurrencyDTO transform(Currency currency) {
+    public CurrencyDTO apply(Currency currency) {
         CurrencyDTO dto = new CurrencyDTO();
-        if(currency == null) {
+        if (currency == null) {
             return dto;
         }
         dto.setCode(currency.getCode());

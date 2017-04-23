@@ -33,7 +33,7 @@ import java.util.Optional;
 @Service("currencyService")
 @Transactional
 public class CurrencyServiceImpl implements CurrencyService {
-    public static final Logger LOGGER = LoggerFactory.getLogger(CurrencyServiceImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CurrencyServiceImpl.class);
 
 
     @Autowired
@@ -71,10 +71,10 @@ public class CurrencyServiceImpl implements CurrencyService {
 
     CurrencyResponseDTO toCurrencyResponseDTO(CurrencyResponse response, double amount, Currency currencyFrom, Currency currencyTo) {
         CurrencyTransformer currencyTransformer = new CurrencyTransformer();
-        CurrencyResponseDTO dto = new ResponseTransformer().transform(response);
+        CurrencyResponseDTO dto = new ResponseTransformer().apply(response);
         dto.setAmount(amount);
-        dto.setCurrencyFrom(currencyTransformer.transform(currencyFrom));
-        dto.setCurrencyTo(currencyTransformer.transform(currencyTo));
+        dto.setCurrencyFrom(currencyTransformer.apply(currencyFrom));
+        dto.setCurrencyTo(currencyTransformer.apply(currencyTo));
         return dto;
     }
 

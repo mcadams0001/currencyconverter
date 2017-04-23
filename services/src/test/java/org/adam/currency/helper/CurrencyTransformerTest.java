@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 public class CurrencyTransformerTest {
 
@@ -15,7 +15,7 @@ public class CurrencyTransformerTest {
     public void testTransform() throws Exception {
         CurrencyTransformer transformer = new CurrencyTransformer();
         Currency currency = CurrencyFixture.GBP;
-        CurrencyDTO dto = transformer.transform(currency);
+        CurrencyDTO dto = transformer.apply(currency);
         assertThat(dto, notNullValue());
         assertThat(dto.getCode(), equalTo(currency.getCode()));
         assertThat(dto.getName(), equalTo(currency.getName()));
@@ -25,7 +25,7 @@ public class CurrencyTransformerTest {
     @Test
     public void shouldTransformNullToDtoInstance() throws Exception {
         CurrencyTransformer transformer = new CurrencyTransformer();
-        CurrencyDTO dto = transformer.transform(null);
+        CurrencyDTO dto = transformer.apply(null);
         assertThat(dto, notNullValue());
     }
 

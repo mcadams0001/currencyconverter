@@ -14,7 +14,6 @@ import org.adam.currency.helper.UserTransformer;
 import org.adam.currency.security.PrincipalHelper;
 import org.adam.currency.service.CurrencyService;
 import org.adam.currency.service.HistoryService;
-import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -33,6 +32,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import java.util.*;
 
+import static java.util.stream.Collectors.toList;
+
 @Controller
 @PreAuthorize("hasRole('ROLE_USER')")
 public class CurrencyController {
@@ -47,7 +48,7 @@ public class CurrencyController {
     public ModelAndView displayCurrencies(Principal principal) {
         ModelAndView mav = new ModelAndView(Constants.ViewName.INDEX);
         User user = PrincipalHelper.getUserFromPrincipal(principal);
-        mav.addObject(Constants.Parameters.USER, new UserTransformer().transform(user));
+        mav.addObject(Constants.Parameters.USER, new UserTransformer().apply(user));
         return mav;
     }
 
@@ -56,7 +57,7 @@ public class CurrencyController {
     public ResponseEntity<String> displayForm(HttpServletRequest request) {
         HttpHeaders httpHeaders = HttpServletHelper.createJsonResponseHeaders(request);
         Map<String, Object> model = new HashMap<>();
-        model.put(Constants.Parameters.CURRENCIES, CollectionUtils.collect(currencyService.findAll(), new CurrencyTransformer()));
+        model.put(Constants.Parameters.CURRENCIES, currencyService.findAll().stream().map(new CurrencyTransformer()).collect(toList()));
         model.put(Constants.Parameters.VIEW_NAME, "currencyForm");
         return new ResponseEntity<>(HttpServletHelper.jsonResponse(model), httpHeaders, HttpStatus.OK);
     }
@@ -82,7 +83,7 @@ public class CurrencyController {
         User user = PrincipalHelper.getUserFromPrincipal(principal);
         List<History> historyList = historyService.findByUser(user);
         Map<String, Object> model = new HashMap<>();
-        Collection<HistoryDTO> historyDTOCollection = CollectionUtils.collect(historyList, new HistoryTransformer());
+        Collection<HistoryDTO> historyDTOCollection = historyList.stream().map(new HistoryTransformer()).collect(toList());
         model.put(Constants.Parameters.HISTORY, historyDTOCollection);
         model.put(Constants.Parameters.VIEW_NAME, getHistoryView(historyDTOCollection));
         return new ResponseEntity<>(HttpServletHelper.jsonResponse(model), httpHeaders, HttpStatus.OK);
