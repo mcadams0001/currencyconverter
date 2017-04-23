@@ -18,7 +18,7 @@ public class BaseRepositoryTests extends AbstractTransactionalJUnit4SpringContex
 
     @Autowired
     @Qualifier("sessionFactory")
-    protected SessionFactory sessionFactory;
+    private SessionFactory sessionFactory;
 
     public void setAbstractSessionFactoryBean(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;

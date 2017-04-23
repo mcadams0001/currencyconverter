@@ -165,16 +165,20 @@ public class CurrencyServiceImpl implements CurrencyService {
     }
 
     double getQuote(Map<String, Double> quotes, String currencyFrom, String currencyTo) {
-        if (!"USD".equalsIgnoreCase(currencyFrom) && !"USD".equalsIgnoreCase(currencyTo)) {
+        if (!isUSD(currencyFrom) && !isUSD(currencyTo)) {
             return new BigDecimal(quotes.get("USD" + currencyTo)).divide(new BigDecimal(quotes.get("USD" + currencyFrom)), 9, BigDecimal.ROUND_CEILING).doubleValue();
-        } else if ("USD".equalsIgnoreCase(currencyFrom) && "USD".equalsIgnoreCase(currencyTo)) {
+        } else if (isUSD(currencyFrom) && isUSD(currencyTo)) {
             return 1.0d;
-        } else if ("USD".equalsIgnoreCase(currencyFrom)) {
+        } else if (isUSD(currencyFrom)) {
             return quotes.get("USD" + currencyTo);
-        } else if ("USD".equalsIgnoreCase(currencyTo)) {
+        } else if (isUSD(currencyTo)) {
             return 1.0 / quotes.get("USD" + currencyFrom);
         }
         return 0.0d;
+    }
+
+    private boolean isUSD(String currencyFrom) {
+        return "USD".equalsIgnoreCase(currencyFrom);
     }
 
 
