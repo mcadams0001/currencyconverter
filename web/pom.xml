@@ -129,6 +129,7 @@
                 </executions>
                 <configuration>
                     <version>2.1.1</version>
+                    <skip>${skipTests}</skip>
                 </configuration>
             </plugin>
             <plugin>
