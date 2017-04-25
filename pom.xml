@@ -32,6 +32,9 @@
         <sonar.host.url>https://sonarqube.com</sonar.host.url>
         <sonar.organization>mcadams0001-github</sonar.organization>
         <sonar.exclusions>**/dto/**,**/builder/**,**/js/jquery/**,**/js/handlebars/**</sonar.exclusions>
+        <sonar.tests>junit</sonar.tests>
+        <sonar.java.coveragePlugin>Jacoco</sonar.java.coveragePlugin>
+        <sonar.jacoco.reportPath>target/test-reports/jacoco.exec</sonar.jacoco.reportPath>
     </properties>
 
     <profiles>
