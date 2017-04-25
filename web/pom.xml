@@ -142,6 +142,7 @@
                         </goals>
                         <configuration>
                             <keepServerAlive>true</keepServerAlive>
+                            <mvnTestSkip>${skipTests}</mvnTestSkip>
                         </configuration>
                     </execution>
                 </executions>
@@ -182,6 +183,7 @@
                     </execution>
                 </executions>
                 <configuration>
+                    <skipTests>${skipTests}</skipTests>
                     <baseDir>http://localhost:${jasmine.serverPort}</baseDir>
                     <outputDir>${saga.output.dir}</outputDir>
                 </configuration>
@@ -197,6 +199,7 @@
                             <goal>run</goal>
                         </goals>
                         <configuration>
+                            <skip>${skipTests}</skip>
                             <target>
                                 <echo message="setting up sonar lcov file (from saga): ${saga.output.coverage.sonar.lcov.file} ..."/>
                                 <copy file="${saga.output.coverage.file}"
