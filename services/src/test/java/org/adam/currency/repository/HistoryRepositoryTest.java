@@ -70,7 +70,7 @@ public class HistoryRepositoryTest extends BaseRepositoryTests {
     public void shouldFindRecent() throws Exception {
         LocalDateTime now = LocalDateTime.now();
         History h1 = new HistoryBuilder().withAmount(200.0d).withCurrencyFrom(CurrencyFixture.GBP).withCurrencyTo(CurrencyFixture.EUR).withDate(now.toLocalDate()).withRate(1.25d).withResult(250.0d).withUser(UserFixture.TEST_USER).withTimeStamp(now.minusMinutes(10)).build();
-        History h2 = new HistoryBuilder().withAmount(180.0d).withCurrencyFrom(CurrencyFixture.GBP).withCurrencyTo(CurrencyFixture.EUR).withDate(now.toLocalDate()).withRate(1.26d).withResult(225.0d).withUser(UserFixture.TEST_USER).withTimeStamp(now.minusMinutes(50)).build();
+        History h2 = new HistoryBuilder().withAmount(180.0d).withCurrencyFrom(CurrencyFixture.GBP).withCurrencyTo(CurrencyFixture.EUR).withDate(now.toLocalDate().minusDays(1)).withRate(1.26d).withResult(225.0d).withUser(UserFixture.TEST_USER).withTimeStamp(now.minusMinutes(50)).build();
         History h3 = new HistoryBuilder().withAmount(200.0d).withCurrencyFrom(CurrencyFixture.GBP).withCurrencyTo(CurrencyFixture.EUR).withDate(LocalDate.of(2016, 1, 2)).withRate(1.4d).withResult(280.0d).withUser(UserFixture.TEST_USER).withTimeStamp(now.minusDays(10)).build();
         getSession().save(h1);
         getSession().save(h2);
