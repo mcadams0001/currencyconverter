@@ -36,7 +36,7 @@ public class HistoryRepository {
         criteria.add(Restrictions.eq("currencyFrom", currencyFrom));
         criteria.add(Restrictions.eq("currencyTo", currencyTo));
         criteria.add(Restrictions.gt("timeStamp", LocalDateTime.now().minusMinutes(55)));
-        criteria.addOrder(Order.desc("createDate"));
+        criteria.addOrder(Order.desc("timeStamp"));
         criteria.setMaxResults(1);
         List<History> list = criteria.list();
         return !list.isEmpty() ? list.get(0) : null;
