@@ -62,19 +62,6 @@ public class User implements Serializable {
         this.roles = new ArrayList<>();
     }
 
-    public User(Long id, String name, String password, String firstName, String lastName, String emailAddress, LocalDate birthDate, List<Role> roles, Address address, LocalDateTime createDate) {
-        this.id = id;
-        this.name = name;
-        this.password = password;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.emailAddress = emailAddress;
-        this.birthDate = birthDate;
-        this.createDate = createDate;
-        this.roles = CollectionHelper.defensiveCopy(roles);
-        this.address = address;
-    }
-
     public Long getId() {
         return id;
     }
@@ -115,6 +102,46 @@ public class User implements Serializable {
         return createDate;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public void setEmailAddress(String emailAddress) {
+        this.emailAddress = emailAddress;
+    }
+
+    public void setBirthDate(LocalDate birthDate) {
+        this.birthDate = birthDate;
+    }
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
+    public void setCreateDate(LocalDateTime createDate) {
+        this.createDate = createDate;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -132,6 +159,7 @@ public class User implements Serializable {
                 .append(emailAddress, user.emailAddress)
                 .append(birthDate, user.birthDate)
                 .append(address, user.address)
+                .append(createDate, user.createDate)
                 .isEquals();
     }
 
@@ -146,6 +174,7 @@ public class User implements Serializable {
                 .append(emailAddress)
                 .append(birthDate)
                 .append(address)
+                .append(createDate)
                 .toHashCode();
     }
 

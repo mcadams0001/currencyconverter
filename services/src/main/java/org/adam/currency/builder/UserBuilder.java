@@ -78,7 +78,17 @@ public class UserBuilder {
     }
 
     public User build() {
-        return new User(id, name, password, firstName, lastName, emailAddress, birthDate, roles, address, createDate);
+        User user = new User();
+        user.setId(id);
+        user.setName(name);
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+        user.setEmailAddress(emailAddress);
+        user.setBirthDate(birthDate);
+        user.setRoles(roles);
+        user.setAddress(address);
+        user.setCreateDate(createDate);
+        return user;
     }
 
 }

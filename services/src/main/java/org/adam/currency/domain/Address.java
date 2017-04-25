@@ -86,6 +86,7 @@ public class Address implements Serializable {
                 .append(city, address.city)
                 .append(postCode, address.postCode)
                 .append(country, address.country)
+                .append(createDate, address.createDate)
                 .isEquals();
     }
 
@@ -97,6 +98,7 @@ public class Address implements Serializable {
                 .append(city)
                 .append(postCode)
                 .append(country)
+                .append(createDate)
                 .toHashCode();
     }
 

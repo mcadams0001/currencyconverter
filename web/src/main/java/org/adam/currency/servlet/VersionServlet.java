@@ -8,7 +8,11 @@ import java.io.IOException;
 
 public class VersionServlet extends HttpServlet {
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.getOutputStream().print(getServletConfig().getInitParameter("version"));
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException {
+        try {
+            resp.getOutputStream().print(getServletConfig().getInitParameter("version"));
+        }catch (IOException ex) {
+            throw new ServletException(ex.getMessage(), ex);
+        }
     }
 }

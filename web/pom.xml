@@ -11,6 +11,22 @@
 
     <artifactId>currency-web</artifactId>
     <packaging>war</packaging>
+
+    <properties>
+        <saga.output.dir>${project.build.directory}/coverage</saga.output.dir>
+        <saga.output.coverage.file>${saga.output.dir}/total-coverage.dat</saga.output.coverage.file>
+        <saga.output.coverage.sonar.lcov.file>${saga.output.dir}/total-coverage-sonar.dat
+        </saga.output.coverage.sonar.lcov.file>
+
+        <!-- properties for translating saga output to sonar lcov file -->
+        <saga.output.lcov.source.dir.path>SF:src/</saga.output.lcov.source.dir.path>
+        <sonar.lcov.source.dir.path>SF:src/main/webapp/js/</sonar.lcov.source.dir.path>
+
+        <!-- properties for sonar -->
+
+        <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
+        <sonar.javascript.lcov.reportPath>${saga.output.coverage.sonar.lcov.file}</sonar.javascript.lcov.reportPath>
+    </properties>
     <build>
         <finalName>currency-web</finalName>
         <plugins>
@@ -124,6 +140,9 @@
                         <goals>
                             <goal>test</goal>
                         </goals>
+                        <configuration>
+                            <keepServerAlive>true</keepServerAlive>
+                        </configuration>
                     </execution>
                 </executions>
                 <configuration>
@@ -151,13 +170,57 @@
                 </configuration>
             </plugin>
             <plugin>
+                <groupId>com.github.timurstrekalov</groupId>
+                <artifactId>saga-maven-plugin</artifactId>
+                <version>1.5.5</version>
+                <executions>
+                    <execution>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>coverage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <baseDir>http://localhost:${jasmine.serverPort}</baseDir>
+                    <outputDir>${saga.output.dir}</outputDir>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.7</version>
+                <executions>
+                    <execution>
+                        <id>saga-to-sonar-lcov</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <echo message="setting up sonar lcov file (from saga): ${saga.output.coverage.sonar.lcov.file} ..."/>
+                                <copy file="${saga.output.coverage.file}"
+                                      tofile="${saga.output.coverage.sonar.lcov.file}"/>
+
+                                <echo message="replacing '${saga.output.lcov.source.dir.path} with '${sonar.lcov.source.dir.path}' in ${saga.output.coverage.sonar.lcov.file}"/>
+                                <replace file="${saga.output.coverage.sonar.lcov.file}"
+                                         token="${saga.output.lcov.source.dir.path}"
+                                         value="${sonar.lcov.source.dir.path}"/>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
                 <version>3.0.0</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
-                        <goals><goal>copy</goal></goals>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
                         <configuration>
                             <artifactItems>
                                 <artifactItem>
@@ -209,7 +272,6 @@
                 </includes>
             </testResource>
         </testResources>
-
     </build>
 
     <dependencies>
