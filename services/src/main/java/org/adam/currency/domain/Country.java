@@ -11,7 +11,7 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "COUNTRIES")
-public class Country implements Serializable{
+public class Country implements Serializable {
 
     @Id
     @Column(name = "COUNTRY_CODE")
@@ -46,9 +46,13 @@ public class Country implements Serializable{
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
+        if (this == o) {
+            return true;
+        }
 
-        if (o == null || getClass() != o.getClass()) return false;
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         Country country = (Country) o;
 

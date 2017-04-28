@@ -7,6 +7,9 @@ import java.util.List;
  * Collection Helper
  */
 public class CollectionHelper {
+    private CollectionHelper() {
+        //Do nothing.
+    }
 
     /**
      * Creates defensive copy of list if

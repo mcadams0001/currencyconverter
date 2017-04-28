@@ -8,7 +8,9 @@ common.isValidDouble = function (value) {
 };
 
 common.isValidDate = function (value) {
-    if (value === null || value === '') return true;
+    if (value === null || value === '') {
+        return true;
+    }
     return value.toLowerCase().match(/^(\d{1,2})(\/|-)(?:(\d{1,2})|(jan)|(feb)|(mar)|(apr)|(may)|(jun)|(jul)|(aug)|(sep)|(oct)|(nov)|(dec))(\/|-)(\d{4})$/i);
 };
 

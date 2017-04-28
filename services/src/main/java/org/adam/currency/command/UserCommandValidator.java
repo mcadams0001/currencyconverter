@@ -16,7 +16,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class UserCommandValidator implements Validator {
-    public static final Logger LOGGER = LoggerFactory.getLogger(UserCommandValidator.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserCommandValidator.class);
+    private static final String ERROR_BLANK = "error.blank";
 
     private UserService userService;
     private CountryService countryService;
@@ -43,16 +44,16 @@ public class UserCommandValidator implements Validator {
     }
 
     private void validateBirthDate(Errors errors, UserCommand command) {
-        if(StringUtils.isBlank(command.getBirthDate())) {
-            errors.rejectValue("birthDate", "error.blank");
-        } else if(!DateHelper.isCorrectDate(command.getBirthDate())) {
+        if (StringUtils.isBlank(command.getBirthDate())) {
+            errors.rejectValue("birthDate", ERROR_BLANK);
+        } else if (!DateHelper.isCorrectDate(command.getBirthDate())) {
             errors.rejectValue("birthDate", "error.invalid.date.format", new Object[]{DateHelper.APPLICATION_DATE_FORMAT}, null);
         }
     }
 
     private void validateEmailAddress(Errors errors, UserCommand command) {
         if (StringUtils.isBlank(command.getEmail())) {
-            errors.rejectValue("email", "error.blank");
+            errors.rejectValue("email", ERROR_BLANK);
         } else if (!EmailValidator.getInstance().isValid(command.getEmail())) {
             errors.rejectValue("email", "error.email.not.valid");
         }
@@ -66,7 +67,7 @@ public class UserCommandValidator implements Validator {
     private void validatePassword(Errors errors, UserCommand command) {
         if (StringUtils.isEmpty(command.getPassword())) {
             errors.rejectValue("password", "error.blank");
-        } else if(command.getPassword().length() < 8) {
+        } else if (command.getPassword().length() < 8) {
             errors.rejectValue("password", "error.password.too.short", new Object[]{"8"}, null);
         } else if (!command.getPassword().equals(command.getRepeatPassword())) {
             errors.rejectValue("repeatPassword", "error.repeated.password.different");
