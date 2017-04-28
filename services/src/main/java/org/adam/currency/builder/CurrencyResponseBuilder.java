@@ -12,44 +12,45 @@ public class CurrencyResponseBuilder {
     private Double result;
     private LocalDateTime timestamp;
     private String errorMessage;
+    private String errorCode;
 
-    public CurrencyResponseBuilder withQuote(Double quote){
+    public CurrencyResponseBuilder withQuote(Double quote) {
         this.quote = quote;
         return this;
     }
 
-    public CurrencyResponseBuilder withResult(Double result){
+    public CurrencyResponseBuilder withResult(Double result) {
         this.result = result;
         return this;
     }
 
-    public CurrencyResponseBuilder withTimestamp(LocalDateTime timestamp){
+    public CurrencyResponseBuilder withTimestamp(LocalDateTime timestamp) {
         this.timestamp = timestamp;
         return this;
     }
 
-    public CurrencyResponseBuilder withSuccess(Boolean success){
+    public CurrencyResponseBuilder withSuccess(Boolean success) {
         this.success = success;
         return this;
     }
 
-    public CurrencyResponseBuilder withErrorMessage(String errorMessage){
+    public CurrencyResponseBuilder withErrorMessage(String errorMessage) {
         this.errorMessage = errorMessage;
+        return this;
+    }
+
+    public CurrencyResponseBuilder withErrorCode(String errorCode) {
+        this.errorCode = errorCode;
         return this;
     }
 
     public CurrencyResponse build() {
         CurrencyResponse response = new CurrencyResponse();
-        CurrencyInfo info = new CurrencyInfo();
-        info.setQuote(quote);
-        info.setTimestamp(timestamp);
-        response.setInfo(info);
+        response.setInfo(new CurrencyInfo(quote, timestamp));
         response.setResult(result);
         response.setSuccess(success);
-        CurrencyError error = new CurrencyError();
-        error.setInfo(errorMessage);
-        response.setError(error);
-        return  response;
+        response.setError(new CurrencyError(errorCode, errorMessage));
+        return response;
     }
 
 }

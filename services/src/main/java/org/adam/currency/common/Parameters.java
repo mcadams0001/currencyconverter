@@ -9,7 +9,8 @@ public enum Parameters {
     USER("user"),
     CURRENCIES("currencies"),
     VIEW_NAME("viewName"),
-    HISTORY("historyList");
+    HISTORY("historyList"),
+    ERROR("error");
 
     private String name;
 

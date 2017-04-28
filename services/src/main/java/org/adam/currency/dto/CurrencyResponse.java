@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.adam.currency.helper.BooleanSerializer;
 import org.adam.currency.helper.DoubleSerializer;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -71,5 +73,35 @@ public class CurrencyResponse {
 
     public void setError(CurrencyError error) {
         this.error = error;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        CurrencyResponse that = (CurrencyResponse) o;
+
+        return new EqualsBuilder()
+                .append(success, that.success)
+                .append(result, that.result)
+                .append(info, that.info)
+                .append(error, that.error)
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .append(success)
+                .append(result)
+                .append(info)
+                .append(error)
+                .toHashCode();
     }
 }
