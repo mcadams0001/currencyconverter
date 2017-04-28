@@ -12,11 +12,11 @@ import java.time.LocalDateTime;
 import java.util.TimeZone;
 
 import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
-public class LocalDateTimeSerializerTest {
+public class LocalDateTimeStringSerializerTest {
 
     @Mock
     private JsonGenerator mockJsonGenerator;
@@ -28,17 +28,17 @@ public class LocalDateTimeSerializerTest {
 
     @Test
     public void testSerialize() throws Exception {
-        LocalDateTimeSerializer serializer = new LocalDateTimeSerializer();
+        LocalDateTimeStringSerializer serializer = new LocalDateTimeStringSerializer();
         serializer.serialize(LocalDateTime.of(2016, 1, 30, 19, 30, 15), mockJsonGenerator, null);
         ArgumentCaptor<String> stringCaptor = ArgumentCaptor.forClass(String.class);
         verify(mockJsonGenerator).writeString(stringCaptor.capture());
         String value = stringCaptor.getValue();
-        assertThat(value, equalTo("1454182215"));
+        assertThat(value, equalTo("30-Jan-2016 19:30:15"));
     }
 
     @Test
     public void shouldSerializeAndReturnEmptyStringOnNullDate() throws Exception {
-        LocalDateTimeSerializer serializer = new LocalDateTimeSerializer();
+        LocalDateTimeStringSerializer serializer = new LocalDateTimeStringSerializer();
         serializer.serialize(null, mockJsonGenerator, null);
         ArgumentCaptor<String> stringCaptor = ArgumentCaptor.forClass(String.class);
         verify(mockJsonGenerator).writeString(stringCaptor.capture());

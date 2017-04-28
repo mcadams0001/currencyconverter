@@ -31,7 +31,7 @@
         <sonar.host.url>https://sonarqube.com</sonar.host.url>
         <sonar.organization>mcadams0001-github</sonar.organization>
 
-        <sonar.exclusions>**/js/jquery/**,**/js/handlebars/**</sonar.exclusions>
+        <sonar.exclusions>**/common/**,**/js/jquery/**,**/js/handlebars/**</sonar.exclusions>
         <sonar.jacoco.reportPaths>${basedir}/target/jacoco.exec</sonar.jacoco.reportPaths>
     </properties>
 
@@ -416,6 +416,11 @@
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.7.9</version>
+                <configuration>
+                    <excludes>
+                        <exclude>**/common/**</exclude>
+                    </excludes>
+                </configuration>
                 <executions>
                     <execution>
                         <id>default-prepare-agent</id>
