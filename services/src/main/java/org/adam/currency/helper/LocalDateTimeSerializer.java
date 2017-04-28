@@ -10,10 +10,10 @@ import java.time.LocalDateTime;
 public class LocalDateTimeSerializer extends JsonSerializer<LocalDateTime> {
     @Override
     public void serialize(LocalDateTime localDateTime, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
-        if(localDateTime == null) {
+        if (localDateTime == null) {
             jsonGenerator.writeString("");
             return;
         }
-        jsonGenerator.writeString(Long.valueOf(DateHelper.localDateTimeToLong(localDateTime)).toString());
+        jsonGenerator.writeString(Long.toString(DateHelper.localDateTimeToLong(localDateTime)));
     }
 }

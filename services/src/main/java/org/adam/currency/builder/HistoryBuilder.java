@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class HistoryBuilder {
+    private Long id;
     private Currency currencyFrom;
     private Currency currencyTo;
     private User user;
@@ -19,6 +20,11 @@ public class HistoryBuilder {
     private LocalDateTime createDate = LocalDateTime.now();
     private LocalDateTime timeStamp;
     private CallTypeEnum callType;
+
+    public HistoryBuilder withId(Long id) {
+        this.id = id;
+        return this;
+    }
 
     public HistoryBuilder withCallType(CallTypeEnum callType){
         this.callType = callType;
@@ -75,6 +81,7 @@ public class HistoryBuilder {
 
     public History build() {
         History history = new History();
+        history.setId(id);
         history.setAmount(amount);
         history.setCurrencyFrom(currencyFrom);
         history.setCurrencyTo(currencyTo);

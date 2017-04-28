@@ -2,7 +2,8 @@ package org.adam.currency.controller;
 
 import org.adam.currency.command.CurrencyCommand;
 import org.adam.currency.command.CurrencyCommandValidator;
-import org.adam.currency.common.Constants;
+import org.adam.currency.common.Parameters;
+import org.adam.currency.common.ViewName;
 import org.adam.currency.domain.History;
 import org.adam.currency.domain.User;
 import org.adam.currency.dto.CurrencyResponseDTO;
@@ -46,9 +47,9 @@ public class CurrencyController {
 
     @RequestMapping(value = "/index", method = RequestMethod.GET)
     public ModelAndView displayCurrencies(Principal principal) {
-        ModelAndView mav = new ModelAndView(Constants.ViewName.INDEX);
+        ModelAndView mav = new ModelAndView(ViewName.INDEX.toString());
         User user = PrincipalHelper.getUserFromPrincipal(principal);
-        mav.addObject(Constants.Parameters.USER, new UserTransformer().apply(user));
+        mav.addObject(Parameters.USER.toString(), new UserTransformer().apply(user));
         return mav;
     }
 
@@ -57,8 +58,8 @@ public class CurrencyController {
     public ResponseEntity<String> displayForm(HttpServletRequest request) {
         HttpHeaders httpHeaders = HttpServletHelper.createJsonResponseHeaders(request);
         Map<String, Object> model = new HashMap<>();
-        model.put(Constants.Parameters.CURRENCIES, currencyService.findAll().stream().map(new CurrencyTransformer()).collect(toList()));
-        model.put(Constants.Parameters.VIEW_NAME, "currencyForm");
+        model.put(Parameters.CURRENCIES.getName(), currencyService.findAll().stream().map(new CurrencyTransformer()).collect(toList()));
+        model.put(Parameters.VIEW_NAME.getName(), "currencyForm");
         return new ResponseEntity<>(HttpServletHelper.jsonResponse(model), httpHeaders, HttpStatus.OK);
     }
 
@@ -84,8 +85,8 @@ public class CurrencyController {
         List<History> historyList = historyService.findByUser(user);
         Map<String, Object> model = new HashMap<>();
         Collection<HistoryDTO> historyDTOCollection = historyList.stream().map(new HistoryTransformer()).collect(toList());
-        model.put(Constants.Parameters.HISTORY, historyDTOCollection);
-        model.put(Constants.Parameters.VIEW_NAME, getHistoryView(historyDTOCollection));
+        model.put(Parameters.HISTORY.getName(), historyDTOCollection);
+        model.put(Parameters.VIEW_NAME.getName(), getHistoryView(historyDTOCollection));
         return new ResponseEntity<>(HttpServletHelper.jsonResponse(model), httpHeaders, HttpStatus.OK);
     }
 

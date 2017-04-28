@@ -1,5 +1,8 @@
 package org.adam.currency.domain;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import javax.persistence.*;
 
 @Entity
@@ -35,5 +38,33 @@ public class Currency {
 
     public Country getCountry() {
         return country;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Currency currency = (Currency) o;
+
+        return new EqualsBuilder()
+                .append(code, currency.code)
+                .append(name, currency.name)
+                .append(country, currency.country)
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .append(code)
+                .append(name)
+                .append(country)
+                .toHashCode();
     }
 }

@@ -60,13 +60,13 @@ public class UserCommandValidator implements Validator {
     }
 
     private void validateFirstAndLastName(Errors errors) {
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "firstName", "error.blank");
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "lastName", "error.blank");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "firstName", ERROR_BLANK);
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "lastName", ERROR_BLANK);
     }
 
     private void validatePassword(Errors errors, UserCommand command) {
         if (StringUtils.isEmpty(command.getPassword())) {
-            errors.rejectValue("password", "error.blank");
+            errors.rejectValue("password", ERROR_BLANK);
         } else if (command.getPassword().length() < 8) {
             errors.rejectValue("password", "error.password.too.short", new Object[]{"8"}, null);
         } else if (!command.getPassword().equals(command.getRepeatPassword())) {
@@ -76,15 +76,15 @@ public class UserCommandValidator implements Validator {
 
     private void validateUserName(Errors errors, UserCommand command) {
         if (StringUtils.isEmpty(command.getName())) {
-            errors.rejectValue("name", "error.blank");
+            errors.rejectValue("name", ERROR_BLANK);
         } else if (userService.findUserByName(command.getName()) != null) {
             errors.rejectValue("name", "error.name.already.exists");
         }
     }
 
     private void validateAddress(Errors errors, UserCommand command) {
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "street", "error.blank");
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "city", "error.blank");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "street", ERROR_BLANK);
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "city", ERROR_BLANK);
         Country country = validateCountry(errors, command);
         validatePostCode(errors, country, command.getPostCode());
 
@@ -107,7 +107,7 @@ public class UserCommandValidator implements Validator {
 
     private void validatePostCode(Errors errors, Country country, String postCode) {
         if (StringUtils.isBlank(postCode)) {
-            errors.rejectValue("postCode", "error.blank");
+            errors.rejectValue("postCode", ERROR_BLANK);
             return;
         }
         if (country == null || StringUtils.isEmpty(country.getPostCodeRegExp())) {

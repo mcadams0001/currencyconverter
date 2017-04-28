@@ -2,7 +2,8 @@ package org.adam.currency.controller;
 
 import org.adam.currency.builder.CurrencyDTOBuilder;
 import org.adam.currency.command.CurrencyCommand;
-import org.adam.currency.common.Constants;
+import org.adam.currency.common.Parameters;
+import org.adam.currency.common.ViewName;
 import org.adam.currency.domain.Currency;
 import org.adam.currency.domain.User;
 import org.adam.currency.dto.CurrencyResponseDTO;
@@ -72,8 +73,8 @@ public class CurrencyControllerTest {
     public void testDisplayCurrencies() throws Exception {
         ModelAndView mav = controller.displayCurrencies(mockAuthentication);
         assertThat(mav, notNullValue());
-        assertThat(mav.getViewName(), equalTo(Constants.ViewName.INDEX));
-        UserDTO actual = (UserDTO) mav.getModel().get(Constants.Parameters.USER);
+        assertThat(mav.getViewName(), equalTo(ViewName.INDEX.getName()));
+        UserDTO actual = (UserDTO) mav.getModel().get(Parameters.USER.getName());
         assertThat(actual.getFirstName(), equalTo(user.getFirstName()));
         assertThat(actual.getLastName(), equalTo(user.getLastName()));
     }

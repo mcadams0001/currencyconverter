@@ -35,10 +35,10 @@ public class SettingServiceImpl implements SettingService {
         } catch (NumberFormatException e) {
             LOGGER.warn(FAILED_TO_RETRIEVE_SETTING + field.name());
             if (field.isDefaultValueEmpty()) {
-                LOGGER.warn("Failed to retrieve setting " + field.name() + ". Using default value: 0");
+                LOGGER.warn(FAILED_TO_RETRIEVE_SETTING + field.name() + ". Using default value: 0");
                 return 0;
             }
-            LOGGER.warn("Failed to retrieve setting " + field.name() + ". Using default value: " + field.getDefaultValue());
+            LOGGER.warn(FAILED_TO_RETRIEVE_SETTING + field.name() + ". Using default value: " + field.getDefaultValue());
             return Integer.parseInt(field.getDefaultValue());
         }
     }

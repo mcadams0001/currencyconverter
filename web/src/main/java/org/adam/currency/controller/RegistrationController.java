@@ -2,7 +2,7 @@ package org.adam.currency.controller;
 
 import org.adam.currency.command.UserCommand;
 import org.adam.currency.command.UserCommandValidator;
-import org.adam.currency.common.Constants;
+import org.adam.currency.common.Parameters;
 import org.adam.currency.domain.User;
 import org.adam.currency.service.CountryService;
 import org.adam.currency.service.UserService;
@@ -39,19 +39,19 @@ public class RegistrationController {
     @RequestMapping(value = "/register", method = RequestMethod.GET)
     public ModelAndView showForm() {
         ModelAndView mav = new ModelAndView("register");
-        mav.addObject(Constants.Parameters.COMMAND, new UserCommand());
-        mav.addObject(Constants.Parameters.COUNTRIES, countryService.findAll());
+        mav.addObject(Parameters.COMMAND.getName(), new UserCommand());
+        mav.addObject(Parameters.COUNTRIES.getName(), countryService.findAll());
         return mav;
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public String registerUser(@Valid @ModelAttribute(value = "command") UserCommand command, BindingResult bindingResult, ModelMap modelMap) {
         if (bindingResult.hasErrors()) {
-            modelMap.put(Constants.Parameters.COUNTRIES, countryService.findAll());
+            modelMap.put(Parameters.COUNTRIES.getName(), countryService.findAll());
             return "register";
         }
         User user = userService.createUser(command);
-        modelMap.put(Constants.Parameters.USER, user);
+        modelMap.put(Parameters.USER.getName(), user);
         LOGGER.info("User: " + user.getName() + " has completed registration");
         return "registerSuccess";
     }

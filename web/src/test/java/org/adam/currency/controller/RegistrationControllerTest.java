@@ -2,7 +2,7 @@ package org.adam.currency.controller;
 
 import org.adam.currency.command.UserCommand;
 import org.adam.currency.command.UserCommandValidator;
-import org.adam.currency.common.Constants;
+import org.adam.currency.common.Parameters;
 import org.adam.currency.domain.Country;
 import org.adam.currency.domain.User;
 import org.adam.currency.fixture.CountryFixture;
@@ -23,9 +23,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasKey;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -55,8 +53,8 @@ public class RegistrationControllerTest {
         ModelAndView mav = controller.showForm();
         verify(mockCountryService).findAll();
         assertThat(mav, notNullValue());
-        assertThat(mav.getModel().get(Constants.Parameters.COMMAND), equalTo(new UserCommand()));
-        assertThat(mav.getModel().get(Constants.Parameters.COUNTRIES), equalTo(countries));
+        assertThat(mav.getModel().get(Parameters.COMMAND.getName()), equalTo(new UserCommand()));
+        assertThat(mav.getModel().get(Parameters.COUNTRIES.getName()), equalTo(countries));
     }
 
     @Test
@@ -68,7 +66,7 @@ public class RegistrationControllerTest {
         String viewName = controller.registerUser(command, mockBindResult, modelMap);
         verify(mockUserService).createUser(command);
         assertThat(viewName, equalTo("registerSuccess"));
-        assertThat(modelMap, hasKey(Constants.Parameters.USER));
+        assertThat(modelMap, hasKey(Parameters.USER.getName()));
     }
 
     @Test
