@@ -25,6 +25,6 @@ public class LoginControllerTest {
         ModelAndView mav = controller.displayLoginPage("error");
         assertThat(mav, notNullValue());
         assertThat(mav.getViewName(), equalTo(ViewName.LOGIN.getName()));
-        assertThat(mav.getModel().get(Parameters.ERROR.getName()), equalTo(LoginController.INVALID_USER_OR_PWD));
+        assertThat(mav.getModel().get(Parameters.ERROR.getName()), equalTo(LoginController.ERROR_MESSAGE));
     }
 }

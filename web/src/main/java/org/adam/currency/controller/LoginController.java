@@ -11,13 +11,13 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class LoginController {
 
-    static final String INVALID_USER_OR_PWD = "Invalid user or password";
+    static final String ERROR_MESSAGE = "Invalid user or password";
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public ModelAndView displayLoginPage(@RequestParam(value = "error", required = false) String error) {
         ModelAndView mav = new ModelAndView(ViewName.LOGIN.getName());
         if (error != null) {
-            mav.addObject(Parameters.ERROR.getName(), INVALID_USER_OR_PWD);
+            mav.addObject(Parameters.ERROR.getName(), ERROR_MESSAGE);
         }
         return mav;
     }
