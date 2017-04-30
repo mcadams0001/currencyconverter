@@ -7,20 +7,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 
 /**
  * Helper class for Http Servlet.
  */
+@Component("httpServletHelper")
 public class HttpServletHelper {
     private static final Logger LOGGER = LoggerFactory.getLogger(HttpServletHelper.class);
 
-    HttpServletHelper() {
-
-    }
-
-    public static HttpHeaders createJsonResponseHeaders(HttpServletRequest request) {
+    public HttpHeaders createJsonResponseHeaders(HttpServletRequest request) {
         HttpHeaders responseHeaders = new HttpHeaders();
         String userAgent = request.getHeader("User-Agent");
         if (userAgent != null && userAgent.contains("MSIE")) {
@@ -31,16 +29,20 @@ public class HttpServletHelper {
         return responseHeaders;
     }
 
-    public static String jsonResponse(Object object) {
+    public String jsonResponse(Object object) {
         if (object == null) {
             return "{}";
         }
-        ObjectWriter objectWriter = new ObjectMapper().writerWithDefaultPrettyPrinter();
+        ObjectWriter objectWriter = getObjectWriter();
         try {
             return objectWriter.writeValueAsString(object);
         } catch (JsonProcessingException e) {
             LOGGER.error(e.getMessage(), e);
         }
         return "{}";
+    }
+
+    ObjectWriter getObjectWriter() {
+        return new ObjectMapper().writerWithDefaultPrettyPrinter();
     }
 }

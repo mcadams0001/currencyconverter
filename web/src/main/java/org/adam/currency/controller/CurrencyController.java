@@ -45,6 +45,9 @@ public class CurrencyController {
     @Autowired
     private HistoryService historyService;
 
+    @Autowired
+    private HttpServletHelper httpServletHelper;
+
     @RequestMapping(value = "/index", method = RequestMethod.GET)
     public ModelAndView displayCurrencies(Principal principal) {
         ModelAndView mav = new ModelAndView(ViewName.INDEX.toString());
@@ -56,38 +59,42 @@ public class CurrencyController {
     @RequestMapping(value = "/currency", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<String> displayForm(HttpServletRequest request) {
-        HttpHeaders httpHeaders = HttpServletHelper.createJsonResponseHeaders(request);
+        HttpHeaders httpHeaders = httpServletHelper.createJsonResponseHeaders(request);
         Map<String, Object> model = new HashMap<>();
         model.put(Parameters.CURRENCIES.getName(), currencyService.findAll().stream().map(new CurrencyTransformer()).collect(toList()));
         model.put(Parameters.VIEW_NAME.getName(), "currencyForm");
-        return new ResponseEntity<>(HttpServletHelper.jsonResponse(model), httpHeaders, HttpStatus.OK);
+        return new ResponseEntity<>(httpServletHelper.jsonResponse(model), httpHeaders, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/convert", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<String> convert(Principal principal, @ModelAttribute CurrencyCommand command, HttpServletRequest request) {
-        HttpHeaders httpHeaders = HttpServletHelper.createJsonResponseHeaders(request);
+        HttpHeaders httpHeaders = httpServletHelper.createJsonResponseHeaders(request);
         User user = PrincipalHelper.getUserFromPrincipal(principal);
-        BindException errors = new BindException(command, "command");
-        Validator validator = new CurrencyCommandValidator(currencyService);
-        validator.validate(command, errors);
-        if (errors.hasErrors()) {
+        if (isCurrencyInvalid(command)) {
             return new ResponseEntity<>(HttpStatus.OK);
         }
         CurrencyResponseDTO currencyResponse = currencyService.convertCurrency(user, command.getFrom(), command.getTo(), Double.parseDouble(command.getAmount()), Optional.ofNullable(command.getDate()));
-        return new ResponseEntity<>(HttpServletHelper.jsonResponse(currencyResponse), httpHeaders, HttpStatus.OK);
+        return new ResponseEntity<>(httpServletHelper.jsonResponse(currencyResponse), httpHeaders, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/history", method = RequestMethod.GET)
     public ResponseEntity<String> displayHistory(Principal principal, HttpServletRequest request) {
-        HttpHeaders httpHeaders = HttpServletHelper.createJsonResponseHeaders(request);
+        HttpHeaders httpHeaders = httpServletHelper.createJsonResponseHeaders(request);
         User user = PrincipalHelper.getUserFromPrincipal(principal);
         List<History> historyList = historyService.findByUser(user);
         Map<String, Object> model = new HashMap<>();
         Collection<HistoryDTO> historyDTOCollection = historyList.stream().map(new HistoryTransformer()).collect(toList());
         model.put(Parameters.HISTORY.getName(), historyDTOCollection);
         model.put(Parameters.VIEW_NAME.getName(), getHistoryView(historyDTOCollection));
-        return new ResponseEntity<>(HttpServletHelper.jsonResponse(model), httpHeaders, HttpStatus.OK);
+        return new ResponseEntity<>(httpServletHelper.jsonResponse(model), httpHeaders, HttpStatus.OK);
+    }
+
+    boolean isCurrencyInvalid(@ModelAttribute CurrencyCommand command) {
+        BindException errors = new BindException(command, "command");
+        Validator validator = new CurrencyCommandValidator(currencyService);
+        validator.validate(command, errors);
+        return errors.hasErrors();
     }
 
     String getHistoryView(Collection<HistoryDTO> historyDTOCollection) {

@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.*;
 
 public class UserBuilderTest {
@@ -36,6 +37,11 @@ public class UserBuilderTest {
                 .withRoles(user.getRoles())
                 .build();
         assertThat(actualUser, equalTo(user));
+    }
 
+    @Test
+    public void notIncludeNullRole() throws Exception {
+        User user = new UserBuilder().withRoles(null).build();
+        assertThat(user.getRoles(), notNullValue());
     }
 }

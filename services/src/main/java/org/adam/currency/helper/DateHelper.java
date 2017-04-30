@@ -100,4 +100,15 @@ public final class DateHelper {
             return null;
         return LocalDateTime.ofInstant(Instant.ofEpochSecond(timestamp), TimeZone.getDefault().toZoneId());
     }
+
+    /**
+     * Checks if provided date is either empty or in the past comparing to todays date.
+     * @param date the date to check.
+     * @return true if in the past otherwise false.
+     */
+    public static boolean isPastDate(LocalDate date) {
+        return date == null || date.isBefore(LocalDate.now());
+    }
+
+
 }

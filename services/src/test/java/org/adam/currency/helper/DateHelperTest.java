@@ -90,4 +90,19 @@ public class DateHelperTest {
     public void shouldReturnNullOnPatternConversionException() throws Exception {
         assertThat(DateHelper.localDateToAppString(null), nullValue());
     }
+
+    @Test
+    public void shouldBeInThePast() throws Exception {
+        assertThat(DateHelper.isPastDate(LocalDate.of(2000,1,1)), equalTo(true));
+    }
+
+    @Test
+    public void todaysDateIsNotInThePast() throws Exception {
+        assertThat(DateHelper.isPastDate(LocalDate.now()), equalTo(false));
+    }
+
+    @Test
+    public void nullIsTrueInThePast() throws Exception {
+        assertThat(DateHelper.isPastDate(null), equalTo(true));
+    }
 }

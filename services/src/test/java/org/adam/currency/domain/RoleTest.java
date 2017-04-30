@@ -2,12 +2,11 @@ package org.adam.currency.domain;
 
 import org.adam.currency.builder.RoleBuilder;
 import org.adam.currency.common.RoleNameEnum;
-import org.adam.currency.fixture.RoleFixture;
 import org.adam.currency.helper.EqualsTestHelper;
 import org.junit.Test;
 
 import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 public class RoleTest {
     private Role role1 = new RoleBuilder().withId(1L).withName(RoleNameEnum.ROLE_USER).withDescription("Standard User").build();

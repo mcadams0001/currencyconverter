@@ -80,7 +80,7 @@ public class CurrencyServiceImpl implements CurrencyService {
         return dto;
     }
 
-    private CurrencyResponse getResultsFromWebService(User user, double amount, Currency currencyFrom, Currency currencyTo) {
+    CurrencyResponse getResultsFromWebService(User user, double amount, Currency currencyFrom, Currency currencyTo) {
         History history = historyService.findRecent(currencyFrom, currencyTo);
         if (history != null) {
             return createResponseFromHistory(user, amount, LocalDate.now(), currencyFrom, currencyTo, history);
@@ -93,7 +93,7 @@ public class CurrencyServiceImpl implements CurrencyService {
     }
 
     CurrencyResponse getResultForPastDaysFromDatabase(User user, double amount, LocalDate date, Currency currencyFrom, Currency currencyTo) {
-        if (!isPastDate(date)) {
+        if (!DateHelper.isPastDate(date)) {
             return null;
         }
         History history = historyService.findBy(currencyFrom, currencyTo, date);
@@ -107,10 +107,6 @@ public class CurrencyServiceImpl implements CurrencyService {
         CurrencyResponse response = new CurrencyResponseBuilder().withResult(history.getRate() * amount).withQuote(history.getRate()).withTimestamp(history.getTimeStamp()).build();
         historyService.saveHistory(user, currencyFrom, currencyTo, amount, date, response, CallTypeEnum.DATABASE);
         return response;
-    }
-
-    private boolean isPastDate(LocalDate date) {
-        return date == null || date.isBefore(LocalDate.now());
     }
 
     CurrencyResponse invokeService(String from, String to, double amount) {
@@ -173,10 +169,8 @@ public class CurrencyServiceImpl implements CurrencyService {
             return 1.0d;
         } else if (isUSD(currencyFrom)) {
             return quotes.get("USD" + currencyTo);
-        } else if (isUSD(currencyTo)) {
-            return 1.0 / quotes.get("USD" + currencyFrom);
         }
-        return 0.0d;
+        return 1.0 / quotes.get("USD" + currencyFrom);
     }
 
     private boolean isUSD(String currencyFrom) {

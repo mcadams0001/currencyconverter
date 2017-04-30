@@ -25,6 +25,7 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -67,6 +68,17 @@ public class RegistrationControllerTest {
         verify(mockUserService).createUser(command);
         assertThat(viewName, equalTo("registerSuccess"));
         assertThat(modelMap, hasKey(Parameters.USER.getName()));
+    }
+
+    @Test
+    public void shouldNotRegisterUser() throws Exception {
+        ModelMap modelMap = new ModelMap();
+        UserCommand command = new UserCommand();
+        when(mockBindResult.hasErrors()).thenReturn(true);
+        String viewName = controller.registerUser(command, mockBindResult, modelMap);
+        verify(mockUserService, never()).createUser(command);
+        assertThat(viewName, equalTo("register"));
+        assertThat(modelMap, hasKey(Parameters.COUNTRIES.getName()));
     }
 
     @Test

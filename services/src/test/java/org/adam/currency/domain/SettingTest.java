@@ -1,6 +1,7 @@
 package org.adam.currency.domain;
 
 import org.adam.currency.common.SettingField;
+import org.adam.currency.helper.EqualsTestHelper;
 import org.junit.Test;
 
 import static org.hamcrest.Matchers.equalTo;
@@ -21,12 +22,15 @@ public class SettingTest {
         Setting setting1 = new Setting(SettingField.CURRENCY_SERVICE_URL, "http://localhost");
         Setting setting2 = new Setting(SettingField.CURRENCY_SERVICE_URL, "http://localhost");
         Setting setting3 = new Setting(SettingField.CURRENCY_SERVICE_URL, "http://localhost2");
-        assertThat(setting1, equalTo(setting2));
-        assertThat(setting1.hashCode(), equalTo(setting2.hashCode()));
-        assertThat(setting2, not(equalTo(setting3)));
-        assertThat(setting2.hashCode(), not(equalTo(setting3.hashCode())));
-        assertThat(setting1.equals(null), equalTo(false));
-        assertThat(setting1.equals(setting1), equalTo(true));
+        EqualsTestHelper.verifyEquals(setting1, setting2, setting3);
+    }
+
+    @Test
+    public void verifyHashCode() throws Exception {
+        Setting setting1 = new Setting(SettingField.CURRENCY_SERVICE_URL, "http://localhost");
+        Setting setting2 = new Setting(SettingField.CURRENCY_SERVICE_URL, "http://localhost");
+        Setting setting3 = new Setting(SettingField.CURRENCY_SERVICE_URL, "http://localhost2");
+        EqualsTestHelper.verifyHashCode(setting1, setting2, setting3);
     }
 
     @Test

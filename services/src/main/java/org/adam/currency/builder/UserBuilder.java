@@ -71,7 +71,7 @@ public class UserBuilder {
     }
 
     public UserBuilder withRoles(List<Role> roles) {
-        if(roles != null && !roles.isEmpty()) {
+        if(roles != null) {
             this.roles = roles;
         }
         return this;

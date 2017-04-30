@@ -12,6 +12,7 @@ import org.adam.currency.dto.UserDTO;
 import org.adam.currency.fixture.CurrencyFixture;
 import org.adam.currency.fixture.HistoryFixture;
 import org.adam.currency.fixture.UserFixture;
+import org.adam.currency.helper.HttpServletHelper;
 import org.adam.currency.security.UserDetailsImpl;
 import org.adam.currency.service.CurrencyService;
 import org.adam.currency.service.HistoryService;
@@ -24,6 +25,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -36,10 +38,10 @@ import java.util.Optional;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CurrencyControllerTest {
@@ -65,6 +67,7 @@ public class CurrencyControllerTest {
 
     @Before
     public void setUp() throws Exception {
+        ReflectionTestUtils.setField(controller, "httpServletHelper", new HttpServletHelper());
         UserDetailsImpl userDetails = new UserDetailsImpl(user);
         when(mockAuthentication.getPrincipal()).thenReturn(userDetails);
     }
@@ -89,7 +92,6 @@ public class CurrencyControllerTest {
         assertThat(responseEntity.getBody(), equalTo("{" + SEPARATOR + "  \"viewName\" : \"currencyForm\"," + SEPARATOR + "  \"currencies\" : [ {" + SEPARATOR + "    \"code\" : \"EUR\"," + SEPARATOR + "    \"name\" : \"Euro\"," + SEPARATOR + "    \"country\" : \"Germany\"" + SEPARATOR + "  }, {" + SEPARATOR + "    \"code\" : \"USD\"," + SEPARATOR + "    \"name\" : \"US Dollar\"," + SEPARATOR + "    \"country\" : \"United States\"" + SEPARATOR + "  }, {" + SEPARATOR + "    \"code\" : \"GBP\"," + SEPARATOR + "    \"name\" : \"British Pound\"," + SEPARATOR + "    \"country\" : \"United Kingdom\"" + SEPARATOR + "  } ]" + SEPARATOR + "}"));
     }
 
-
     @Test
     public void testConvert() throws Exception {
         CurrencyCommand command = new CurrencyCommand();
@@ -104,6 +106,21 @@ public class CurrencyControllerTest {
         verify(mockCurrencyService).convertCurrency(user, command.getFrom(), command.getTo(), Double.parseDouble(command.getAmount()), Optional.of(command.getDate()));
         assertThat(responseEntity.getStatusCode(), equalTo(HttpStatus.OK));
         assertThat(responseEntity.getBody(), equalTo("{\r\n  \"success\" : \"true\",\r\n  \"quote\" : \"0.7\",\r\n  \"result\" : \"125.5\",\r\n  \"timestamp\" : \"30-Jan-2016 19:14:30\",\r\n  \"error\" : null,\r\n  \"currencyFrom\" : null,\r\n  \"currencyTo\" : null,\r\n  \"amount\" : null\r\n}".replace("\r\n",SEPARATOR)));
+    }
+
+    @Test
+    public void testNotConvert() throws Exception {
+        CurrencyController spyController = spy(controller);
+        CurrencyCommand command = new CurrencyCommand();
+        command.setFrom("GBP");
+        command.setTo("EUR");
+        command.setAmount("125.50");
+        command.setDate(LocalDate.of(2016, 1, 30));
+        doReturn(true).when(spyController).isCurrencyInvalid(any());
+        ResponseEntity<String> responseEntity = spyController.convert(mockAuthentication, command, mockRequest);
+        verify(mockCurrencyService, never()).convertCurrency(user, command.getFrom(), command.getTo(), Double.parseDouble(command.getAmount()), Optional.of(command.getDate()));
+        assertThat(responseEntity.getStatusCode(), equalTo(HttpStatus.OK));
+        assertThat(responseEntity.getBody(), nullValue());
     }
 
     @Test

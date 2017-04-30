@@ -31,6 +31,7 @@ import static org.mockito.ArgumentMatchers.anyDouble;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isA;
+import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -228,10 +229,37 @@ public class CurrencyServiceImplTest {
     }
 
     @Test
+    public void shouldNotConfertIfBothAreUSD() throws Exception {
+        Map<String, Double> quotes = new HashMap<>();
+        quotes.put("USDGBP", 0.702050d);
+        quotes.put("USDEUR", 0.923318d);
+        double quote = service.getQuote(quotes, "USD", "USD");
+        assertThat(quote, equalTo(1.0d));
+    }
+
+    @Test
+    public void shouldConvertEURtoUSD() throws Exception {
+        Map<String, Double> quotes = new HashMap<>();
+        quotes.put("USDGBP", 0.702050d);
+        quotes.put("USDEUR", 0.923318d);
+        double quote = service.getQuote(quotes, "EUR", "USD");
+        assertThat(quote, equalTo(1.083050476650515d));
+    }
+
+    @Test
     public void getErrorIfHistoryIsNotAvailable() throws Exception {
         CurrencyResponse response = service.getResultForPastDaysFromDatabase(user, 100.0d, LocalDate.of(2016, 4, 30), CurrencyFixture.GBP, CurrencyFixture.EUR);
         assertThat(response, notNullValue());
         assertThat(response.getError(), notNullValue());
         assertThat(response.getError().getInfo(), equalTo("Historical exchange rate for GBP and EUR for 30-Apr-2016 is not available"));
+    }
+
+    @Test
+    public void returnResponseWithoutSavingHistory() throws Exception {
+        CurrencyServiceImpl spyService = spy(service);
+        doReturn(null).when(spyService).invokeService(anyString(), anyString(), anyDouble());
+        CurrencyResponse response = spyService.getResultsFromWebService(user, 200d, CurrencyFixture.GBP, CurrencyFixture.EUR);
+        verify(mockHistoryService, never()).saveHistory(any(), any(), any(), anyDouble(), any(), any(), any());
+        assertThat(response, nullValue());
     }
 }

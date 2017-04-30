@@ -58,7 +58,7 @@ public class GenericRepository {
     @SuppressWarnings("unchecked")
     public <T> List<T> findAll(Class<T> clazz, String... orderBy) {
         Criteria criteria = sessionFactory.getCurrentSession().createCriteria(clazz);
-        if (orderBy != null) {
+        if (orderBy.length > 0) {
             for (String order : orderBy) {
                 criteria.addOrder(Order.asc(order));
             }
