@@ -16,6 +16,7 @@ import static org.junit.Assert.assertThat;
 public class CollectionHelperTest {
     @Test
     public void shouldCreateADefensiveCopy() throws Exception {
+        new CollectionHelper();
         List<Country> sourceList = CountryFixture.COUNTRIES;
         List<Country> countries = CollectionHelper.defensiveCopy(sourceList);
         assertThat(countries, equalTo(sourceList));

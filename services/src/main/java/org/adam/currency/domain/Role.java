@@ -69,4 +69,11 @@ public class Role implements Serializable {
                 .append(name)
                 .toHashCode();
     }
+
+    @Override
+    public String toString() {
+        return "Role{" +
+                "name=" + name +
+                '}';
+    }
 }

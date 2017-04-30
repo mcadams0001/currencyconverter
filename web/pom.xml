@@ -23,7 +23,6 @@
         <sonar.lcov.source.dir.path>SF:src/main/webapp/js/</sonar.lcov.source.dir.path>
 
         <!-- properties for sonar -->
-        <sonar.exclusions>**/SecurityContextHelper*</sonar.exclusions>
         <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
         <sonar.javascript.lcov.reportPath>${saga.output.coverage.sonar.lcov.file}</sonar.javascript.lcov.reportPath>
     </properties>

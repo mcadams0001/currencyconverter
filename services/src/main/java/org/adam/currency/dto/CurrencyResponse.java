@@ -104,4 +104,12 @@ public class CurrencyResponse {
                 .append(error)
                 .toHashCode();
     }
+
+    @Override
+    public String toString() {
+        return "CurrencyResponse{" +
+                "success=" + success +
+                ", result=" + result +
+                '}';
+    }
 }

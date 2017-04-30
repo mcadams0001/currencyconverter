@@ -30,8 +30,7 @@
         <phantomjs.binary>${project.basedir}/target/phantomjs-maven-plugin/phantomjs-2.1.1-linux-x86_64/bin/phantomjs</phantomjs.binary>
         <sonar.host.url>https://sonarqube.com</sonar.host.url>
         <sonar.organization>mcadams0001-github</sonar.organization>
-
-        <sonar.exclusions>**/common/**,**/js/jquery/**,**/js/handlebars/**</sonar.exclusions>
+        <sonar.exclusions>**/SecurityContextHelper*,**/common/**,**/js/jquery/**,**/js/handlebars/**</sonar.exclusions>
         <sonar.jacoco.reportPaths>${basedir}/target/jacoco.exec</sonar.jacoco.reportPaths>
     </properties>
 

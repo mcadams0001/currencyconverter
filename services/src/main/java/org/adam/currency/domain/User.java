@@ -182,5 +182,11 @@ public class User implements Serializable {
                 .toHashCode();
     }
 
-
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }
