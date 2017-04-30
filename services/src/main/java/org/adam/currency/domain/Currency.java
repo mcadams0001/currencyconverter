@@ -67,4 +67,12 @@ public class Currency {
                 .append(country)
                 .toHashCode();
     }
+
+    @Override
+    public String toString() {
+        return "Currency{" +
+                "code='" + code + '\'' +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }
