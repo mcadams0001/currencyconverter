@@ -147,4 +147,11 @@ public class UserCommand {
                 .append(country)
                 .toHashCode();
     }
+
+    @Override
+    public String toString() {
+        return "UserCommand{" +
+                "name='" + name + '\'' +
+                '}';
+    }
 }

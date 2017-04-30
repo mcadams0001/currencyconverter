@@ -19,7 +19,7 @@ public final class DateHelper {
     private static final String DATE_TIME_FORMAT = "dd-MMM-yyyy HH:mm:ss";
     private static final Pattern DATE_PATTERN = Pattern.compile("\\d{1,2}-\\w{3}-\\d{4}");
 
-    private DateHelper() {
+    DateHelper() {
 
     }
 

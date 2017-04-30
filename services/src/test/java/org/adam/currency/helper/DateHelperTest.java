@@ -21,6 +21,7 @@ public class DateHelperTest {
 
     @Test
     public void testStringToDateTime() throws Exception {
+        new DateHelper();
         LocalDate localDate = DateHelper.stringToDateTime("12-Dec-2015");
         assertThat(localDate, equalTo(LocalDate.of(2015, 12, 12)));
     }
@@ -31,6 +32,11 @@ public class DateHelperTest {
         assertThat(localDate, nullValue());
     }
 
+    @Test
+    public void shouldReturnNullOnBlankDate() throws Exception {
+        LocalDate localDate = DateHelper.stringToDateTime(null);
+        assertThat(localDate, nullValue());
+    }
 
     @Test
     public void testIsCorrectDate() throws Exception {
@@ -52,10 +58,20 @@ public class DateHelperTest {
     }
 
     @Test
+    public void shouldReturnZeroOnNullDate() throws Exception {
+        assertThat(DateHelper.localDateTimeToLong(null), equalTo(0L));
+    }
+
+    @Test
     public void shouldConvertTimeStampToLocalDateTime() throws Exception {
         LocalDateTime expected = LocalDateTime.of(2015, 4, 26, 17, 15, 15);
         LocalDateTime localDateTime = DateHelper.timestampToLocalDateTime(1430068515L);
         assertThat(localDateTime, equalTo(expected));
+    }
+
+    @Test
+    public void shouldReturnNullOnZeroTimeStamp() throws Exception {
+        assertThat(DateHelper.timestampToLocalDateTime(0L), nullValue());
     }
 
     @Test
@@ -70,8 +86,8 @@ public class DateHelperTest {
         assertThat(DateHelper.localDateToAppString(localDate), equalTo("30-Jan-2016"));
     }
 
-
-
-
-
+    @Test
+    public void shouldReturnNullOnPatternConversionException() throws Exception {
+        assertThat(DateHelper.localDateToAppString(null), nullValue());
+    }
 }
