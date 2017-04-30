@@ -10,7 +10,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.*;
 
 public class RoleTest {
-    private Role role1 = RoleFixture.ROLE_USER;
+    private Role role1 = new RoleBuilder().withId(1L).withName(RoleNameEnum.ROLE_USER).withDescription("Standard User").build();
     private Role role2 = new RoleBuilder().withId(1L).withName(RoleNameEnum.ROLE_USER).withDescription("Standard User").build();
     private Role role3 = new RoleBuilder().withId(2L).withName(RoleNameEnum.ROLE_USER).withDescription("Standard User2").build();
 

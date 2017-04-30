@@ -139,6 +139,7 @@ public class History {
         this.id = id;
     }
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

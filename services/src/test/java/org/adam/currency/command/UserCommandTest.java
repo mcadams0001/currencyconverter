@@ -18,7 +18,7 @@ public class UserCommandTest {
 
     @Test
     public void userCommandHashCode() throws Exception {
-        EqualsTestHelper.verifyEquals(userCommand, userCommand2, userCommand3);
+        EqualsTestHelper.verifyHashCode(userCommand, userCommand2, userCommand3);
     }
 
     @Test

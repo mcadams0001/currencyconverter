@@ -47,6 +47,13 @@ public class GenericRepositoryTest extends BaseRepositoryTests {
     }
 
     @Test
+    public void testFindAllWithNullOrder() throws Exception {
+        List<Country> countries = genericRepository.findAll(Country.class);
+        assertThat(countries, notNullValue());
+        assertThat(countries, equalTo(CountryFixture.COUNTRIES));
+    }
+
+    @Test
     public void testSave() throws Exception {
         Country country = new CountryBuilder().withCode("TST").withName("Test").build();
         genericRepository.save(country);

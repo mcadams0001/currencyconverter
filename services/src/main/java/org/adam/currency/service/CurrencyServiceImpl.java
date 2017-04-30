@@ -92,7 +92,7 @@ public class CurrencyServiceImpl implements CurrencyService {
         return response;
     }
 
-    private CurrencyResponse getResultForPastDaysFromDatabase(User user, double amount, LocalDate date, Currency currencyFrom, Currency currencyTo) {
+    CurrencyResponse getResultForPastDaysFromDatabase(User user, double amount, LocalDate date, Currency currencyFrom, Currency currencyTo) {
         if (!isPastDate(date)) {
             return null;
         }

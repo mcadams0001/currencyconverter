@@ -16,6 +16,7 @@ public class CurrencyTest {
 
     @Test
     public void verifyEquals() throws Exception {
+        new Currency();
         EqualsTestHelper.verifyEquals(c1, c2, c3);
     }
 

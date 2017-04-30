@@ -1,5 +1,6 @@
 package org.adam.currency.command;
 
+import org.adam.currency.domain.Country;
 import org.adam.currency.domain.User;
 import org.adam.currency.fixture.CountryFixture;
 import org.adam.currency.fixture.UserFixture;
@@ -313,6 +314,23 @@ public class UserCommandValidatorTest {
         assertThat(errors.getErrorCount(), equalTo(1));
         assertThat(errors.hasFieldErrors("country"), equalTo(true));
         assertThat(errors.getFieldError("country").getCode(), equalTo("error.select.value"));
+    }
+
+    @Test
+    public void skipValidatePostCodeForNullCountry() throws Exception {
+        UserCommand command = createValidCommand();
+        BindException errors = new BindException(command, "command");
+        validator.validatePostCode(errors, null, "W7 TD1");
+        assertThat(errors.getErrorCount(), equalTo(0));
+    }
+
+    @Test
+    public void skipValidatePostCodeForEmptyRegExp() throws Exception {
+        UserCommand command = createValidCommand();
+        Country country = new Country("FR", "France", null);
+        BindException errors = new BindException(command, "command");
+        validator.validatePostCode(errors, country, "W7 TD1");
+        assertThat(errors.getErrorCount(), equalTo(0));
     }
 
     private UserCommand createValidCommand() {

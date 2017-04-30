@@ -14,6 +14,7 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.*;
 
 public class HistoryRepositoryTest extends BaseRepositoryTests {
@@ -41,6 +42,12 @@ public class HistoryRepositoryTest extends BaseRepositoryTests {
         assertThat(history.getCurrencyTo(), equalTo(CurrencyFixture.EUR));
         assertThat(history.getDate(), equalTo(LocalDate.of(2016, 1, 30)));
         assertThat(history.getRate(), equalTo(1.25d));
+    }
+
+    @Test
+    public void testFindByNullForNotFound() throws Exception {
+        History history = historyRepository.findBy(CurrencyFixture.GBP, CurrencyFixture.EUR, LocalDate.of(2016, 1, 30));
+        assertThat(history, nullValue());
     }
 
     @Test
@@ -83,6 +90,13 @@ public class HistoryRepositoryTest extends BaseRepositoryTests {
         assertThat(history.getDate(), equalTo(now.toLocalDate()));
         assertThat(history.getRate(), equalTo(1.25d));
     }
+
+    @Test
+    public void shouldFindRecentForNull() throws Exception {
+        History history = historyRepository.findRecent(CurrencyFixture.GBP, CurrencyFixture.EUR);
+        assertThat(history, nullValue());
+    }
+
 
 
 }

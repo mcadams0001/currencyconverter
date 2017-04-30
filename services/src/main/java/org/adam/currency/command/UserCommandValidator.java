@@ -105,7 +105,7 @@ public class UserCommandValidator implements Validator {
         return null;
     }
 
-    private void validatePostCode(Errors errors, Country country, String postCode) {
+    void validatePostCode(Errors errors, Country country, String postCode) {
         if (StringUtils.isBlank(postCode)) {
             errors.rejectValue("postCode", ERROR_BLANK);
             return;

@@ -227,5 +227,11 @@ public class CurrencyServiceImplTest {
         assertThat(quote, equalTo(1 / 0.923318d));
     }
 
-
+    @Test
+    public void getErrorIfHistoryIsNotAvailable() throws Exception {
+        CurrencyResponse response = service.getResultForPastDaysFromDatabase(user, 100.0d, LocalDate.of(2016, 4, 30), CurrencyFixture.GBP, CurrencyFixture.EUR);
+        assertThat(response, notNullValue());
+        assertThat(response.getError(), notNullValue());
+        assertThat(response.getError().getInfo(), equalTo("Historical exchange rate for GBP and EUR for 30-Apr-2016 is not available"));
+    }
 }
