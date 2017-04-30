@@ -15,6 +15,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
@@ -56,6 +57,12 @@ public class UserDetailsServiceImplTest {
         verify(mockUserService).findUserByName("test_user");
         verify(service).setUserInSession(isA(User.class));
         assertThat(testUser.getUsername(), equalTo("test_user"));
+    }
+
+    @Test(expected = UsernameNotFoundException.class)
+    public void shouldThrowExceptionOnNonExistingUser() throws Exception {
+        doReturn(null).when(service).getUserFromSession();
+        service.loadUserByUsername("test_user");
     }
 
     @Test

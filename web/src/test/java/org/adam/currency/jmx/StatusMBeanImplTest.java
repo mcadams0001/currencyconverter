@@ -33,6 +33,7 @@ public class StatusMBeanImplTest {
         List<Object> list = new ArrayList<>();
         list.add(new User("user1", "password", Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))));
         list.add(new User("user2", "password", Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))));
+        list.add("Invalid object");
         when(mockSessionRegistry.getAllPrincipals()).thenReturn(list);
         List<String> userNames = bean.getCurrentActiveUsers();
         verify(mockSessionRegistry).getAllPrincipals();

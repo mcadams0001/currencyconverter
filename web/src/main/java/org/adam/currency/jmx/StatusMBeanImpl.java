@@ -16,17 +16,18 @@ import java.util.List;
         description = "Application Status Bean")
 @Component("statusMBean")
 public class StatusMBeanImpl implements StatusMBean {
+
     @Autowired
     @Qualifier("sessionRegistry")
     private SessionRegistry sessionRegistry;
 
-    @ManagedAttribute(description="Currently Active Users", currencyTimeLimit=15)
+    @ManagedAttribute(description = "Currently Active Users", currencyTimeLimit = 15)
     @Override
     public List<String> getCurrentActiveUsers() {
         List<Object> principals = sessionRegistry.getAllPrincipals();
         List<String> userNames = new ArrayList<>();
 
-        for (Object principal: principals) {
+        for (Object principal : principals) {
             if (principal instanceof User) {
                 userNames.add(((User) principal).getUsername());
             }
