@@ -3,7 +3,6 @@ package org.adam.currency.repository;
 import org.adam.currency.domain.Currency;
 import org.adam.currency.domain.History;
 import org.adam.currency.domain.User;
-import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -54,7 +53,6 @@ public class HistoryRepository {
         Root<History> root = query.from(History.class);
         query.where(criteriaBuilder.equal(root.get("user"), user));
         query.orderBy(criteriaBuilder.desc(root.get("createDate")));
-        Criteria criteria = sessionFactory.getCurrentSession().createCriteria(History.class);
         List<History> list = sessionFactory.getCurrentSession().createQuery(query).getResultList();
         return list.subList(0, limit);
     }
