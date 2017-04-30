@@ -33,7 +33,8 @@ public class GenericRepositoryTest extends BaseRepositoryTests {
 
     @Test
     public void shouldFindByName() throws Exception {
-        Country country = genericRepository.findByName(Country.class, "name", "United Kingdom");
+        Country uk = CountryFixture.UK;
+        Country country = genericRepository.findByName(Country.class, "name", uk.getName());
         assertThat(country, notNullValue());
         assertThat(country.getCode(), equalTo("GBR"));
     }

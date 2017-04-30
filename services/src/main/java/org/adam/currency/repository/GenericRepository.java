@@ -1,14 +1,17 @@
 package org.adam.currency.repository;
 
-import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * Generic Repository.
@@ -40,11 +43,12 @@ public class GenericRepository {
      * @param <T>   generic type.
      * @return instance of entity or null if not found.
      */
-    @SuppressWarnings("unchecked")
     public <T> T findByName(Class<T> clazz, String name, Object value) {
-        Criteria criteria = sessionFactory.getCurrentSession().createCriteria(clazz);
-        criteria.add(Restrictions.eq(name, value));
-        return (T) criteria.uniqueResult();
+        CriteriaBuilder criteriaBuilder = sessionFactory.getCriteriaBuilder();
+        CriteriaQuery<T> query = criteriaBuilder.createQuery(clazz);
+        Root<T> root = query.from(clazz);
+        query.where(criteriaBuilder.equal(root.get(name), value));
+        return sessionFactory.getCurrentSession().createQuery(query).getSingleResult();
     }
 
     /**
@@ -55,15 +59,16 @@ public class GenericRepository {
      * @param <T>     generic type.
      * @return the list collection with all entities found.
      */
-    @SuppressWarnings("unchecked")
     public <T> List<T> findAll(Class<T> clazz, String... orderBy) {
-        Criteria criteria = sessionFactory.getCurrentSession().createCriteria(clazz);
+        CriteriaBuilder criteriaBuilder = sessionFactory.getCriteriaBuilder();
+        CriteriaQuery<T> query = criteriaBuilder.createQuery(clazz);
+        Root<T> root = query.from(clazz);
         if (orderBy.length > 0) {
-            for (String order : orderBy) {
-                criteria.addOrder(Order.asc(order));
-            }
+            List<String> orders = Arrays.asList(orderBy);
+            List<javax.persistence.criteria.Order> orderList = orders.stream().map(o -> criteriaBuilder.asc(root.get(o))).collect(toList());
+            query.orderBy(orderList);
         }
-        return criteria.list();
+        return sessionFactory.getCurrentSession().createQuery(query).getResultList();
     }
 
     /**
