@@ -48,7 +48,7 @@ public class GenericRepository {
         CriteriaQuery<T> query = criteriaBuilder.createQuery(clazz);
         Root<T> root = query.from(clazz);
         query.where(criteriaBuilder.equal(root.get(name), value));
-        return sessionFactory.getCurrentSession().createQuery(query).getSingleResult();
+        return single(query);
     }
 
     /**
@@ -68,7 +68,7 @@ public class GenericRepository {
             List<javax.persistence.criteria.Order> orderList = orders.stream().map(o -> criteriaBuilder.asc(root.get(o))).collect(toList());
             query.orderBy(orderList);
         }
-        return sessionFactory.getCurrentSession().createQuery(query).getResultList();
+        return list(query);
     }
 
     /**
@@ -80,4 +80,13 @@ public class GenericRepository {
     public Serializable save(Object obj) {
         return sessionFactory.getCurrentSession().save(obj);
     }
-}
+
+    public <T> List<T> list(CriteriaQuery<T> query) {
+        return sessionFactory.getCurrentSession().createQuery(query).getResultList();
+    }
+
+    public <T> T single(CriteriaQuery<T> query) {
+        List<T> list = list(query);
+        return list.isEmpty() ? null : list.get(0);
+    }
+ }
