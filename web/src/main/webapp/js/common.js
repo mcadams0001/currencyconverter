@@ -1,14 +1,18 @@
 var common = {};
 
+common.isNotEmptyValue = function(value) {
+    return value !== undefined && value !== null && value !== '';
+};
+
 common.isValidDouble = function (value) {
-    if (value === '' || value === undefined) {
+    if (!common.isNotEmptyValue(value)) {
         return false;
     }
     return value.match(/^-?\d*(\.\d+)?$/);
 };
 
 common.isValidDate = function (value) {
-    if (value === null || value === '') {
+    if (!common.isNotEmptyValue(value)) {
         return true;
     }
     return value.toLowerCase().match(/^(\d{1,2})(\/|-)(?:(\d{1,2})|(jan)|(feb)|(mar)|(apr)|(may)|(jun)|(jul)|(aug)|(sep)|(oct)|(nov)|(dec))(\/|-)(\d{4})$/i);
@@ -31,7 +35,7 @@ common.successHandler = function (url, textStatus, jqXHR, handleAfterInitializat
 };
 
 common.errorHandler = function (xhr, element) {
-    var msg = "The application has encountered an error. If this problem persists please contact the Administrator";
+    var msg = "The application has encountered an error. If this problem persists please contact the Administrator. ";
     $('#' + element).html(msg + xhr.statusText);
     return false;
 };
