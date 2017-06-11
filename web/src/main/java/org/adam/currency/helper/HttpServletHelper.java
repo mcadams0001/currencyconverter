@@ -21,12 +21,16 @@ public class HttpServletHelper {
     public HttpHeaders createJsonResponseHeaders(HttpServletRequest request) {
         HttpHeaders responseHeaders = new HttpHeaders();
         String userAgent = request.getHeader("User-Agent");
-        if (userAgent != null && userAgent.contains("MSIE")) {
-            responseHeaders.setContentType(MediaType.TEXT_HTML);
-        } else {
-            responseHeaders.setContentType(MediaType.APPLICATION_JSON);
-        }
+        responseHeaders.setContentType(getMediaType(userAgent));
         return responseHeaders;
+    }
+
+    private MediaType getMediaType(String userAgent) {
+        return isIEBrowser(userAgent) ? MediaType.TEXT_HTML : MediaType.APPLICATION_JSON;
+    }
+
+    private boolean isIEBrowser(String userAgent) {
+        return userAgent != null && userAgent.contains("MSIE");
     }
 
     public String jsonResponse(Object object) {

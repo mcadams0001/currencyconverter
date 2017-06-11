@@ -184,7 +184,7 @@
                 </executions>
                 <configuration>
                     <skipTests>${skipTests}</skipTests>
-                    <baseDir>http://localhost:${jasmine.serverPort}</baseDir>
+                    <baseDir>http://localhost:7621</baseDir>
                     <outputDir>${saga.output.dir}</outputDir>
                 </configuration>
             </plugin>
