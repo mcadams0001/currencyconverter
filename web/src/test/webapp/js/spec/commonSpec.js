@@ -106,8 +106,9 @@ describe('Class Common', function () {
         var xhr = {
             statusText: "Failed to open file"
         };
-        common.errorHandler(xhr, 'element');
+        var returnVal = common.errorHandler(xhr, 'element');
         expect(element.html()).toEqual('The application has encountered an error. If this problem persists please contact the Administrator. Failed to open file');
+        expect(returnVal).toEqual(false);
         element.remove();
     })
 
