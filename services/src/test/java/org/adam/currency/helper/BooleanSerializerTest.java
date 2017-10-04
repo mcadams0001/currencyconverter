@@ -1,39 +1,42 @@
 package org.adam.currency.helper;
 
 import com.fasterxml.jackson.core.JsonGenerator;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
+import static org.mockito.MockitoAnnotations.initMocks;
 
-@RunWith(MockitoJUnitRunner.class)
-public class BooleanSerializerTest {
+class BooleanSerializerTest {
 
     @Mock
     private JsonGenerator mockJsonGenerator;
 
+    @BeforeEach
+    void setup() {
+        initMocks(this);
+    }
+
     @Test
-    public void testSerialize() throws Exception {
+    void testSerialize() throws Exception {
         BooleanSerializer serializer = new BooleanSerializer();
         serializer.serialize(Boolean.TRUE, mockJsonGenerator, null);
         ArgumentCaptor<String> stringCaptor = ArgumentCaptor.forClass(String.class);
         verify(mockJsonGenerator).writeString(stringCaptor.capture());
         String value = stringCaptor.getValue();
-        assertThat(value, equalTo("true"));
+        assertEquals("true", value);
     }
 
     @Test
-    public void shouldSerializeAndReturnEmptyStringOnNullDate() throws Exception {
+    void shouldSerializeAndReturnEmptyStringOnNullDate() throws Exception {
         BooleanSerializer serializer = new BooleanSerializer();
         serializer.serialize(null, mockJsonGenerator, null);
         ArgumentCaptor<String> stringCaptor = ArgumentCaptor.forClass(String.class);
         verify(mockJsonGenerator).writeString(stringCaptor.capture());
         String value = stringCaptor.getValue();
-        assertThat(value, equalTo(""));
+        assertEquals("", value);
     }
 }

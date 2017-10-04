@@ -4,20 +4,21 @@ import org.adam.currency.domain.Country;
 import org.adam.currency.domain.User;
 import org.adam.currency.fixture.CountryFixture;
 import org.adam.currency.repository.GenericRepository;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.List;
 
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.sameInstance;
 import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
+import static org.mockito.MockitoAnnotations.initMocks;
 
-@RunWith(MockitoJUnitRunner.class)
-public class GenericServiceImplTest {
+class GenericServiceImplTest {
 
     @InjectMocks
     private GenericServiceImpl service = new GenericServiceImpl();
@@ -25,8 +26,13 @@ public class GenericServiceImplTest {
     @Mock
     private GenericRepository mockGenericRepository;
 
+    @BeforeEach
+    void setup() {
+        initMocks(this);
+    }
+
     @Test
-    public void testFindById() throws Exception {
+    void testFindById() throws Exception {
         User expectedUser = new User();
         when(mockGenericRepository.findById(User.class, 1L)).thenReturn(expectedUser);
         User user = service.findById(User.class, 1L);
@@ -37,7 +43,7 @@ public class GenericServiceImplTest {
     }
 
     @Test
-    public void testFindByName() throws Exception {
+    void testFindByName() throws Exception {
         User expectedUser = new User();
         when(mockGenericRepository.findByName(User.class, "name", "someUser")).thenReturn(expectedUser);
         User user = service.findByName(User.class, "name", "someUser");
@@ -48,7 +54,7 @@ public class GenericServiceImplTest {
     }
 
     @Test
-    public void testFindAll() throws Exception {
+    void testFindAll() throws Exception {
         List<Country> expectedCountries = CountryFixture.COUNTRIES;
         when(mockGenericRepository.findAll(Country.class)).thenReturn(expectedCountries);
         List<Country> countries = service.findAll(Country.class);
@@ -58,12 +64,12 @@ public class GenericServiceImplTest {
     }
 
     @Test
-    public void testSave() throws Exception {
+    void testSave() throws Exception {
         User user = new User();
         when(mockGenericRepository.save(user)).thenReturn(1L);
         Long userId = (Long) service.save(user);
         verify(mockGenericRepository).save(user);
         verifyNoMoreInteractions(mockGenericRepository);
-        assertThat(userId, equalTo(1L));
+        assertEquals(1L, userId.longValue());
     }
 }

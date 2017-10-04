@@ -3,18 +3,18 @@ package org.adam.currency.builder;
 import org.adam.currency.domain.User;
 import org.adam.currency.fixture.CountryFixture;
 import org.adam.currency.fixture.RoleFixture;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 
-public class UserBuilderTest {
+class UserBuilderTest {
     @Test
-    public void createUser() throws Exception {
+    void createUser() throws Exception {
         User user = new User();
         user.setId(100L);
         user.setName("test_user");
@@ -36,11 +36,11 @@ public class UserBuilderTest {
                 .withAddress(user.getAddress())
                 .withRoles(user.getRoles())
                 .build();
-        assertThat(actualUser, equalTo(user));
+        assertEquals(user, actualUser);
     }
 
     @Test
-    public void notIncludeNullRole() throws Exception {
+    void notIncludeNullRole() throws Exception {
         User user = new UserBuilder().withRoles(null).build();
         assertThat(user.getRoles(), notNullValue());
     }

@@ -1,36 +1,34 @@
 package org.adam.currency.helper;
 
 import com.fasterxml.jackson.core.JsonParser;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
 
 import java.time.LocalDateTime;
 import java.util.TimeZone;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
+import static org.mockito.MockitoAnnotations.initMocks;
 
-@RunWith(MockitoJUnitRunner.class)
-public class LocalDateTimeDeserializerTest {
+class LocalDateTimeDeserializerTest {
 
     @Mock
     private JsonParser mockJsonParser;
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    void setUp() throws Exception {
+        initMocks(this);
         TimeZone.setDefault(TimeZone.getTimeZone("GMT"));
     }
 
 
     @Test
-    public void testDeserialize() throws Exception {
+    void testDeserialize() throws Exception {
         LocalDateTimeDeserializer deserializer = new LocalDateTimeDeserializer();
         when(mockJsonParser.getLongValue()).thenReturn(1454180070L);
         LocalDateTime localDateTime = deserializer.deserialize(mockJsonParser, null);
-        assertThat(localDateTime, equalTo(LocalDateTime.of(2016, 1, 30, 18, 54, 30)));
+        assertEquals(LocalDateTime.of(2016, 1, 30, 18, 54, 30), localDateTime);
     }
 }

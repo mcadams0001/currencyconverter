@@ -4,31 +4,28 @@ import org.adam.currency.builder.HistoryBuilder;
 import org.adam.currency.domain.History;
 import org.adam.currency.fixture.CurrencyFixture;
 import org.adam.currency.fixture.UserFixture;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.*;
 
-public class HistoryRepositoryTest extends BaseRepositoryTests {
+class HistoryRepositoryTest extends BaseRepositoryTests {
 
     @Autowired
     private HistoryRepository historyRepository;
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    void setUp() throws Exception {
         initialSetup();
     }
 
     @Test
-    public void testFindBy() throws Exception {
+    void testFindBy() throws Exception {
         History h1 = new HistoryBuilder().withAmount(200.0d).withCurrencyFrom(CurrencyFixture.GBP).withCurrencyTo(CurrencyFixture.EUR).withDate(LocalDate.of(2016, 1, 30)).withRate(1.25d).withResult(250.0d).withUser(UserFixture.TEST_USER).build();
         History h2 = new HistoryBuilder().withAmount(180.0d).withCurrencyFrom(CurrencyFixture.GBP).withCurrencyTo(CurrencyFixture.EUR).withDate(LocalDate.of(2016, 1, 30)).withRate(1.25d).withResult(225.0d).withUser(UserFixture.TEST_USER).build();
         History h3 = new HistoryBuilder().withAmount(200.0d).withCurrencyFrom(CurrencyFixture.GBP).withCurrencyTo(CurrencyFixture.EUR).withDate(LocalDate.of(2016, 1, 2)).withRate(1.4d).withResult(280.0d).withUser(UserFixture.TEST_USER).build();
@@ -37,21 +34,21 @@ public class HistoryRepositoryTest extends BaseRepositoryTests {
         getSession().save(h3);
         getSession().flush();
         History history = historyRepository.findBy(CurrencyFixture.GBP, CurrencyFixture.EUR, LocalDate.of(2016, 1, 30));
-        assertThat(history, notNullValue());
-        assertThat(history.getCurrencyFrom(), equalTo(CurrencyFixture.GBP));
-        assertThat(history.getCurrencyTo(), equalTo(CurrencyFixture.EUR));
-        assertThat(history.getDate(), equalTo(LocalDate.of(2016, 1, 30)));
-        assertThat(history.getRate(), equalTo(1.25d));
+        assertNotNull(history);
+        assertEquals(CurrencyFixture.GBP, history.getCurrencyFrom());
+        assertEquals(CurrencyFixture.EUR, history.getCurrencyTo());
+        assertEquals(LocalDate.of(2016, 1, 30), history.getDate());
+        assertEquals(1.25d, history.getRate(), 0.01);
     }
 
     @Test
-    public void testFindByNullForNotFound() throws Exception {
+    void testFindByNullForNotFound() throws Exception {
         History history = historyRepository.findBy(CurrencyFixture.GBP, CurrencyFixture.EUR, LocalDate.of(2016, 1, 30));
-        assertThat(history, nullValue());
+        assertNull(history);
     }
 
     @Test
-    public void shouldFindByUser() throws Exception {
+    void shouldFindByUser() throws Exception {
         History h1 = new HistoryBuilder().withAmount(200.0d).withCurrencyFrom(CurrencyFixture.GBP).withCurrencyTo(CurrencyFixture.EUR).withDate(LocalDate.of(2016, 1, 30)).withRate(1.25d).withResult(250.0d).withUser(UserFixture.TEST_USER).withCreateDate(LocalDateTime.of(2016, 1, 30, 20, 0, 0)).build();
         History h2 = new HistoryBuilder().withAmount(180.0d).withCurrencyFrom(CurrencyFixture.GBP).withCurrencyTo(CurrencyFixture.EUR).withDate(LocalDate.of(2016, 1, 30)).withRate(1.25d).withResult(225.0d).withUser(UserFixture.TEST_USER).withCreateDate(LocalDateTime.of(2016, 1, 30, 18, 0, 0)).build();
         History h3 = new HistoryBuilder().withAmount(200.0d).withCurrencyFrom(CurrencyFixture.GBP).withCurrencyTo(CurrencyFixture.EUR).withDate(LocalDate.of(2016, 1, 2)).withRate(1.4d).withResult(280.0d).withUser(UserFixture.TEST_USER).withCreateDate(LocalDateTime.of(2016, 1, 25, 20, 0, 0)).build();
@@ -66,15 +63,15 @@ public class HistoryRepositoryTest extends BaseRepositoryTests {
         getSession().save(h1);
         getSession().flush();
         List<History> historyList = historyRepository.findByUser(UserFixture.TEST_USER, 3);
-        assertThat(historyList, notNullValue());
-        assertThat(historyList.size(), equalTo(3));
-        assertThat(historyList.get(0), equalTo(h1));
-        assertThat(historyList.get(1), equalTo(h2));
-        assertThat(historyList.get(2), equalTo(h3));
+        assertNotNull(historyList);
+        assertEquals(3, historyList.size());
+        assertEquals(h1, historyList.get(0));
+        assertEquals(h2, historyList.get(1));
+        assertEquals(h3, historyList.get(2));
     }
 
     @Test
-    public void shouldFindRecent() throws Exception {
+    void shouldFindRecent() throws Exception {
         LocalDateTime now = LocalDateTime.now();
         History h1 = new HistoryBuilder().withAmount(200.0d).withCurrencyFrom(CurrencyFixture.GBP).withCurrencyTo(CurrencyFixture.EUR).withDate(now.toLocalDate()).withRate(1.25d).withResult(250.0d).withUser(UserFixture.TEST_USER).withTimeStamp(now.minusMinutes(10)).build();
         History h2 = new HistoryBuilder().withAmount(180.0d).withCurrencyFrom(CurrencyFixture.GBP).withCurrencyTo(CurrencyFixture.EUR).withDate(now.toLocalDate()).withRate(1.26d).withResult(225.0d).withUser(UserFixture.TEST_USER).withTimeStamp(now.minusMinutes(50)).build();
@@ -84,19 +81,18 @@ public class HistoryRepositoryTest extends BaseRepositoryTests {
         getSession().save(h3);
         getSession().flush();
         History history = historyRepository.findRecent(CurrencyFixture.GBP, CurrencyFixture.EUR);
-        assertThat(history, notNullValue());
-        assertThat(history.getCurrencyFrom(), equalTo(CurrencyFixture.GBP));
-        assertThat(history.getCurrencyTo(), equalTo(CurrencyFixture.EUR));
-        assertThat(history.getDate(), equalTo(now.toLocalDate()));
-        assertThat(history.getRate(), equalTo(1.25d));
+        assertNotNull(history);
+        assertEquals(CurrencyFixture.GBP, history.getCurrencyFrom());
+        assertEquals(CurrencyFixture.EUR, history.getCurrencyTo());
+        assertEquals(now.toLocalDate(), history.getDate());
+        assertEquals(1.25d, history.getRate(), 0.01);
     }
 
     @Test
-    public void shouldFindRecentForNull() throws Exception {
+    void shouldFindRecentForNull() throws Exception {
         History history = historyRepository.findRecent(CurrencyFixture.GBP, CurrencyFixture.EUR);
-        assertThat(history, nullValue());
+        assertNull(history);
     }
-
 
 
 }

@@ -1,49 +1,47 @@
 package org.adam.currency.helper;
 
 import com.fasterxml.jackson.core.JsonGenerator;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
 
 import java.time.LocalDateTime;
 import java.util.TimeZone;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.verify;
+import static org.mockito.MockitoAnnotations.initMocks;
 
-@RunWith(MockitoJUnitRunner.class)
-public class LocalDateTimeStringSerializerTest {
+class LocalDateTimeStringSerializerTest {
 
     @Mock
     private JsonGenerator mockJsonGenerator;
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    void setUp() throws Exception {
+        initMocks(this);
         TimeZone.setDefault(TimeZone.getTimeZone("GMT"));
     }
 
     @Test
-    public void testSerialize() throws Exception {
+    void testSerialize() throws Exception {
         LocalDateTimeStringSerializer serializer = new LocalDateTimeStringSerializer();
         serializer.serialize(LocalDateTime.of(2016, 1, 30, 19, 30, 15), mockJsonGenerator, null);
         ArgumentCaptor<String> stringCaptor = ArgumentCaptor.forClass(String.class);
         verify(mockJsonGenerator).writeString(stringCaptor.capture());
         String value = stringCaptor.getValue();
-        assertThat(value, equalTo("30-Jan-2016 19:30:15"));
+        assertEquals("30-Jan-2016 19:30:15", value);
     }
 
     @Test
-    public void shouldSerializeAndReturnEmptyStringOnNullDate() throws Exception {
+    void shouldSerializeAndReturnEmptyStringOnNullDate() throws Exception {
         LocalDateTimeStringSerializer serializer = new LocalDateTimeStringSerializer();
         serializer.serialize(null, mockJsonGenerator, null);
         ArgumentCaptor<String> stringCaptor = ArgumentCaptor.forClass(String.class);
         verify(mockJsonGenerator).writeString(stringCaptor.capture());
         String value = stringCaptor.getValue();
-        assertThat(value, equalTo(""));
+        assertEquals("", value);
     }
 
 }

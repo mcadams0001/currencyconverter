@@ -1,29 +1,23 @@
 package org.adam.currency.servlet;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Spy;
-import org.mockito.junit.MockitoJUnitRunner;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
+import static org.mockito.MockitoAnnotations.initMocks;
 
-@RunWith(MockitoJUnitRunner.class)
-public class VersionServletTest {
+class VersionServletTest {
 
     @Spy
     private VersionServlet servlet = new VersionServlet();
@@ -37,8 +31,13 @@ public class VersionServletTest {
     @Mock
     private ServletConfig mockServletConfig;
 
+    @BeforeEach
+    void setup() {
+        initMocks(this);
+    }
+
     @Test
-    public void getVersion() throws Exception {
+    void getVersion() throws Exception {
         when(servlet.getServletConfig()).thenReturn(mockServletConfig);
         when(mockServletConfig.getInitParameter(anyString())).thenReturn("2.0.0");
         when(mockResponse.getOutputStream()).thenReturn(mockServletOutputStream);
@@ -46,12 +45,12 @@ public class VersionServletTest {
         verify(mockServletOutputStream).print("2.0.0");
     }
 
-    @Test(expected = ServletException.class)
-    public void throwServletException() throws Exception {
+    @Test
+    void throwServletException() throws Exception {
         when(servlet.getServletConfig()).thenReturn(mockServletConfig);
         when(mockServletConfig.getInitParameter(anyString())).thenReturn("2.0.0");
         when(mockResponse.getOutputStream()).thenReturn(mockServletOutputStream);
         doThrow(new IOException("failure")).when(mockServletOutputStream).print(anyString());
-        servlet.doGet(mockRequest, mockResponse);
+        assertThrows(ServletException.class, () -> servlet.doGet(mockRequest, mockResponse));
     }
 }

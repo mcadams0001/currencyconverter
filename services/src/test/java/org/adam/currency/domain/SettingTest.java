@@ -2,23 +2,21 @@ package org.adam.currency.domain;
 
 import org.adam.currency.common.SettingField;
 import org.adam.currency.helper.EqualsTestHelper;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.not;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
-public class SettingTest {
+class SettingTest {
     @Test
-    public void createSetting() throws Exception {
+    void createSetting() throws Exception {
         new Setting();
         Setting setting = new Setting(SettingField.CURRENCY_SERVICE_URL, "http://localhost");
-        assertThat(setting.getName(), equalTo(SettingField.CURRENCY_SERVICE_URL));
-        assertThat(setting.getValue(), equalTo("http://localhost"));
+        assertEquals(SettingField.CURRENCY_SERVICE_URL, setting.getName());
+        assertEquals("http://localhost", setting.getValue());
     }
 
     @Test
-    public void verifyEqual() throws Exception {
+    void verifyEqual() throws Exception {
         Setting setting1 = new Setting(SettingField.CURRENCY_SERVICE_URL, "http://localhost");
         Setting setting2 = new Setting(SettingField.CURRENCY_SERVICE_URL, "http://localhost");
         Setting setting3 = new Setting(SettingField.CURRENCY_SERVICE_URL, "http://localhost2");
@@ -26,7 +24,7 @@ public class SettingTest {
     }
 
     @Test
-    public void verifyHashCode() throws Exception {
+    void verifyHashCode() throws Exception {
         Setting setting1 = new Setting(SettingField.CURRENCY_SERVICE_URL, "http://localhost");
         Setting setting2 = new Setting(SettingField.CURRENCY_SERVICE_URL, "http://localhost");
         Setting setting3 = new Setting(SettingField.CURRENCY_SERVICE_URL, "http://localhost2");
@@ -34,9 +32,9 @@ public class SettingTest {
     }
 
     @Test
-    public void verifyToString() throws Exception {
+    void verifyToString() throws Exception {
         Setting setting = new Setting(SettingField.CURRENCY_SERVICE_URL, "http://localhost");
-        assertThat(setting.toString(), equalTo("Setting{CURRENCY_SERVICE_URL=http://localhost}"));
+        assertEquals("Setting{CURRENCY_SERVICE_URL=http://localhost}", setting.toString());
 
     }
 }

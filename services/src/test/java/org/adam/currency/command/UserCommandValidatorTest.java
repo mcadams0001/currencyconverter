@@ -6,19 +6,16 @@ import org.adam.currency.fixture.CountryFixture;
 import org.adam.currency.fixture.UserFixture;
 import org.adam.currency.service.CountryService;
 import org.adam.currency.service.UserService;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.validation.BindException;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
+import static org.mockito.MockitoAnnotations.initMocks;
 
-@RunWith(MockitoJUnitRunner.class)
 public class UserCommandValidatorTest {
 
     private UserCommandValidator validator;
@@ -29,35 +26,36 @@ public class UserCommandValidatorTest {
     @Mock
     private CountryService mockCountryService;
 
-    @Before
-    public void beforeTest() throws Exception {
+    @BeforeEach
+    void setup() throws Exception {
+        initMocks(this);
         validator = new UserCommandValidator(mockUserService, mockCountryService);
     }
 
     @Test
-    public void testSupports() throws Exception {
-        assertThat(validator.supports(UserCommand.class), equalTo(true));
+    void testSupports() throws Exception {
+        assertEquals(true, validator.supports(UserCommand.class));
     }
 
     @Test
-    public void shouldFailSupports() throws Exception {
-        assertThat(validator.supports(User.class), equalTo(false));
+    void shouldFailSupports() throws Exception {
+        assertEquals(false, validator.supports(User.class));
     }
 
 
     @Test
-    public void testValidatePass() throws Exception {
+    void testValidatePass() throws Exception {
         UserCommand command = createValidCommand();
         BindException errors = new BindException(command, "command");
         when(mockCountryService.findByCode(anyString())).thenReturn(CountryFixture.UK);
         validator.validate(command, errors);
         verify(mockUserService).findUserByName(command.getName());
         verify(mockCountryService).findByCode(command.getCountry());
-        assertThat(errors.hasErrors(), equalTo(false));
+        assertEquals(false, errors.hasErrors());
     }
 
     @Test
-    public void shouldRejectExistingUser() throws Exception {
+    void shouldRejectExistingUser() throws Exception {
         UserCommand command = createValidCommand();
         BindException errors = new BindException(command, "command");
         when(mockUserService.findUserByName(anyString())).thenReturn(UserFixture.TEST_USER);
@@ -65,13 +63,13 @@ public class UserCommandValidatorTest {
         validator.validate(command, errors);
         verify(mockUserService).findUserByName(command.getName());
         verify(mockCountryService).findByCode(command.getCountry());
-        assertThat(errors.getErrorCount(), equalTo(1));
-        assertThat(errors.hasFieldErrors("name"), equalTo(true));
-        assertThat(errors.getFieldError("name").getCode(), equalTo("error.name.already.exists"));
+        assertEquals(1, errors.getErrorCount());
+        assertEquals(true, errors.hasFieldErrors("name"));
+        assertEquals("error.name.already.exists", errors.getFieldError("name").getCode());
     }
 
     @Test
-    public void shouldRejectEmptyUserName() throws Exception {
+    void shouldRejectEmptyUserName() throws Exception {
         UserCommand command = createValidCommand();
         command.setName("");
         BindException errors = new BindException(command, "command");
@@ -79,13 +77,13 @@ public class UserCommandValidatorTest {
         validator.validate(command, errors);
         verify(mockUserService, never()).findUserByName(command.getName());
         verify(mockCountryService).findByCode(command.getCountry());
-        assertThat(errors.getErrorCount(), equalTo(1));
-        assertThat(errors.hasFieldErrors("name"), equalTo(true));
-        assertThat(errors.getFieldError("name").getCode(), equalTo("error.blank"));
+        assertEquals(1, errors.getErrorCount());
+        assertEquals(true, errors.hasFieldErrors("name"));
+        assertEquals("error.blank", errors.getFieldError("name").getCode());
     }
 
     @Test
-    public void shouldRejectEmptyPassword() throws Exception {
+    void shouldRejectEmptyPassword() throws Exception {
         UserCommand command = createValidCommand();
         command.setPassword("");
         command.setRepeatPassword("");
@@ -94,13 +92,13 @@ public class UserCommandValidatorTest {
         validator.validate(command, errors);
         verify(mockUserService).findUserByName(command.getName());
         verify(mockCountryService).findByCode(command.getCountry());
-        assertThat(errors.getErrorCount(), equalTo(1));
-        assertThat(errors.hasFieldErrors("password"), equalTo(true));
-        assertThat(errors.getFieldError("password").getCode(), equalTo("error.blank"));
+        assertEquals(1, errors.getErrorCount());
+        assertEquals(true, errors.hasFieldErrors("password"));
+        assertEquals("error.blank", errors.getFieldError("password").getCode());
     }
 
     @Test
-    public void shouldRejectShortPassword() throws Exception {
+    void shouldRejectShortPassword() throws Exception {
         UserCommand command = createValidCommand();
         command.setPassword("abcdefg");
         command.setRepeatPassword("abcdefg");
@@ -109,13 +107,13 @@ public class UserCommandValidatorTest {
         validator.validate(command, errors);
         verify(mockUserService).findUserByName(command.getName());
         verify(mockCountryService).findByCode(command.getCountry());
-        assertThat(errors.getErrorCount(), equalTo(1));
-        assertThat(errors.hasFieldErrors("password"), equalTo(true));
-        assertThat(errors.getFieldError("password").getCode(), equalTo("error.password.too.short"));
+        assertEquals(1, errors.getErrorCount());
+        assertEquals(true, errors.hasFieldErrors("password"));
+        assertEquals("error.password.too.short", errors.getFieldError("password").getCode());
     }
 
     @Test
-    public void shouldRejectPasswordDifferentThanRepeated() throws Exception {
+    void shouldRejectPasswordDifferentThanRepeated() throws Exception {
         UserCommand command = createValidCommand();
         command.setPassword("abcdefgh");
         command.setRepeatPassword("abcdefg");
@@ -124,13 +122,13 @@ public class UserCommandValidatorTest {
         validator.validate(command, errors);
         verify(mockUserService).findUserByName(command.getName());
         verify(mockCountryService).findByCode(command.getCountry());
-        assertThat(errors.getErrorCount(), equalTo(1));
-        assertThat(errors.hasFieldErrors("repeatPassword"), equalTo(true));
-        assertThat(errors.getFieldError("repeatPassword").getCode(), equalTo("error.repeated.password.different"));
+        assertEquals(1, errors.getErrorCount());
+        assertEquals(true, errors.hasFieldErrors("repeatPassword"));
+        assertEquals("error.repeated.password.different", errors.getFieldError("repeatPassword").getCode());
     }
 
     @Test
-    public void shouldRejectEmptyFirstAndLastName() throws Exception {
+    void shouldRejectEmptyFirstAndLastName() throws Exception {
         UserCommand command = createValidCommand();
         command.setFirstName("");
         command.setLastName("");
@@ -140,15 +138,15 @@ public class UserCommandValidatorTest {
         validator.validate(command, errors);
         verify(mockUserService).findUserByName(command.getName());
         verify(mockCountryService).findByCode(command.getCountry());
-        assertThat(errors.getErrorCount(), equalTo(2));
-        assertThat(errors.hasFieldErrors("firstName"), equalTo(true));
-        assertThat(errors.getFieldError("firstName").getCode(), equalTo("error.blank"));
-        assertThat(errors.hasFieldErrors("lastName"), equalTo(true));
-        assertThat(errors.getFieldError("lastName").getCode(), equalTo("error.blank"));
+        assertEquals(2, errors.getErrorCount());
+        assertEquals(true, errors.hasFieldErrors("firstName"));
+        assertEquals("error.blank", errors.getFieldError("firstName").getCode());
+        assertEquals(true, errors.hasFieldErrors("lastName"));
+        assertEquals("error.blank", errors.getFieldError("lastName").getCode());
     }
 
     @Test
-    public void shouldRejectEmptyEmailAddress() throws Exception {
+    void shouldRejectEmptyEmailAddress() throws Exception {
         UserCommand command = createValidCommand();
         command.setEmail("");
         BindException errors = new BindException(command, "command");
@@ -156,13 +154,13 @@ public class UserCommandValidatorTest {
         validator.validate(command, errors);
         verify(mockUserService).findUserByName(command.getName());
         verify(mockCountryService).findByCode(command.getCountry());
-        assertThat(errors.getErrorCount(), equalTo(1));
-        assertThat(errors.hasFieldErrors("email"), equalTo(true));
-        assertThat(errors.getFieldError("email").getCode(), equalTo("error.blank"));
+        assertEquals(1, errors.getErrorCount());
+        assertEquals(true, errors.hasFieldErrors("email"));
+        assertEquals("error.blank", errors.getFieldError("email").getCode());
     }
 
     @Test
-    public void shouldRejectInvalidEmailAddress() throws Exception {
+    void shouldRejectInvalidEmailAddress() throws Exception {
         UserCommand command = createValidCommand();
         command.setEmail("a@a");
         BindException errors = new BindException(command, "command");
@@ -170,13 +168,13 @@ public class UserCommandValidatorTest {
         validator.validate(command, errors);
         verify(mockUserService).findUserByName(command.getName());
         verify(mockCountryService).findByCode(command.getCountry());
-        assertThat(errors.getErrorCount(), equalTo(1));
-        assertThat(errors.hasFieldErrors("email"), equalTo(true));
-        assertThat(errors.getFieldError("email").getCode(), equalTo("error.email.not.valid"));
+        assertEquals(1, errors.getErrorCount());
+        assertEquals(true, errors.hasFieldErrors("email"));
+        assertEquals("error.email.not.valid", errors.getFieldError("email").getCode());
     }
 
     @Test
-    public void shouldRejectEmptyBirthDate() throws Exception {
+    void shouldRejectEmptyBirthDate() throws Exception {
         UserCommand command = createValidCommand();
         command.setBirthDate("");
         BindException errors = new BindException(command, "command");
@@ -184,13 +182,13 @@ public class UserCommandValidatorTest {
         validator.validate(command, errors);
         verify(mockUserService).findUserByName(command.getName());
         verify(mockCountryService).findByCode(command.getCountry());
-        assertThat(errors.getErrorCount(), equalTo(1));
-        assertThat(errors.hasFieldErrors("birthDate"), equalTo(true));
-        assertThat(errors.getFieldError("birthDate").getCode(), equalTo("error.blank"));
+        assertEquals(1, errors.getErrorCount());
+        assertEquals(true, errors.hasFieldErrors("birthDate"));
+        assertEquals("error.blank", errors.getFieldError("birthDate").getCode());
     }
 
     @Test
-    public void shouldRejectInvalidBirthDate() throws Exception {
+    void shouldRejectInvalidBirthDate() throws Exception {
         UserCommand command = createValidCommand();
         command.setBirthDate("10-10-2999");
         BindException errors = new BindException(command, "command");
@@ -198,14 +196,14 @@ public class UserCommandValidatorTest {
         validator.validate(command, errors);
         verify(mockUserService).findUserByName(command.getName());
         verify(mockCountryService).findByCode(command.getCountry());
-        assertThat(errors.getErrorCount(), equalTo(1));
-        assertThat(errors.hasFieldErrors("birthDate"), equalTo(true));
-        assertThat(errors.getFieldError("birthDate").getCode(), equalTo("error.invalid.date.format"));
+        assertEquals(1, errors.getErrorCount());
+        assertEquals(true, errors.hasFieldErrors("birthDate"));
+        assertEquals("error.invalid.date.format", errors.getFieldError("birthDate").getCode());
     }
 
 
     @Test
-    public void shouldRejectEmptyStreet() throws Exception {
+    void shouldRejectEmptyStreet() throws Exception {
         UserCommand command = createValidCommand();
         command.setStreet("");
         BindException errors = new BindException(command, "command");
@@ -213,13 +211,13 @@ public class UserCommandValidatorTest {
         validator.validate(command, errors);
         verify(mockUserService).findUserByName(command.getName());
         verify(mockCountryService).findByCode(command.getCountry());
-        assertThat(errors.getErrorCount(), equalTo(1));
-        assertThat(errors.hasFieldErrors("street"), equalTo(true));
-        assertThat(errors.getFieldError("street").getCode(), equalTo("error.blank"));
+        assertEquals(1, errors.getErrorCount());
+        assertEquals(true, errors.hasFieldErrors("street"));
+        assertEquals("error.blank", errors.getFieldError("street").getCode());
     }
 
     @Test
-    public void shouldRejectEmptyCity() throws Exception {
+    void shouldRejectEmptyCity() throws Exception {
         UserCommand command = createValidCommand();
         command.setCity("");
         BindException errors = new BindException(command, "command");
@@ -227,26 +225,26 @@ public class UserCommandValidatorTest {
         validator.validate(command, errors);
         verify(mockUserService).findUserByName(command.getName());
         verify(mockCountryService).findByCode(command.getCountry());
-        assertThat(errors.getErrorCount(), equalTo(1));
-        assertThat(errors.hasFieldErrors("city"), equalTo(true));
-        assertThat(errors.getFieldError("city").getCode(), equalTo("error.blank"));
+        assertEquals(1, errors.getErrorCount());
+        assertEquals(true, errors.hasFieldErrors("city"));
+        assertEquals("error.blank", errors.getFieldError("city").getCode());
     }
 
     @Test
-    public void shouldRejectEmptyCountry() throws Exception {
+    void shouldRejectEmptyCountry() throws Exception {
         UserCommand command = createValidCommand();
         command.setCountry("");
         BindException errors = new BindException(command, "command");
         validator.validate(command, errors);
         verify(mockUserService).findUserByName(command.getName());
         verify(mockCountryService, never()).findByCode(command.getCountry());
-        assertThat(errors.getErrorCount(), equalTo(1));
-        assertThat(errors.hasFieldErrors("country"), equalTo(true));
-        assertThat(errors.getFieldError("country").getCode(), equalTo("error.select.value"));
+        assertEquals(1, errors.getErrorCount());
+        assertEquals(true, errors.hasFieldErrors("country"));
+        assertEquals("error.select.value", errors.getFieldError("country").getCode());
     }
 
     @Test
-    public void shouldRejectNonExistingCountryCode() throws Exception {
+    void shouldRejectNonExistingCountryCode() throws Exception {
         UserCommand command = createValidCommand();
         command.setCountry("ABC");
         BindException errors = new BindException(command, "command");
@@ -254,13 +252,13 @@ public class UserCommandValidatorTest {
         validator.validate(command, errors);
         verify(mockUserService).findUserByName(command.getName());
         verify(mockCountryService).findByCode(command.getCountry());
-        assertThat(errors.getErrorCount(), equalTo(1));
-        assertThat(errors.hasFieldErrors("country"), equalTo(true));
-        assertThat(errors.getFieldError("country").getCode(), equalTo("error.select.value"));
+        assertEquals(1, errors.getErrorCount());
+        assertEquals(true, errors.hasFieldErrors("country"));
+        assertEquals("error.select.value", errors.getFieldError("country").getCode());
     }
 
     @Test
-    public void shouldRejectEmptyPostCode() throws Exception {
+    void shouldRejectEmptyPostCode() throws Exception {
         UserCommand command = createValidCommand();
         command.setPostCode("");
         BindException errors = new BindException(command, "command");
@@ -268,13 +266,13 @@ public class UserCommandValidatorTest {
         validator.validate(command, errors);
         verify(mockUserService).findUserByName(command.getName());
         verify(mockCountryService).findByCode(command.getCountry());
-        assertThat(errors.getErrorCount(), equalTo(1));
-        assertThat(errors.hasFieldErrors("postCode"), equalTo(true));
-        assertThat(errors.getFieldError("postCode").getCode(), equalTo("error.blank"));
+        assertEquals(1, errors.getErrorCount());
+        assertEquals(true, errors.hasFieldErrors("postCode"));
+        assertEquals("error.blank", errors.getFieldError("postCode").getCode());
     }
 
     @Test
-    public void shouldRejectInvalidPostCode() throws Exception {
+    void shouldRejectInvalidPostCode() throws Exception {
         UserCommand command = createValidCommand();
         command.setPostCode("ABC");
         BindException errors = new BindException(command, "command");
@@ -282,13 +280,13 @@ public class UserCommandValidatorTest {
         validator.validate(command, errors);
         verify(mockUserService).findUserByName(command.getName());
         verify(mockCountryService).findByCode(command.getCountry());
-        assertThat(errors.getErrorCount(), equalTo(1));
-        assertThat(errors.hasFieldErrors("postCode"), equalTo(true));
-        assertThat(errors.getFieldError("postCode").getCode(), equalTo("error.invalid.postCode"));
+        assertEquals(1, errors.getErrorCount());
+        assertEquals(true, errors.hasFieldErrors("postCode"));
+        assertEquals("error.invalid.postCode", errors.getFieldError("postCode").getCode());
     }
 
     @Test
-    public void shouldNotRejectPostCodeIfCountryIsEmpty() throws Exception {
+    void shouldNotRejectPostCodeIfCountryIsEmpty() throws Exception {
         UserCommand command = createValidCommand();
         command.setPostCode("ABC");
         command.setCountry("");
@@ -296,13 +294,13 @@ public class UserCommandValidatorTest {
         validator.validate(command, errors);
         verify(mockUserService).findUserByName(command.getName());
         verify(mockCountryService, never()).findByCode(command.getCountry());
-        assertThat(errors.getErrorCount(), equalTo(1));
-        assertThat(errors.hasFieldErrors("country"), equalTo(true));
-        assertThat(errors.getFieldError("country").getCode(), equalTo("error.select.value"));
+        assertEquals(1, errors.getErrorCount());
+        assertEquals(true, errors.hasFieldErrors("country"));
+        assertEquals("error.select.value", errors.getFieldError("country").getCode());
     }
 
     @Test
-    public void shouldNotRejectPostCodeIfCountryCodeIsInvalid() throws Exception {
+    void shouldNotRejectPostCodeIfCountryCodeIsInvalid() throws Exception {
         UserCommand command = createValidCommand();
         command.setPostCode("ABC");
         command.setCountry("RRR");
@@ -311,26 +309,26 @@ public class UserCommandValidatorTest {
         validator.validate(command, errors);
         verify(mockUserService).findUserByName(command.getName());
         verify(mockCountryService).findByCode(command.getCountry());
-        assertThat(errors.getErrorCount(), equalTo(1));
-        assertThat(errors.hasFieldErrors("country"), equalTo(true));
-        assertThat(errors.getFieldError("country").getCode(), equalTo("error.select.value"));
+        assertEquals(1, errors.getErrorCount());
+        assertEquals(true, errors.hasFieldErrors("country"));
+        assertEquals("error.select.value", errors.getFieldError("country").getCode());
     }
 
     @Test
-    public void skipValidatePostCodeForNullCountry() throws Exception {
+    void skipValidatePostCodeForNullCountry() throws Exception {
         UserCommand command = createValidCommand();
         BindException errors = new BindException(command, "command");
         validator.validatePostCode(errors, null, "W7 TD1");
-        assertThat(errors.getErrorCount(), equalTo(0));
+        assertEquals(0, errors.getErrorCount());
     }
 
     @Test
-    public void skipValidatePostCodeForEmptyRegExp() throws Exception {
+    void skipValidatePostCodeForEmptyRegExp() throws Exception {
         UserCommand command = createValidCommand();
         Country country = new Country("FR", "France", null);
         BindException errors = new BindException(command, "command");
         validator.validatePostCode(errors, country, "W7 TD1");
-        assertThat(errors.getErrorCount(), equalTo(0));
+        assertEquals(0, errors.getErrorCount());
     }
 
     private UserCommand createValidCommand() {

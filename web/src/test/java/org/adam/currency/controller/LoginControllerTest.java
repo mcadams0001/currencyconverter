@@ -2,29 +2,29 @@ package org.adam.currency.controller;
 
 import org.adam.currency.common.Parameters;
 import org.adam.currency.common.ViewName;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.web.servlet.ModelAndView;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class LoginControllerTest {
+ class LoginControllerTest {
 
     private LoginController controller = new LoginController();
+
     @Test
-    public void displayLoginPage() throws Exception {
+     void displayLoginPage() throws Exception {
         ModelAndView mav = controller.displayLoginPage(null);
-        assertThat(mav, notNullValue());
-        assertThat(mav.getViewName(), equalTo(ViewName.LOGIN.getName()));
-        assertThat(mav.getModel().containsKey(Parameters.ERROR.getName()), equalTo(false));
+        assertNotNull(mav);
+        assertEquals(ViewName.LOGIN.getName(), mav.getViewName());
+        assertEquals(false, mav.getModel().containsKey(Parameters.ERROR.getName()));
     }
 
     @Test
-    public void displayLoginPageError() throws Exception {
+     void displayLoginPageError() throws Exception {
         ModelAndView mav = controller.displayLoginPage("error");
-        assertThat(mav, notNullValue());
-        assertThat(mav.getViewName(), equalTo(ViewName.LOGIN.getName()));
-        assertThat(mav.getModel().get(Parameters.ERROR.getName()), equalTo(LoginController.ERROR_MESSAGE));
+        assertNotNull(mav);
+        assertEquals(ViewName.LOGIN.getName(), mav.getViewName());
+        assertEquals(LoginController.ERROR_MESSAGE, mav.getModel().get(Parameters.ERROR.getName()));
     }
 }

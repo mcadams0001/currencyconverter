@@ -4,26 +4,26 @@ import org.adam.currency.builder.UserBuilder;
 import org.adam.currency.domain.User;
 import org.adam.currency.security.SecurityContextHelper;
 import org.adam.currency.security.UserDetailsImpl;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.*;
+import static org.mockito.MockitoAnnotations.initMocks;
 
-@RunWith(value = MockitoJUnitRunner.class)
-public class UserDetailsServiceImplTest {
+class UserDetailsServiceImplTest {
     @InjectMocks
     @Spy
     private UserDetailsServiceImpl service = new UserDetailsServiceImpl();
@@ -36,19 +36,24 @@ public class UserDetailsServiceImplTest {
     @Mock
     private SecurityContextHelper mockSecurityContextHelper;
 
+    @BeforeEach
+    void setup() {
+        initMocks(this);
+    }
+
 
     @Test
-    public void testLoadUserByUsername() throws Exception {
+    void testLoadUserByUsername() throws Exception {
         User user = new UserBuilder().withId(1L).withName("test_user").build();
         doReturn(user).when(service).getUserFromSession();
         doNothing().when(service).setUserInSession(isA(User.class));
         UserDetails testUser = service.loadUserByUsername("test_user");
         verify(service).setUserInSession(isA(User.class));
-        assertThat(testUser.getUsername(), equalTo("test_user"));
+        assertEquals("test_user", testUser.getUsername());
     }
 
     @Test
-    public void shouldLoadUserByUserNameFromDb() throws Exception {
+    void shouldLoadUserByUserNameFromDb() throws Exception {
         User user = new UserBuilder().withId(1L).withName("test_user").build();
         doReturn(null).when(service).getUserFromSession();
         doNothing().when(service).setUserInSession(isA(User.class));
@@ -56,17 +61,19 @@ public class UserDetailsServiceImplTest {
         UserDetails testUser = service.loadUserByUsername("test_user");
         verify(mockUserService).findUserByName("test_user");
         verify(service).setUserInSession(isA(User.class));
-        assertThat(testUser.getUsername(), equalTo("test_user"));
-    }
-
-    @Test(expected = UsernameNotFoundException.class)
-    public void shouldThrowExceptionOnNonExistingUser() throws Exception {
-        doReturn(null).when(service).getUserFromSession();
-        service.loadUserByUsername("test_user");
+        assertEquals("test_user", testUser.getUsername());
     }
 
     @Test
-    public void testGetUserFromSession() throws Exception {
+    void shouldThrowExceptionOnNonExistingUser() throws Exception {
+        doReturn(null).when(service).getUserFromSession();
+        assertThrows(UsernameNotFoundException.class, () -> {
+            service.loadUserByUsername("test_user");
+        });
+    }
+
+    @Test
+    void testGetUserFromSession() throws Exception {
         User user = new UserBuilder().withId(1L).withName("test_user").build();
         doReturn(mockSecurityContext).when(service).getSecurityContext();
         when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
@@ -74,11 +81,11 @@ public class UserDetailsServiceImplTest {
         User actualUser = service.getUserFromSession();
         verify(mockSecurityContext).getAuthentication();
         verify(mockAuthentication).getPrincipal();
-        assertThat(actualUser, equalTo(user));
+        assertEquals(user, actualUser);
     }
 
     @Test
-    public void shouldGetUserFromSessionIfNotAuthenticated() throws Exception {
+    void shouldGetUserFromSessionIfNotAuthenticated() throws Exception {
         doReturn(mockSecurityContext).when(service).getSecurityContext();
         when(mockSecurityContext.getAuthentication()).thenReturn(null);
         User actualUser = service.getUserFromSession();
@@ -87,7 +94,7 @@ public class UserDetailsServiceImplTest {
     }
 
     @Test
-    public void shouldGetUserFromSessionAndReturnNullOnWrongPrincipal() throws Exception {
+    void shouldGetUserFromSessionAndReturnNullOnWrongPrincipal() throws Exception {
         doReturn(mockSecurityContext).when(service).getSecurityContext();
         when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
         when(mockAuthentication.getPrincipal()).thenReturn(1L);
@@ -98,30 +105,30 @@ public class UserDetailsServiceImplTest {
     }
 
     @Test
-    public void testSetUserInSession() throws Exception {
+    void testSetUserInSession() throws Exception {
         User user = new UserBuilder().withId(1L).withName("test_user").build();
         doReturn(mockSecurityContext).when(service).getSecurityContext();
         service.setUserInSession(user);
         ArgumentCaptor<UsernamePasswordAuthenticationToken> authenticationCaptor = ArgumentCaptor.forClass(UsernamePasswordAuthenticationToken.class);
         verify(mockSecurityContext).setAuthentication(authenticationCaptor.capture());
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = authenticationCaptor.getValue();
-        assertThat(usernamePasswordAuthenticationToken, notNullValue());
+        assertNotNull(usernamePasswordAuthenticationToken);
         UserDetails userDetails = (UserDetails) usernamePasswordAuthenticationToken.getPrincipal();
-        assertThat(userDetails.getUsername(), equalTo(user.getName()));
+        assertEquals(user.getName(), userDetails.getUsername());
     }
 
     @Test
-    public void shouldGetSecurityContext() throws Exception {
+    void shouldGetSecurityContext() throws Exception {
         doReturn(mockSecurityContextHelper).when(service).getSecurityContextHelper();
         when(mockSecurityContextHelper.getSecurityContext()).thenReturn(mockSecurityContext);
         SecurityContext securityContext = service.getSecurityContext();
         verify(mockSecurityContextHelper).getSecurityContext();
-        assertThat(securityContext, equalTo(mockSecurityContext));
+        assertEquals(mockSecurityContext, securityContext);
     }
 
     @Test
-    public void shouldGetSecurityContextHelper() throws Exception {
+    void shouldGetSecurityContextHelper() throws Exception {
         SecurityContextHelper securityContextHelper = service.getSecurityContextHelper();
-        assertThat(securityContextHelper, notNullValue());
+        assertNotNull(securityContextHelper);
     }
 }

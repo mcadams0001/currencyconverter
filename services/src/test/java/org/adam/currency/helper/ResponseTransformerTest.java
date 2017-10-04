@@ -3,31 +3,30 @@ package org.adam.currency.helper;
 import org.adam.currency.builder.CurrencyResponseBuilder;
 import org.adam.currency.dto.CurrencyResponse;
 import org.adam.currency.dto.CurrencyResponseDTO;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class ResponseTransformerTest {
+class ResponseTransformerTest {
 
     @Test
-    public void testTransform() throws Exception {
+    void testTransform() throws Exception {
         CurrencyResponse response = new CurrencyResponseBuilder().withTimestamp(LocalDateTime.of(2016, 1, 30, 19, 30, 15)).withQuote(0.6).withResult(200.0d).withSuccess(true).build();
         CurrencyResponseDTO currencyResponseDTO = new ResponseTransformer().apply(response);
-        assertThat(currencyResponseDTO, notNullValue());
-        assertThat(currencyResponseDTO.getQuote(), equalTo(response.getInfo().getQuote()));
-        assertThat(currencyResponseDTO.getResult(), equalTo(response.getResult()));
-        assertThat(currencyResponseDTO.getTimestamp(), equalTo(response.getInfo().getTimestamp()));
-        assertThat(currencyResponseDTO.getError(), equalTo(response.getError().getInfo()));
-        assertThat(currencyResponseDTO.isSuccess(), equalTo(response.getSuccess()));
+        assertNotNull(currencyResponseDTO);
+        assertEquals(response.getInfo().getQuote(), currencyResponseDTO.getQuote());
+        assertEquals(response.getResult(), currencyResponseDTO.getResult());
+        assertEquals(response.getInfo().getTimestamp(), currencyResponseDTO.getTimestamp());
+        assertEquals(response.getError().getInfo(), currencyResponseDTO.getError());
+        assertEquals(response.getSuccess(), currencyResponseDTO.isSuccess());
     }
 
     @Test
-    public void shouldTransformNullResponseToEmptyCurrencyDTO() throws Exception {
-        assertThat(new ResponseTransformer().apply(null), equalTo(new CurrencyResponseDTO()));
+    void shouldTransformNullResponseToEmptyCurrencyDTO() throws Exception {
+        assertEquals(new CurrencyResponseDTO(), new ResponseTransformer().apply(null));
     }
 
 }

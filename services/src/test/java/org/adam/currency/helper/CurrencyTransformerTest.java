@@ -3,30 +3,29 @@ package org.adam.currency.helper;
 import org.adam.currency.domain.Currency;
 import org.adam.currency.dto.CurrencyDTO;
 import org.adam.currency.fixture.CurrencyFixture;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class CurrencyTransformerTest {
+class CurrencyTransformerTest {
 
     @Test
-    public void testTransform() throws Exception {
+    void testTransform() throws Exception {
         CurrencyTransformer transformer = new CurrencyTransformer();
         Currency currency = CurrencyFixture.GBP;
         CurrencyDTO dto = transformer.apply(currency);
-        assertThat(dto, notNullValue());
-        assertThat(dto.getCode(), equalTo(currency.getCode()));
-        assertThat(dto.getName(), equalTo(currency.getName()));
-        assertThat(dto.getCountry(), equalTo(currency.getCountry().getName()));
+        assertNotNull(dto);
+        assertEquals(currency.getCode(), dto.getCode());
+        assertEquals(currency.getName(), dto.getName());
+        assertEquals(currency.getCountry().getName(), dto.getCountry());
     }
 
     @Test
-    public void shouldTransformNullToDtoInstance() throws Exception {
+    void shouldTransformNullToDtoInstance() throws Exception {
         CurrencyTransformer transformer = new CurrencyTransformer();
         CurrencyDTO dto = transformer.apply(null);
-        assertThat(dto, notNullValue());
+        assertNotNull(dto);
     }
 
 }

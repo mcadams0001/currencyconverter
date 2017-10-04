@@ -4,23 +4,29 @@ import org.adam.currency.fixture.*;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
+
+@ExtendWith(SpringExtension.class)
 @ContextConfiguration(locations = {"classpath:data-applicationContext.xml", "classpath:h2-hibernate.xml"})
 @Rollback
 @Transactional
-public class BaseRepositoryTests extends AbstractTransactionalJUnit4SpringContextTests {
+public class BaseRepositoryTests {
 
     @Autowired
     @Qualifier("sessionFactory")
     private SessionFactory sessionFactory;
 
-    public void setAbstractSessionFactoryBean(SessionFactory sessionFactory) {
+    JdbcTemplate jdbcTemplate;
+
+    void setAbstractSessionFactoryBean(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
 
@@ -29,15 +35,15 @@ public class BaseRepositoryTests extends AbstractTransactionalJUnit4SpringContex
     }
 
     @Autowired
-    public void setDataSource(BasicDataSource dataSource) {
-        super.setDataSource(dataSource);
+    void setDataSource(BasicDataSource dataSource) {
+        jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
-    public void saveEntity(Object entity) {
+    void saveEntity(Object entity) {
         getSession().save(entity.getClass().getName(), entity);
     }
 
-    public void initialSetup() {
+    void initialSetup() {
         Session session = getSession();
 
         SettingFixture.SETTINGS.forEach(session::save);

@@ -1,41 +1,44 @@
 package org.adam.currency.helper;
 
 import com.fasterxml.jackson.core.JsonGenerator;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.verify;
+import static org.mockito.MockitoAnnotations.initMocks;
 
-@RunWith(MockitoJUnitRunner.class)
-public class DoubleSerializerTest {
+class DoubleSerializerTest {
 
     @Mock
     private JsonGenerator mockJsonGenerator;
 
 
+    @BeforeEach
+    void setup() {
+        initMocks(this);
+    }
+
     @Test
-    public void testSerialize() throws Exception {
+    void testSerialize() throws Exception {
         DoubleSerializer serializer = new DoubleSerializer();
         serializer.serialize(20.35, mockJsonGenerator, null);
         ArgumentCaptor<String> stringCaptor = ArgumentCaptor.forClass(String.class);
         verify(mockJsonGenerator).writeString(stringCaptor.capture());
         String value = stringCaptor.getValue();
-        assertThat(value, equalTo("20.35"));
+        assertEquals("20.35", value);
     }
 
     @Test
-    public void shouldReturnEmptyStringOnNullValue() throws Exception {
+    void shouldReturnEmptyStringOnNullValue() throws Exception {
         DoubleSerializer serializer = new DoubleSerializer();
         serializer.serialize(null, mockJsonGenerator, null);
         ArgumentCaptor<String> stringCaptor = ArgumentCaptor.forClass(String.class);
         verify(mockJsonGenerator).writeString(stringCaptor.capture());
         String value = stringCaptor.getValue();
-        assertThat(value, equalTo(""));
+        assertEquals("", value);
 
     }
 

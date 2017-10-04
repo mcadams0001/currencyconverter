@@ -4,18 +4,19 @@ import org.adam.currency.common.CallTypeEnum;
 import org.adam.currency.domain.History;
 import org.adam.currency.fixture.CurrencyFixture;
 import org.adam.currency.fixture.UserFixture;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class HistoryBuilderTest {
+class HistoryBuilderTest {
 
     @Test
-    public void createHistory() throws Exception {
+    void createHistory() throws Exception {
         History history = new History();
         history.setId(100L);
         history.setAmount(100d);
@@ -42,6 +43,6 @@ public class HistoryBuilderTest {
                 .withTimeStamp(history.getTimeStamp())
                 .withCallType(history.getCallType())
                 .build();
-        assertThat(actual, equalTo(history));
+        assertEquals(history, actual);
     }
 }

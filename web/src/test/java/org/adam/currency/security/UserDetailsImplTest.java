@@ -6,9 +6,8 @@ import org.adam.currency.common.RoleNameEnum;
 import org.adam.currency.domain.Role;
 import org.adam.currency.domain.User;
 import org.adam.currency.fixture.AddressFixture;
-import org.adam.currency.fixture.RoleFixture;
 import org.adam.currency.fixture.UserFixture;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.time.LocalDate;
@@ -18,17 +17,16 @@ import java.util.Collections;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class UserDetailsImplTest {
+class UserDetailsImplTest {
 
     private static final User USER = UserFixture.TEST_USER;
     private UserDetailsImpl userDetails = new UserDetailsImpl(USER);
 
     @Test
-    public void testGetAuthorities() throws Exception {
+    void testGetAuthorities() throws Exception {
         List<Role> roles = new ArrayList<>();
         Role standardRole = new RoleBuilder().withId(1L).withName(RoleNameEnum.ROLE_USER).withDescription("Standard User").build();
         roles.add(standardRole);
@@ -37,44 +35,44 @@ public class UserDetailsImplTest {
         UserDetailsImpl userDetails = new UserDetailsImpl(user);
         List<String> expectedRoles = USER.getRoles().stream().map(r -> r.getName().name()).collect(toList());
         Collection<GrantedAuthority> authorities = userDetails.getAuthorities();
-        assertThat(authorities, notNullValue());
-        assertThat(authorities.size(), equalTo(expectedRoles.size()));
+        assertNotNull(authorities);
+        assertEquals(expectedRoles.size(), authorities.size());
         List<String> actualRoles = authorities.stream().map(GrantedAuthority::getAuthority).collect(toList());
-        assertThat(actualRoles, equalTo(Collections.singletonList(RoleNameEnum.ROLE_USER.name())));
+        assertEquals(Collections.singletonList(RoleNameEnum.ROLE_USER.name()), actualRoles);
     }
 
     @Test
-    public void testGetPassword() throws Exception {
-        assertThat(userDetails.getPassword(), equalTo(USER.getPassword()));
+    void testGetPassword() throws Exception {
+        assertEquals(USER.getPassword(), userDetails.getPassword());
     }
 
     @Test
-    public void testGetUsername() throws Exception {
-        assertThat(userDetails.getUsername(), equalTo(USER.getName()));
+    void testGetUsername() throws Exception {
+        assertEquals(USER.getName(), userDetails.getUsername());
     }
 
     @Test
-    public void testIsAccountNonExpired() throws Exception {
-        assertThat(userDetails.isAccountNonExpired(), equalTo(true));
+    void testIsAccountNonExpired() throws Exception {
+        assertEquals(true, userDetails.isAccountNonExpired());
     }
 
     @Test
-    public void testIsAccountNonLocked() throws Exception {
-        assertThat(userDetails.isAccountNonLocked(), equalTo(true));
+    void testIsAccountNonLocked() throws Exception {
+        assertEquals(true, userDetails.isAccountNonLocked());
     }
 
     @Test
-    public void testIsCredentialsNonExpired() throws Exception {
-        assertThat(userDetails.isCredentialsNonExpired(), equalTo(true));
+    void testIsCredentialsNonExpired() throws Exception {
+        assertEquals(true, userDetails.isCredentialsNonExpired());
     }
 
     @Test
-    public void testIsEnabled() throws Exception {
-        assertThat(userDetails.isEnabled(), equalTo(true));
+    void testIsEnabled() throws Exception {
+        assertEquals(true, userDetails.isEnabled());
     }
 
     @Test
-    public void testGetUser() throws Exception {
-        assertThat(userDetails.getUser(), equalTo(USER));
+    void testGetUser() throws Exception {
+        assertEquals(USER, userDetails.getUser());
     }
 }

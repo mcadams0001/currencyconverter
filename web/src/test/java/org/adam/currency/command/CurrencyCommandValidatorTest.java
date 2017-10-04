@@ -3,117 +3,115 @@ package org.adam.currency.command;
 import org.adam.currency.domain.User;
 import org.adam.currency.fixture.CurrencyFixture;
 import org.adam.currency.service.CurrencyService;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.validation.BindException;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
+import static org.mockito.MockitoAnnotations.initMocks;
 
-@RunWith(MockitoJUnitRunner.class)
-public class CurrencyCommandValidatorTest {
+class CurrencyCommandValidatorTest {
 
     @Mock
     private CurrencyService mockCurrencyService;
 
     private CurrencyCommandValidator validator;
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    void setUp() throws Exception {
+        initMocks(this);
         validator = new CurrencyCommandValidator(mockCurrencyService);
         when(mockCurrencyService.findAll()).thenReturn(CurrencyFixture.CURRENCIES);
     }
 
     @Test
-    public void testSupports() throws Exception {
-        assertThat(validator.supports(CurrencyCommand.class), equalTo(true));
+    void testSupports() throws Exception {
+        assertEquals(true, validator.supports(CurrencyCommand.class));
     }
 
     @Test
-    public void shouldFailSupports() throws Exception {
-        assertThat(validator.supports(User.class), equalTo(false));
+    void shouldFailSupports() throws Exception {
+        assertEquals(false, validator.supports(User.class));
     }
 
     @Test
-    public void testValidate() throws Exception {
+    void testValidate() throws Exception {
         CurrencyCommand command = createCurrencyCommand();
         BindException errors = new BindException(command, "command");
         validator.validate(command, errors);
-        assertThat(errors.getErrorCount(), equalTo(0));
+        assertEquals(0, errors.getErrorCount());
     }
 
     @Test
-    public void shouldRejectEmptyAmount() throws Exception {
+    void shouldRejectEmptyAmount() throws Exception {
         CurrencyCommand command = createCurrencyCommand();
         command.setAmount(null);
         BindException errors = new BindException(command, "command");
         validator.validate(command, errors);
-        assertThat(errors.getErrorCount(), equalTo(1));
-        assertThat(errors.getFieldError("amount").getCode(), equalTo("error.blank"));
+        assertEquals(1, errors.getErrorCount());
+        assertEquals("error.blank", errors.getFieldError("amount").getCode());
     }
 
     @Test
-    public void shouldRejectInvalidAmount() throws Exception {
+    void shouldRejectInvalidAmount() throws Exception {
         CurrencyCommand command = createCurrencyCommand();
         command.setAmount("abc");
         BindException errors = new BindException(command, "command");
         validator.validate(command, errors);
-        assertThat(errors.getErrorCount(), equalTo(1));
-        assertThat(errors.getFieldError("amount").getCode(), equalTo("error.positive.numeric.value"));
+        assertEquals(1, errors.getErrorCount());
+        assertEquals("error.positive.numeric.value", errors.getFieldError("amount").getCode());
     }
 
     @Test
-    public void shouldRejectEmptyFromCurrency() throws Exception {
+    void shouldRejectEmptyFromCurrency() throws Exception {
         CurrencyCommand command = createCurrencyCommand();
         command.setFrom(null);
         BindException errors = new BindException(command, "command");
         validator.validate(command, errors);
-        assertThat(errors.getErrorCount(), equalTo(1));
-        assertThat(errors.getFieldError("from").getCode(), equalTo("error.select.currency"));
+        assertEquals(1, errors.getErrorCount());
+        assertEquals("error.select.currency", errors.getFieldError("from").getCode());
     }
 
     @Test
-    public void shouldRejectInvalidFromCurrency() throws Exception {
+    void shouldRejectInvalidFromCurrency() throws Exception {
         CurrencyCommand command = createCurrencyCommand();
         command.setFrom("AAA");
         BindException errors = new BindException(command, "command");
         validator.validate(command, errors);
-        assertThat(errors.getErrorCount(), equalTo(1));
-        assertThat(errors.getFieldError("from").getCode(), equalTo("error.valid.currency"));
+        assertEquals(1, errors.getErrorCount());
+        assertEquals("error.valid.currency", errors.getFieldError("from").getCode());
     }
 
     @Test
-    public void shouldRejectEmptyToCurrency() throws Exception {
+    void shouldRejectEmptyToCurrency() throws Exception {
         CurrencyCommand command = createCurrencyCommand();
         command.setTo(null);
         BindException errors = new BindException(command, "command");
         validator.validate(command, errors);
-        assertThat(errors.getErrorCount(), equalTo(1));
-        assertThat(errors.getFieldError("to").getCode(), equalTo("error.select.currency"));
+        assertEquals(1, errors.getErrorCount());
+        assertEquals("error.select.currency", errors.getFieldError("to").getCode());
     }
 
     @Test
-    public void shouldRejectInvalidToCurrency() throws Exception {
+    void shouldRejectInvalidToCurrency() throws Exception {
         CurrencyCommand command = createCurrencyCommand();
         command.setTo("AAA");
         BindException errors = new BindException(command, "command");
         validator.validate(command, errors);
-        assertThat(errors.getErrorCount(), equalTo(1));
-        assertThat(errors.getFieldError("to").getCode(), equalTo("error.valid.currency"));
+        assertEquals(1, errors.getErrorCount());
+        assertEquals("error.valid.currency", errors.getFieldError("to").getCode());
     }
 
     @Test
-    public void shouldRejectSameFromAndToCurrency() throws Exception {
+    void shouldRejectSameFromAndToCurrency() throws Exception {
         CurrencyCommand command = createCurrencyCommand();
         command.setTo("GBP");
         BindException errors = new BindException(command, "command");
         validator.validate(command, errors);
-        assertThat(errors.getErrorCount(), equalTo(1));
-        assertThat(errors.getFieldError("to").getCode(), equalTo("error.select.diff.currencies"));
+        assertEquals(1, errors.getErrorCount());
+        assertEquals("error.select.diff.currencies", errors.getFieldError("to").getCode());
     }
 
     private CurrencyCommand createCurrencyCommand() {

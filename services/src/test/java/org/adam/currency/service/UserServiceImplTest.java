@@ -7,28 +7,26 @@ import org.adam.currency.domain.User;
 import org.adam.currency.fixture.CountryFixture;
 import org.adam.currency.fixture.RoleFixture;
 import org.adam.currency.fixture.UserFixture;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.hamcrest.Matchers.hasItem;
 import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.ArgumentMatchers.isA;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.*;
+import static org.mockito.MockitoAnnotations.initMocks;
 
-@RunWith(MockitoJUnitRunner.class)
-public class UserServiceImplTest {
+class UserServiceImplTest {
 
     @InjectMocks
     private UserServiceImpl userService = new UserServiceImpl();
@@ -42,8 +40,13 @@ public class UserServiceImplTest {
     @Mock
     private CountryService mockCountryService;
 
+    @BeforeEach
+    void setup() {
+        initMocks(this);
+    }
+
     @Test
-    public void testFindUserByName() throws Exception {
+    void testFindUserByName() throws Exception {
         User expectedUser = UserFixture.TEST_USER;
         when(mockGenericService.findByName(User.class, "name", "test_user")).thenReturn(expectedUser);
         User user = userService.findUserByName("test_user");
@@ -52,7 +55,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void shouldCreateUser() throws Exception {
+    void shouldCreateUser() throws Exception {
         UserCommand command = createCommand();
         String encodedPassword = "A1B2C3D4";
         when(mockPasswordEncoder.encode(anyString())).thenReturn(encodedPassword);
@@ -64,26 +67,26 @@ public class UserServiceImplTest {
         verify(mockGenericService, times(2)).save(any());
         assertThat(user, notNullValue());
         assertThat(user.getAddress(), notNullValue());
-        assertThat(user.getBirthDate(), equalTo(LocalDate.of(2016, 1, 1)));
-        assertThat(user.getFirstName(), equalTo(command.getFirstName()));
-        assertThat(user.getLastName(), equalTo(command.getLastName()));
-        assertThat(user.getName(), equalTo(command.getName()));
-        assertThat(user.getPassword(), equalTo(encodedPassword));
+        assertEquals(LocalDate.of(2016, 1, 1), user.getBirthDate());
+        assertEquals(command.getFirstName(), user.getFirstName());
+        assertEquals(command.getLastName(), user.getLastName());
+        assertEquals(command.getName(), user.getName());
+        assertEquals(encodedPassword, user.getPassword());
         assertThat(user.getRoles(), hasItem(RoleFixture.ROLE_USER));
-        assertThat(user.getAddress().getStreet(), equalTo(command.getStreet()));
-        assertThat(user.getAddress().getCity(), equalTo(command.getCity()));
-        assertThat(user.getAddress().getCountry(), equalTo(CountryFixture.UK));
-        assertThat(user.getAddress().getPostCode(), equalTo(command.getPostCode()));
+        assertEquals(command.getStreet(), user.getAddress().getStreet());
+        assertEquals(command.getCity(), user.getAddress().getCity());
+        assertEquals(CountryFixture.UK, user.getAddress().getCountry());
+        assertEquals(command.getPostCode(), user.getAddress().getPostCode());
     }
 
     @Test
-    public void shouldFindRoleByName() throws Exception {
+    void shouldFindRoleByName() throws Exception {
         RoleNameEnum roleName = RoleNameEnum.ROLE_USER;
         when(mockGenericService.findByName(eq(Role.class), anyString(), eq(RoleNameEnum.ROLE_USER))).thenReturn(RoleFixture.ROLE_USER);
         Role role = userService.findRoleByName(roleName);
         verify(mockGenericService).findByName(Role.class, "name", roleName);
         assertThat(role, notNullValue());
-        assertThat(role.getName(), equalTo(roleName));
+        assertEquals(roleName, role.getName());
     }
 
 

@@ -9,12 +9,11 @@ import org.adam.currency.fixture.CountryFixture;
 import org.adam.currency.fixture.UserFixture;
 import org.adam.currency.service.CountryService;
 import org.adam.currency.service.UserService;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Validator;
@@ -23,14 +22,14 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.hasKey;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.*;
+import static org.mockito.MockitoAnnotations.initMocks;
 
-@RunWith(MockitoJUnitRunner.class)
-public class RegistrationControllerTest {
+class RegistrationControllerTest {
 
     @InjectMocks
     private RegistrationController controller = new RegistrationController();
@@ -47,47 +46,52 @@ public class RegistrationControllerTest {
     @Mock
     private BindingResult mockBindResult;
 
+    @BeforeEach
+    void setup() {
+        initMocks(this);
+    }
+
     @Test
-    public void testShowForm() throws Exception {
+    void testShowForm() throws Exception {
         List<Country> countries = CountryFixture.COUNTRIES;
         when(mockCountryService.findAll()).thenReturn(countries);
         ModelAndView mav = controller.showForm();
         verify(mockCountryService).findAll();
-        assertThat(mav, notNullValue());
-        assertThat(mav.getModel().get(Parameters.COMMAND.getName()), equalTo(new UserCommand()));
-        assertThat(mav.getModel().get(Parameters.COUNTRIES.getName()), equalTo(countries));
+        assertNotNull(mav);
+        assertEquals(new UserCommand(), mav.getModel().get(Parameters.COMMAND.getName()));
+        assertEquals(countries, mav.getModel().get(Parameters.COUNTRIES.getName()));
     }
 
     @Test
-    public void shouldRegisterUser() throws Exception {
+    void shouldRegisterUser() throws Exception {
         ModelMap modelMap = new ModelMap();
         UserCommand command = new UserCommand();
         User user = UserFixture.TEST_USER;
         when(mockUserService.createUser(command)).thenReturn(user);
         String viewName = controller.registerUser(command, mockBindResult, modelMap);
         verify(mockUserService).createUser(command);
-        assertThat(viewName, equalTo("registerSuccess"));
+        assertEquals("registerSuccess", viewName);
         assertThat(modelMap, hasKey(Parameters.USER.getName()));
     }
 
     @Test
-    public void shouldNotRegisterUser() throws Exception {
+    void shouldNotRegisterUser() throws Exception {
         ModelMap modelMap = new ModelMap();
         UserCommand command = new UserCommand();
         when(mockBindResult.hasErrors()).thenReturn(true);
         String viewName = controller.registerUser(command, mockBindResult, modelMap);
         verify(mockUserService, never()).createUser(command);
-        assertThat(viewName, equalTo("register"));
+        assertEquals("register", viewName);
         assertThat(modelMap, hasKey(Parameters.COUNTRIES.getName()));
     }
 
     @Test
-    public void shouldRegisterValidator() throws Exception {
+    void shouldRegisterValidator() throws Exception {
         controller.initBinder(mockWebDataBinder);
         ArgumentCaptor<Validator> validatorArgumentCaptor = ArgumentCaptor.forClass(Validator.class);
         verify(mockWebDataBinder).addValidators(validatorArgumentCaptor.capture());
         Validator actualValidator = validatorArgumentCaptor.getValue();
-        assertThat(actualValidator instanceof UserCommandValidator, equalTo(true));
+        assertEquals(true, actualValidator instanceof UserCommandValidator);
     }
 
 

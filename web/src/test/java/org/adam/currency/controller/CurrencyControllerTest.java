@@ -16,12 +16,10 @@ import org.adam.currency.helper.HttpServletHelper;
 import org.adam.currency.security.UserDetailsImpl;
 import org.adam.currency.service.CurrencyService;
 import org.adam.currency.service.HistoryService;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -36,15 +34,18 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
-import static org.mockito.ArgumentMatchers.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyDouble;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.*;
+import static org.mockito.MockitoAnnotations.initMocks;
 
-@RunWith(MockitoJUnitRunner.class)
-public class CurrencyControllerTest {
+class CurrencyControllerTest {
 
     @InjectMocks
     private CurrencyController controller = new CurrencyController();
@@ -65,35 +66,36 @@ public class CurrencyControllerTest {
 
     private static final String SEPARATOR = System.getProperty("line.separator");
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    void setUp() throws Exception {
+        initMocks(this);
         ReflectionTestUtils.setField(controller, "httpServletHelper", new HttpServletHelper());
         UserDetailsImpl userDetails = new UserDetailsImpl(user);
         when(mockAuthentication.getPrincipal()).thenReturn(userDetails);
     }
 
     @Test
-    public void testDisplayCurrencies() throws Exception {
+    void testDisplayCurrencies() throws Exception {
         ModelAndView mav = controller.displayCurrencies(mockAuthentication);
-        assertThat(mav, notNullValue());
-        assertThat(mav.getViewName(), equalTo(ViewName.INDEX.getName()));
+        assertNotNull(mav);
+        assertEquals(ViewName.INDEX.getName(), mav.getViewName());
         UserDTO actual = (UserDTO) mav.getModel().get(Parameters.USER.getName());
-        assertThat(actual.getFirstName(), equalTo(user.getFirstName()));
-        assertThat(actual.getLastName(), equalTo(user.getLastName()));
+        assertEquals(user.getFirstName(), actual.getFirstName());
+        assertEquals(user.getLastName(), actual.getLastName());
     }
 
     @Test
-    public void shouldGetCurrencies() throws Exception {
+    void shouldGetCurrencies() throws Exception {
         List<Currency> currencies = CurrencyFixture.CURRENCIES;
         when(mockCurrencyService.findAll()).thenReturn(currencies);
         ResponseEntity<String> responseEntity = controller.displayForm(mockRequest);
         verify(mockCurrencyService).findAll();
-        assertThat(responseEntity.getStatusCode(), equalTo(HttpStatus.OK));
-        assertThat(responseEntity.getBody(), equalTo("{" + SEPARATOR + "  \"viewName\" : \"currencyForm\"," + SEPARATOR + "  \"currencies\" : [ {" + SEPARATOR + "    \"code\" : \"EUR\"," + SEPARATOR + "    \"name\" : \"Euro\"," + SEPARATOR + "    \"country\" : \"Germany\"" + SEPARATOR + "  }, {" + SEPARATOR + "    \"code\" : \"USD\"," + SEPARATOR + "    \"name\" : \"US Dollar\"," + SEPARATOR + "    \"country\" : \"United States\"" + SEPARATOR + "  }, {" + SEPARATOR + "    \"code\" : \"GBP\"," + SEPARATOR + "    \"name\" : \"British Pound\"," + SEPARATOR + "    \"country\" : \"United Kingdom\"" + SEPARATOR + "  } ]" + SEPARATOR + "}"));
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals("{" + SEPARATOR + "  \"viewName\" : \"currencyForm\"," + SEPARATOR + "  \"currencies\" : [ {" + SEPARATOR + "    \"code\" : \"EUR\"," + SEPARATOR + "    \"name\" : \"Euro\"," + SEPARATOR + "    \"country\" : \"Germany\"" + SEPARATOR + "  }, {" + SEPARATOR + "    \"code\" : \"USD\"," + SEPARATOR + "    \"name\" : \"US Dollar\"," + SEPARATOR + "    \"country\" : \"United States\"" + SEPARATOR + "  }, {" + SEPARATOR + "    \"code\" : \"GBP\"," + SEPARATOR + "    \"name\" : \"British Pound\"," + SEPARATOR + "    \"country\" : \"United Kingdom\"" + SEPARATOR + "  } ]" + SEPARATOR + "}", responseEntity.getBody());
     }
 
     @Test
-    public void testConvert() throws Exception {
+    void testConvert() throws Exception {
         CurrencyCommand command = new CurrencyCommand();
         command.setFrom("GBP");
         command.setTo("EUR");
@@ -104,12 +106,12 @@ public class CurrencyControllerTest {
         when(mockCurrencyService.convertCurrency(isA(User.class), anyString(), anyString(), anyDouble(), any())).thenReturn(response);
         ResponseEntity<String> responseEntity = controller.convert(mockAuthentication, command, mockRequest);
         verify(mockCurrencyService).convertCurrency(user, command.getFrom(), command.getTo(), Double.parseDouble(command.getAmount()), Optional.of(command.getDate()));
-        assertThat(responseEntity.getStatusCode(), equalTo(HttpStatus.OK));
-        assertThat(responseEntity.getBody(), equalTo("{\r\n  \"success\" : \"true\",\r\n  \"quote\" : \"0.7\",\r\n  \"result\" : \"125.5\",\r\n  \"timestamp\" : \"30-Jan-2016 19:14:30\",\r\n  \"error\" : null,\r\n  \"currencyFrom\" : null,\r\n  \"currencyTo\" : null,\r\n  \"amount\" : null\r\n}".replace("\r\n",SEPARATOR)));
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals("{\r\n  \"success\" : \"true\",\r\n  \"quote\" : \"0.7\",\r\n  \"result\" : \"125.5\",\r\n  \"timestamp\" : \"30-Jan-2016 19:14:30\",\r\n  \"error\" : null,\r\n  \"currencyFrom\" : null,\r\n  \"currencyTo\" : null,\r\n  \"amount\" : null\r\n}".replace("\r\n", SEPARATOR), responseEntity.getBody());
     }
 
     @Test
-    public void testNotConvert() throws Exception {
+    void testNotConvert() throws Exception {
         CurrencyController spyController = spy(controller);
         CurrencyCommand command = new CurrencyCommand();
         command.setFrom("GBP");
@@ -119,22 +121,22 @@ public class CurrencyControllerTest {
         doReturn(true).when(spyController).isCurrencyInvalid(any());
         ResponseEntity<String> responseEntity = spyController.convert(mockAuthentication, command, mockRequest);
         verify(mockCurrencyService, never()).convertCurrency(user, command.getFrom(), command.getTo(), Double.parseDouble(command.getAmount()), Optional.of(command.getDate()));
-        assertThat(responseEntity.getStatusCode(), equalTo(HttpStatus.OK));
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertThat(responseEntity.getBody(), nullValue());
     }
 
     @Test
-    public void shouldGetHistory() throws Exception {
+    void shouldGetHistory() throws Exception {
         when(mockHistoryService.findByUser(isA(User.class))).thenReturn(Collections.singletonList(HistoryFixture.GBP_EUR_2016_1_30));
         ResponseEntity<String> responseEntity = controller.displayHistory(mockAuthentication, mockRequest);
         verify(mockHistoryService).findByUser(user);
-        assertThat(responseEntity.getBody(), equalTo("{\r\n  \"viewName\" : \"currencyHistory\",\r\n  \"historyList\" : [ {\r\n    \"id\" : null,\r\n    \"currencyFrom\" : {\r\n      \"code\" : \"GBP\",\r\n      \"name\" : \"British Pound\",\r\n      \"country\" : \"United Kingdom\"\r\n    },\r\n    \"currencyTo\" : {\r\n      \"code\" : \"EUR\",\r\n      \"name\" : \"Euro\",\r\n      \"country\" : \"Germany\"\r\n    },\r\n    \"date\" : \"30-Jan-2016\",\r\n    \"rate\" : \"0.658443\",\r\n    \"timeStamp\" : \"30-Jan-2016 18:54:30\",\r\n    \"result\" : \"300.0\",\r\n    \"amount\" : \"200.0\"\r\n  } ]\r\n}".replace("\r\n", SEPARATOR)));
+        assertEquals("{\r\n  \"viewName\" : \"currencyHistory\",\r\n  \"historyList\" : [ {\r\n    \"id\" : null,\r\n    \"currencyFrom\" : {\r\n      \"code\" : \"GBP\",\r\n      \"name\" : \"British Pound\",\r\n      \"country\" : \"United Kingdom\"\r\n    },\r\n    \"currencyTo\" : {\r\n      \"code\" : \"EUR\",\r\n      \"name\" : \"Euro\",\r\n      \"country\" : \"Germany\"\r\n    },\r\n    \"date\" : \"30-Jan-2016\",\r\n    \"rate\" : \"0.658443\",\r\n    \"timeStamp\" : \"30-Jan-2016 18:54:30\",\r\n    \"result\" : \"300.0\",\r\n    \"amount\" : \"200.0\"\r\n  } ]\r\n}".replace("\r\n", SEPARATOR), responseEntity.getBody());
     }
 
     @Test
-    public void shouldGetHistoryView() throws Exception {
-        assertThat(controller.getHistoryView(new ArrayList<>()), equalTo("currencyHistoryEmpty"));
-        assertThat(controller.getHistoryView(Collections.singletonList(new HistoryDTO())), equalTo("currencyHistory"));
+    void shouldGetHistoryView() throws Exception {
+        assertEquals("currencyHistoryEmpty", controller.getHistoryView(new ArrayList<>()));
+        assertEquals("currencyHistory", controller.getHistoryView(Collections.singletonList(new HistoryDTO())));
     }
 
 }

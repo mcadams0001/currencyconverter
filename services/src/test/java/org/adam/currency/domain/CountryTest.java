@@ -2,30 +2,29 @@ package org.adam.currency.domain;
 
 import org.adam.currency.fixture.CountryFixture;
 import org.adam.currency.helper.EqualsTestHelper;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class CountryTest {
+class CountryTest {
 
     private Country uk = CountryFixture.UK;
     private Country uk2 = new Country(uk.getCode(), uk.getName(), uk.getPostCodeRegExp());
     private Country de = CountryFixture.GERMANY;
 
     @Test
-    public void countryEquals() throws Exception {
+    void countryEquals() throws Exception {
         new Country();
         EqualsTestHelper.verifyEquals(uk, uk2, de);
     }
 
     @Test
-    public void countryHashCode() throws Exception {
+    void countryHashCode() throws Exception {
         EqualsTestHelper.verifyHashCode(uk, uk2, de);
     }
 
     @Test
-    public void countryToString() throws Exception {
-        assertThat(uk.toString(), equalTo("Country{code='GBR', name='United Kingdom'}"));
+    void countryToString() throws Exception {
+        assertEquals("Country{code='GBR', name='United Kingdom'}", uk.toString());
     }
 }

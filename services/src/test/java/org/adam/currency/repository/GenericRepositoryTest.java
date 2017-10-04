@@ -3,62 +3,61 @@ package org.adam.currency.repository;
 import org.adam.currency.builder.CountryBuilder;
 import org.adam.currency.domain.Country;
 import org.adam.currency.fixture.CountryFixture;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class GenericRepositoryTest extends BaseRepositoryTests {
+class GenericRepositoryTest extends BaseRepositoryTests {
 
     @Autowired
     private GenericRepository genericRepository;
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    void setUp() throws Exception {
         initialSetup();
     }
 
 
     @Test
-    public void testFindById() throws Exception {
+    void testFindById() throws Exception {
         Country country = genericRepository.findById(Country.class, "GBR");
-        assertThat(country, notNullValue());
-        assertThat(country.getCode(), equalTo("GBR"));
+        assertNotNull(country);
+        assertEquals("GBR", country.getCode());
     }
 
     @Test
-    public void shouldFindByName() throws Exception {
+    void shouldFindByName() throws Exception {
         Country uk = CountryFixture.UK;
         Country country = genericRepository.findByName(Country.class, "name", uk.getName());
-        assertThat(country, notNullValue());
-        assertThat(country.getCode(), equalTo("GBR"));
+        assertNotNull(country);
+        assertEquals("GBR", country.getCode());
     }
 
 
     @Test
-    public void testFindAll() throws Exception {
+    void testFindAll() throws Exception {
         List<Country> countries = genericRepository.findAll(Country.class, "name");
-        assertThat(countries, notNullValue());
-        assertThat(countries, equalTo(CountryFixture.COUNTRIES));
+        assertNotNull(countries);
+        assertEquals(CountryFixture.COUNTRIES, countries);
     }
 
     @Test
-    public void testFindAllWithNullOrder() throws Exception {
+    void testFindAllWithNullOrder() throws Exception {
         List<Country> countries = genericRepository.findAll(Country.class);
-        assertThat(countries, notNullValue());
-        assertThat(countries, equalTo(CountryFixture.COUNTRIES));
+        assertNotNull(countries);
+        assertEquals(CountryFixture.COUNTRIES, countries);
     }
 
     @Test
-    public void testSave() throws Exception {
+    void testSave() throws Exception {
         Country country = new CountryBuilder().withCode("TST").withName("Test").build();
         genericRepository.save(country);
         Country actualCountry = genericRepository.findById(Country.class, "TST");
-        assertThat(actualCountry, equalTo(country));
+        assertEquals(country, actualCountry);
     }
 }

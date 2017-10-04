@@ -1,29 +1,28 @@
 package org.adam.currency.command;
 
 import org.adam.currency.helper.EqualsTestHelper;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class UserCommandTest {
+class UserCommandTest {
     private UserCommand userCommand = createUserCommand("user_name");
     private UserCommand userCommand2 = createUserCommand("user_name");
     private UserCommand userCommand3 = createUserCommand("different_name");
 
     @Test
-    public void userCommandEquals() throws Exception {
+    void userCommandEquals() {
         EqualsTestHelper.verifyEquals(userCommand, userCommand2, userCommand3);
     }
 
     @Test
-    public void userCommandHashCode() throws Exception {
+    void userCommandHashCode() throws Exception {
         EqualsTestHelper.verifyHashCode(userCommand, userCommand2, userCommand3);
     }
 
     @Test
-    public void userToString() throws Exception {
-        assertThat(userCommand.toString(), equalTo("UserCommand{name='user_name'}"));
+    void userToString() throws Exception {
+        assertEquals("UserCommand{name='user_name'}", userCommand.toString());
     }
 
     private UserCommand createUserCommand(String userName) {
