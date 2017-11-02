@@ -14,21 +14,21 @@
     </modules>
 
     <properties>
-        <slf4j.pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{10} [%file:%line] %msg%n</slf4j.pattern>
+        <slf4j.pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%file:%line] %msg%n</slf4j.pattern>
         <skip.db.assembly>true</skip.db.assembly>
         <maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
         <timestamp>${maven.build.timestamp}</timestamp>
         <compiler.backend.version>1.8</compiler.backend.version>
-        <spring.version>5.0.0.RELEASE</spring.version>
+        <spring.version>5.0.1.RELEASE</spring.version>
         <spring.security.version>4.2.3.RELEASE</spring.security.version>
-        <hibernate.version>5.2.11.Final</hibernate.version>
+        <hibernate.version>5.2.12.Final</hibernate.version>
         <h2.version>1.4.195</h2.version>
         <junit.version>1.0.1</junit.version>
         <juppiter.version>5.0.1</juppiter.version>
         <jackson.version>2.9.0</jackson.version>
         <jetty.version>9.4.0.RC3</jetty.version>
-        <slf4j.version>1.7.22</slf4j.version>
-        <logback.version>1.1.8</logback.version>
+        <slf4j.version>1.7.25</slf4j.version>
+        <logback.version>1.2.3</logback.version>
         <phantomjs.binary>${project.basedir}/target/phantomjs-maven-plugin/phantomjs-2.1.1-linux-x86_64/bin/phantomjs</phantomjs.binary>
         <sonar.host.url>https://sonarqube.com</sonar.host.url>
         <sonar.organization>mcadams0001-github</sonar.organization>
@@ -88,7 +88,7 @@
             <dependency>
                 <groupId>org.mockito</groupId>
                 <artifactId>mockito-core</artifactId>
-                <version>2.10.0</version>
+                <version>2.11.0</version>
                 <scope>test</scope>
             </dependency>
 
@@ -297,12 +297,12 @@
             <dependency>
                 <groupId>org.javassist</groupId>
                 <artifactId>javassist</artifactId>
-                <version>3.21.0-GA</version>
+                <version>3.22.0-GA</version>
             </dependency>
             <dependency>
-                <groupId>org.hibernate</groupId>
+                <groupId>org.hibernate.validator</groupId>
                 <artifactId>hibernate-validator</artifactId>
-                <version>6.0.2.Final</version>
+                <version>6.0.4.Final</version>
             </dependency>
             <dependency>
                 <groupId>javax.el</groupId>
