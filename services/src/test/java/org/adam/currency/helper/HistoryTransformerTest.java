@@ -5,19 +5,18 @@ import org.adam.currency.dto.HistoryDTO;
 import org.adam.currency.fixture.HistoryFixture;
 import org.junit.jupiter.api.Test;
 
-import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class HistoryTransformerTest {
 
     private HistoryTransformer transformer = new HistoryTransformer();
 
     @Test
-    void testTransform() throws Exception {
+    void testTransform() {
         History history = HistoryFixture.GBP_EUR_2016_1_30;
         HistoryDTO dto = transformer.apply(history);
-        assertThat(dto, notNullValue());
+        assertNotNull(dto);
         assertEquals(history.getCurrencyFrom().getCode(), dto.getCurrencyFrom().getCode());
         assertEquals(history.getCurrencyTo().getCode(), dto.getCurrencyTo().getCode());
         assertEquals(history.getTimeStamp(), dto.getTimeStamp());
@@ -29,8 +28,8 @@ class HistoryTransformerTest {
     }
 
     @Test
-    void shouldTransformNullToDtoInstance() throws Exception {
-        assertThat(transformer.apply(null), notNullValue());
+    void shouldTransformNullToDtoInstance() {
+        assertNotNull(transformer.apply(null));
     }
 
 }

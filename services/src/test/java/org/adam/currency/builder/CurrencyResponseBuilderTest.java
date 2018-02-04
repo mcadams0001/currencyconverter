@@ -6,12 +6,12 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class CurrencyResponseBuilderTest {
+
+class CurrencyResponseBuilderTest {
     @Test
-    void createResponse() throws Exception {
+    void createResponse() {
         CurrencyError error = new CurrencyError("404", "Access Denied");
         CurrencyResponse currencyResponse = new CurrencyResponse(1.12, 120.0d , LocalDateTime.of(2017,4,28,21,58,0));
         currencyResponse.setError(error);

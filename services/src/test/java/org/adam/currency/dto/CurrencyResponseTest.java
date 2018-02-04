@@ -14,17 +14,17 @@ class CurrencyResponseTest {
     private CurrencyResponse dto3 = new CurrencyResponseBuilder().withQuote(3.0).withResult(4.0).withSuccess(false).withTimestamp(LocalDateTime.of(2017, 4, 30, 11, 35, 0)).build();
 
     @Test
-    void verifyEquals() throws Exception {
+    void verifyEquals() {
         EqualsTestHelper.verifyEquals(dto1, dto2, dto3);
     }
 
     @Test
-    void verifyHashCode() throws Exception {
+    void verifyHashCode() {
         EqualsTestHelper.verifyHashCode(dto1, dto2, dto3);
     }
 
     @Test
-    void verifyToString() throws Exception {
+    void verifyToString() {
         assertEquals("CurrencyResponse{success=true, result=3.0}", dto1.toString());
     }
 

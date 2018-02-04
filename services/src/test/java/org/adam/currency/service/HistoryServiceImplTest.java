@@ -20,10 +20,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.sameInstance;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.verify;
@@ -50,26 +47,26 @@ class HistoryServiceImplTest {
     }
 
     @Test
-    void testFindBy() throws Exception {
+    void testFindBy() {
         History expectedHistory = new History();
         when(mockHistoryRepository.findBy(isA(Currency.class), isA(Currency.class), isA(LocalDate.class))).thenReturn(expectedHistory);
         History history = service.findBy(CurrencyFixture.GBP, CurrencyFixture.EUR, LocalDate.of(2016, 1, 30));
         verify(mockHistoryRepository).findBy(CurrencyFixture.GBP, CurrencyFixture.EUR, LocalDate.of(2016, 1, 30));
-        assertThat(history, sameInstance(expectedHistory));
+        assertSame(expectedHistory, history);
     }
 
     @Test
-    void shouldFindRecent() throws Exception {
+    void shouldFindRecent() {
         History expectedHistory = new History();
         when(mockHistoryRepository.findRecent(isA(Currency.class), isA(Currency.class))).thenReturn(expectedHistory);
         History history = service.findRecent(CurrencyFixture.GBP, CurrencyFixture.EUR);
         verify(mockHistoryRepository).findRecent(CurrencyFixture.GBP, CurrencyFixture.EUR);
-        assertThat(history, sameInstance(expectedHistory));
+        assertSame(expectedHistory, history);
     }
 
 
     @Test
-    void testFindByUser() throws Exception {
+    void testFindByUser() {
         List<History> history = new ArrayList<>();
         history.add(new History());
         when(mockSettingService.getIntSetting(SettingField.HISTORY_SHOW_LAST)).thenReturn(10);
@@ -81,7 +78,7 @@ class HistoryServiceImplTest {
     }
 
     @Test
-    void shouldSaveHistory() throws Exception {
+    void shouldSaveHistory() {
         User user = UserFixture.TEST_USER;
         LocalDate date = LocalDate.of(2016, 1, 30);
         CurrencyResponse response = CurrencyResponseFixture.SUCCESS_RESPONSE;
@@ -98,7 +95,7 @@ class HistoryServiceImplTest {
         assertEquals(response.getResult(), history.getResult());
         assertEquals(response.getInfo().getTimestamp(), history.getTimeStamp());
         assertEquals(callType, history.getCallType());
-        assertThat(history.getCreateDate(), notNullValue());
+        assertNotNull(history.getCreateDate());
     }
 
 }

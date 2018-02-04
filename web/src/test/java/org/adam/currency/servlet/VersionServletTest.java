@@ -37,7 +37,7 @@ class VersionServletTest {
     }
 
     @Test
-    void getVersion() throws Exception {
+    void getVersion() throws IOException, ServletException {
         when(servlet.getServletConfig()).thenReturn(mockServletConfig);
         when(mockServletConfig.getInitParameter(anyString())).thenReturn("2.0.0");
         when(mockResponse.getOutputStream()).thenReturn(mockServletOutputStream);
@@ -46,7 +46,7 @@ class VersionServletTest {
     }
 
     @Test
-    void throwServletException() throws Exception {
+    void throwServletException() throws IOException {
         when(servlet.getServletConfig()).thenReturn(mockServletConfig);
         when(mockServletConfig.getInitParameter(anyString())).thenReturn("2.0.0");
         when(mockResponse.getOutputStream()).thenReturn(mockServletOutputStream);

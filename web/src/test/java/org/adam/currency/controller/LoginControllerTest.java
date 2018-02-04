@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
     private LoginController controller = new LoginController();
 
     @Test
-     void displayLoginPage() throws Exception {
+    void displayLoginPage() {
         ModelAndView mav = controller.displayLoginPage(null);
         assertNotNull(mav);
         assertEquals(ViewName.LOGIN.getName(), mav.getViewName());
@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
     }
 
     @Test
-     void displayLoginPageError() throws Exception {
+    void displayLoginPageError() {
         ModelAndView mav = controller.displayLoginPage("error");
         assertNotNull(mav);
         assertEquals(ViewName.LOGIN.getName(), mav.getViewName());

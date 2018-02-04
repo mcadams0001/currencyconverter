@@ -23,7 +23,7 @@ import static org.mockito.MockitoAnnotations.initMocks;
     }
 
     @Test
-     void getUserFromPrincipal() throws Exception {
+    void getUserFromPrincipal() {
         new PrincipalHelper();
         User expectedUser = UserFixture.TEST_USER;
         UserDetailsImpl userDetails = new UserDetailsImpl(expectedUser);

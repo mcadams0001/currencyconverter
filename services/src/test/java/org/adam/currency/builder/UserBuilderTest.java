@@ -8,13 +8,14 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+
 
 class UserBuilderTest {
     @Test
-    void createUser() throws Exception {
+    void createUser() {
         User user = new User();
         user.setId(100L);
         user.setName("test_user");
@@ -40,8 +41,8 @@ class UserBuilderTest {
     }
 
     @Test
-    void notIncludeNullRole() throws Exception {
+    void notIncludeNullRole() {
         User user = new UserBuilder().withRoles(null).build();
-        assertThat(user.getRoles(), notNullValue());
+        assertNotNull(user.getRoles());
     }
 }

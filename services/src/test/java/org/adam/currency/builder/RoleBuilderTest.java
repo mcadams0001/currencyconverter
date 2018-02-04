@@ -4,13 +4,11 @@ import org.adam.currency.common.RoleNameEnum;
 import org.adam.currency.domain.Role;
 import org.junit.jupiter.api.Test;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class RoleBuilderTest {
     @Test
-    void createRole() throws Exception {
+    void createRole() {
         Role role = new Role(1L, RoleNameEnum.ROLE_USER, "Standard user");
         Role actual = new RoleBuilder().withId(role.getId()).withName(role.getName()).withDescription(role.getDescription()).build();
         assertEquals(role, actual);

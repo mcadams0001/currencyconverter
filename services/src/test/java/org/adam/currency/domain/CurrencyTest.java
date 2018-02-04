@@ -6,7 +6,8 @@ import org.adam.currency.fixture.CurrencyFixture;
 import org.adam.currency.helper.EqualsTestHelper;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 
 class CurrencyTest {
     private Currency c1 = CurrencyFixture.GBP;
@@ -14,18 +15,18 @@ class CurrencyTest {
     private Currency c3 = CurrencyFixture.EUR;
 
     @Test
-    void verifyEquals() throws Exception {
+    void verifyEquals() {
         new Currency();
         EqualsTestHelper.verifyEquals(c1, c2, c3);
     }
 
     @Test
-    void verifyHashCode() throws Exception {
+    void verifyHashCode() {
         EqualsTestHelper.verifyHashCode(c1, c2, c3);
     }
 
     @Test
-    void verifyToString() throws Exception {
+    void verifyToString() {
         assertEquals("Currency{code='GBP', name='British Pound'}", c1.toString());
     }
 }

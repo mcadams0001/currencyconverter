@@ -19,7 +19,7 @@ class LocalDateTimeSerializerTest {
     private JsonGenerator mockJsonGenerator;
 
     @BeforeEach
-    void setUp() throws Exception {
+    void setUp() {
         initMocks(this);
         TimeZone.setDefault(TimeZone.getTimeZone("GMT"));
     }

@@ -1,6 +1,7 @@
 package org.adam.currency.helper;
 
 import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import org.adam.currency.fixture.CurrencyFixture;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 
@@ -35,21 +36,21 @@ class HttpServletHelperTest {
     }
 
     @Test
-    void createJsonResponseHeaders() throws Exception {
+    void createJsonResponseHeaders() {
         when(mockRequest.getHeader("User-Agent")).thenReturn("MSIE");
         HttpHeaders responseHeaders = helper.createJsonResponseHeaders(mockRequest);
         assertEquals(MediaType.TEXT_HTML, responseHeaders.getContentType());
     }
 
     @Test
-    void createJsonResponseHeadersNonIE() throws Exception {
+    void createJsonResponseHeadersNonIE() {
         when(mockRequest.getHeader("User-Agent")).thenReturn("Mozilla");
         HttpHeaders responseHeaders = helper.createJsonResponseHeaders(mockRequest);
         assertEquals(MediaType.APPLICATION_JSON, responseHeaders.getContentType());
     }
 
     @Test
-    void jsonResponse() throws Exception {
+    void jsonResponse() {
         Map<String, Object> map = new LinkedHashMap<>();
         map.put("currency", CurrencyFixture.EUR);
         String response = helper.jsonResponse(map);
@@ -67,13 +68,13 @@ class HttpServletHelperTest {
     }
 
     @Test
-    void jsonResponseEmpty() throws Exception {
+    void jsonResponseEmpty() {
         String response = helper.jsonResponse(null);
         assertEquals("{}", response);
     }
 
     @Test
-    void captureException() throws Exception {
+    void captureException() throws JsonProcessingException {
         HttpServletHelper spyHelper = spy(helper);
         Map<String, Object> map = new LinkedHashMap<>();
         map.put("currency", CurrencyFixture.EUR);

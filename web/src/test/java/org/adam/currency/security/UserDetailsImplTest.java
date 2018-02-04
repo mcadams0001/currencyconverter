@@ -26,7 +26,7 @@ class UserDetailsImplTest {
     private UserDetailsImpl userDetails = new UserDetailsImpl(USER);
 
     @Test
-    void testGetAuthorities() throws Exception {
+    void testGetAuthorities() {
         List<Role> roles = new ArrayList<>();
         Role standardRole = new RoleBuilder().withId(1L).withName(RoleNameEnum.ROLE_USER).withDescription("Standard User").build();
         roles.add(standardRole);
@@ -42,37 +42,37 @@ class UserDetailsImplTest {
     }
 
     @Test
-    void testGetPassword() throws Exception {
+    void testGetPassword() {
         assertEquals(USER.getPassword(), userDetails.getPassword());
     }
 
     @Test
-    void testGetUsername() throws Exception {
+    void testGetUsername() {
         assertEquals(USER.getName(), userDetails.getUsername());
     }
 
     @Test
-    void testIsAccountNonExpired() throws Exception {
+    void testIsAccountNonExpired() {
         assertEquals(true, userDetails.isAccountNonExpired());
     }
 
     @Test
-    void testIsAccountNonLocked() throws Exception {
+    void testIsAccountNonLocked() {
         assertEquals(true, userDetails.isAccountNonLocked());
     }
 
     @Test
-    void testIsCredentialsNonExpired() throws Exception {
+    void testIsCredentialsNonExpired() {
         assertEquals(true, userDetails.isCredentialsNonExpired());
     }
 
     @Test
-    void testIsEnabled() throws Exception {
+    void testIsEnabled() {
         assertEquals(true, userDetails.isEnabled());
     }
 
     @Test
-    void testGetUser() throws Exception {
+    void testGetUser() {
         assertEquals(USER, userDetails.getUser());
     }
 }

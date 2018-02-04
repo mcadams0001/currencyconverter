@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class CountryBuilderTest {
     @Test
-    void createCountry() throws Exception {
+    void createCountry() {
         Country ec = CountryFixture.UK;
         Country country = new Country(ec.getCode(), ec.getName(), ec.getPostCodeRegExp());
         Country actualCountry = new CountryBuilder().withCode(ec.getCode()).withName(ec.getName()).withPostCodeRegExp(ec.getPostCodeRegExp()).build();

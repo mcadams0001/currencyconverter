@@ -13,18 +13,18 @@ class CountryTest {
     private Country de = CountryFixture.GERMANY;
 
     @Test
-    void countryEquals() throws Exception {
+    void countryEquals() {
         new Country();
         EqualsTestHelper.verifyEquals(uk, uk2, de);
     }
 
     @Test
-    void countryHashCode() throws Exception {
+    void countryHashCode() {
         EqualsTestHelper.verifyHashCode(uk, uk2, de);
     }
 
     @Test
-    void countryToString() throws Exception {
+    void countryToString() {
         assertEquals("Country{code='GBR', name='United Kingdom'}", uk.toString());
     }
 }

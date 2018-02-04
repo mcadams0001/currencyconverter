@@ -7,13 +7,13 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 
-import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class ResponseTransformerTest {
 
     @Test
-    void testTransform() throws Exception {
+    void testTransform() {
         CurrencyResponse response = new CurrencyResponseBuilder().withTimestamp(LocalDateTime.of(2016, 1, 30, 19, 30, 15)).withQuote(0.6).withResult(200.0d).withSuccess(true).build();
         CurrencyResponseDTO currencyResponseDTO = new ResponseTransformer().apply(response);
         assertNotNull(currencyResponseDTO);

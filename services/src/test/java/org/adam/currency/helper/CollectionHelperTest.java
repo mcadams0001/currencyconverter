@@ -7,13 +7,12 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.assertNotSame;
 import static org.junit.jupiter.api.Assertions.*;
 
 class CollectionHelperTest {
 
     @Test
-    void shouldCreateADefensiveCopy() throws Exception {
+    void shouldCreateADefensiveCopy() {
         new CollectionHelper();
         List<Country> sourceList = CountryFixture.COUNTRIES;
         List<Country> countries = CollectionHelper.defensiveCopy(sourceList);
@@ -22,7 +21,7 @@ class CollectionHelperTest {
     }
 
     @Test
-    void shouldCreateNewInstanceOnEmptyList() throws Exception {
+    void shouldCreateNewInstanceOnEmptyList() {
         List<Country> emptyList = new ArrayList<>();
         List<Country> countries = CollectionHelper.defensiveCopy(emptyList);
         assertNotNull(countries);
@@ -31,7 +30,7 @@ class CollectionHelperTest {
     }
 
     @Test
-    void shouldCreateNewInstanceOnNullList() throws Exception {
+    void shouldCreateNewInstanceOnNullList() {
         List<Country> countries = CollectionHelper.defensiveCopy(null);
         assertNotNull(countries);
         assertTrue(countries.isEmpty());

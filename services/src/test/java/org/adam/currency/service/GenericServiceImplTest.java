@@ -11,10 +11,7 @@ import org.mockito.Mock;
 
 import java.util.List;
 
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.sameInstance;
-import static org.junit.Assert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 
@@ -32,39 +29,39 @@ class GenericServiceImplTest {
     }
 
     @Test
-    void testFindById() throws Exception {
+    void testFindById() {
         User expectedUser = new User();
         when(mockGenericRepository.findById(User.class, 1L)).thenReturn(expectedUser);
         User user = service.findById(User.class, 1L);
         verify(mockGenericRepository).findById(User.class, 1L);
         verifyNoMoreInteractions(mockGenericRepository);
-        assertThat(user, notNullValue());
-        assertThat(user, sameInstance(expectedUser));
+        assertNotNull(user);
+        assertSame(expectedUser, user);
     }
 
     @Test
-    void testFindByName() throws Exception {
+    void testFindByName() {
         User expectedUser = new User();
         when(mockGenericRepository.findByName(User.class, "name", "someUser")).thenReturn(expectedUser);
         User user = service.findByName(User.class, "name", "someUser");
         verify(mockGenericRepository).findByName(User.class, "name", "someUser");
         verifyNoMoreInteractions(mockGenericRepository);
-        assertThat(user, notNullValue());
-        assertThat(user, sameInstance(expectedUser));
+        assertNotNull(user);
+        assertSame(expectedUser, user);
     }
 
     @Test
-    void testFindAll() throws Exception {
+    void testFindAll() {
         List<Country> expectedCountries = CountryFixture.COUNTRIES;
         when(mockGenericRepository.findAll(Country.class)).thenReturn(expectedCountries);
         List<Country> countries = service.findAll(Country.class);
         verify(mockGenericRepository).findAll(Country.class);
         verifyNoMoreInteractions(mockGenericRepository);
-        assertThat(countries, sameInstance(expectedCountries));
+        assertSame(expectedCountries, countries);
     }
 
     @Test
-    void testSave() throws Exception {
+    void testSave() {
         User user = new User();
         when(mockGenericRepository.save(user)).thenReturn(1L);
         Long userId = (Long) service.save(user);

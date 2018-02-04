@@ -10,13 +10,13 @@ class CurrencyErrorTest {
     private CurrencyError error3 = new CurrencyError("EUR", "Error2");
 
     @Test
-    void errorEquals() throws Exception {
+    void errorEquals() {
         error3.setCode("USD");
         EqualsTestHelper.verifyEquals(error1, error2, error3);
     }
 
     @Test
-    void errorHashCode() throws Exception {
+    void errorHashCode() {
         EqualsTestHelper.verifyHashCode(error1, error2, error3);
 
     }

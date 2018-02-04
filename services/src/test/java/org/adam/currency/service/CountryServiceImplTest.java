@@ -28,7 +28,7 @@ class CountryServiceImplTest {
     }
 
     @Test
-    void findAll() throws Exception {
+    void findAll() {
         List<Country> countries = CountryFixture.COUNTRIES;
         when(mockGenericService.findAll(Country.class, "name")).thenReturn(countries);
         List<Country> actualCountries = service.findAll();
@@ -37,7 +37,7 @@ class CountryServiceImplTest {
     }
 
     @Test
-    void findByCode() throws Exception {
+    void findByCode() {
         Country country = CountryFixture.UK;
         when(mockGenericService.findById(Country.class, "UK")).thenReturn(country);
         Country actualCountry = service.findByCode("UK");

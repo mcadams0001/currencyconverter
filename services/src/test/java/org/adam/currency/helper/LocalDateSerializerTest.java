@@ -9,7 +9,7 @@ import org.mockito.Mock;
 import java.time.LocalDate;
 import java.util.TimeZone;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.MockitoAnnotations.initMocks;
 
@@ -19,7 +19,7 @@ class LocalDateSerializerTest {
     private JsonGenerator mockJsonGenerator;
 
     @BeforeEach
-    void setup() throws Exception {
+    void setup() {
         initMocks(this);
         TimeZone.setDefault(TimeZone.getTimeZone("GMT"));
     }

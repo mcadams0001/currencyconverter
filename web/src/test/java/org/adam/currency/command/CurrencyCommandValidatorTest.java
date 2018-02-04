@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.validation.BindException;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
@@ -20,24 +20,24 @@ class CurrencyCommandValidatorTest {
     private CurrencyCommandValidator validator;
 
     @BeforeEach
-    void setUp() throws Exception {
+    void setUp() {
         initMocks(this);
         validator = new CurrencyCommandValidator(mockCurrencyService);
         when(mockCurrencyService.findAll()).thenReturn(CurrencyFixture.CURRENCIES);
     }
 
     @Test
-    void testSupports() throws Exception {
+    void testSupports() {
         assertEquals(true, validator.supports(CurrencyCommand.class));
     }
 
     @Test
-    void shouldFailSupports() throws Exception {
+    void shouldFailSupports() {
         assertEquals(false, validator.supports(User.class));
     }
 
     @Test
-    void testValidate() throws Exception {
+    void testValidate() {
         CurrencyCommand command = createCurrencyCommand();
         BindException errors = new BindException(command, "command");
         validator.validate(command, errors);
@@ -45,7 +45,7 @@ class CurrencyCommandValidatorTest {
     }
 
     @Test
-    void shouldRejectEmptyAmount() throws Exception {
+    void shouldRejectEmptyAmount() {
         CurrencyCommand command = createCurrencyCommand();
         command.setAmount(null);
         BindException errors = new BindException(command, "command");
@@ -55,7 +55,7 @@ class CurrencyCommandValidatorTest {
     }
 
     @Test
-    void shouldRejectInvalidAmount() throws Exception {
+    void shouldRejectInvalidAmount() {
         CurrencyCommand command = createCurrencyCommand();
         command.setAmount("abc");
         BindException errors = new BindException(command, "command");
@@ -65,7 +65,7 @@ class CurrencyCommandValidatorTest {
     }
 
     @Test
-    void shouldRejectEmptyFromCurrency() throws Exception {
+    void shouldRejectEmptyFromCurrency() {
         CurrencyCommand command = createCurrencyCommand();
         command.setFrom(null);
         BindException errors = new BindException(command, "command");
@@ -75,7 +75,7 @@ class CurrencyCommandValidatorTest {
     }
 
     @Test
-    void shouldRejectInvalidFromCurrency() throws Exception {
+    void shouldRejectInvalidFromCurrency() {
         CurrencyCommand command = createCurrencyCommand();
         command.setFrom("AAA");
         BindException errors = new BindException(command, "command");
@@ -85,7 +85,7 @@ class CurrencyCommandValidatorTest {
     }
 
     @Test
-    void shouldRejectEmptyToCurrency() throws Exception {
+    void shouldRejectEmptyToCurrency() {
         CurrencyCommand command = createCurrencyCommand();
         command.setTo(null);
         BindException errors = new BindException(command, "command");
@@ -95,7 +95,7 @@ class CurrencyCommandValidatorTest {
     }
 
     @Test
-    void shouldRejectInvalidToCurrency() throws Exception {
+    void shouldRejectInvalidToCurrency() {
         CurrencyCommand command = createCurrencyCommand();
         command.setTo("AAA");
         BindException errors = new BindException(command, "command");
@@ -105,7 +105,7 @@ class CurrencyCommandValidatorTest {
     }
 
     @Test
-    void shouldRejectSameFromAndToCurrency() throws Exception {
+    void shouldRejectSameFromAndToCurrency() {
         CurrencyCommand command = createCurrencyCommand();
         command.setTo("GBP");
         BindException errors = new BindException(command, "command");

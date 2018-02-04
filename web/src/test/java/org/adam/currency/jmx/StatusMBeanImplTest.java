@@ -32,7 +32,7 @@ class StatusMBeanImplTest {
     }
 
     @Test
-    void testGetCurrentActiveUsers() throws Exception {
+    void testGetCurrentActiveUsers() {
         List<Object> list = new ArrayList<>();
         list.add(new User("user1", "password", Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))));
         list.add(new User("user2", "password", Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))));

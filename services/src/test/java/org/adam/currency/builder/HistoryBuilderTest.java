@@ -9,14 +9,12 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class HistoryBuilderTest {
 
     @Test
-    void createHistory() throws Exception {
+    void createHistory() {
         History history = new History();
         history.setId(100L);
         history.setAmount(100d);

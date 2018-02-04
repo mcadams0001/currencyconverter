@@ -16,7 +16,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 
-public class UserCommandValidatorTest {
+class UserCommandValidatorTest {
 
     private UserCommandValidator validator;
 
@@ -27,24 +27,24 @@ public class UserCommandValidatorTest {
     private CountryService mockCountryService;
 
     @BeforeEach
-    void setup() throws Exception {
+    void setup() {
         initMocks(this);
         validator = new UserCommandValidator(mockUserService, mockCountryService);
     }
 
     @Test
-    void testSupports() throws Exception {
+    void testSupports() {
         assertEquals(true, validator.supports(UserCommand.class));
     }
 
     @Test
-    void shouldFailSupports() throws Exception {
+    void shouldFailSupports() {
         assertEquals(false, validator.supports(User.class));
     }
 
 
     @Test
-    void testValidatePass() throws Exception {
+    void testValidatePass() {
         UserCommand command = createValidCommand();
         BindException errors = new BindException(command, "command");
         when(mockCountryService.findByCode(anyString())).thenReturn(CountryFixture.UK);
@@ -55,7 +55,7 @@ public class UserCommandValidatorTest {
     }
 
     @Test
-    void shouldRejectExistingUser() throws Exception {
+    void shouldRejectExistingUser() {
         UserCommand command = createValidCommand();
         BindException errors = new BindException(command, "command");
         when(mockUserService.findUserByName(anyString())).thenReturn(UserFixture.TEST_USER);
@@ -69,7 +69,7 @@ public class UserCommandValidatorTest {
     }
 
     @Test
-    void shouldRejectEmptyUserName() throws Exception {
+    void shouldRejectEmptyUserName() {
         UserCommand command = createValidCommand();
         command.setName("");
         BindException errors = new BindException(command, "command");
@@ -83,7 +83,7 @@ public class UserCommandValidatorTest {
     }
 
     @Test
-    void shouldRejectEmptyPassword() throws Exception {
+    void shouldRejectEmptyPassword() {
         UserCommand command = createValidCommand();
         command.setPassword("");
         command.setRepeatPassword("");
@@ -98,7 +98,7 @@ public class UserCommandValidatorTest {
     }
 
     @Test
-    void shouldRejectShortPassword() throws Exception {
+    void shouldRejectShortPassword() {
         UserCommand command = createValidCommand();
         command.setPassword("abcdefg");
         command.setRepeatPassword("abcdefg");
@@ -113,7 +113,7 @@ public class UserCommandValidatorTest {
     }
 
     @Test
-    void shouldRejectPasswordDifferentThanRepeated() throws Exception {
+    void shouldRejectPasswordDifferentThanRepeated() {
         UserCommand command = createValidCommand();
         command.setPassword("abcdefgh");
         command.setRepeatPassword("abcdefg");
@@ -128,7 +128,7 @@ public class UserCommandValidatorTest {
     }
 
     @Test
-    void shouldRejectEmptyFirstAndLastName() throws Exception {
+    void shouldRejectEmptyFirstAndLastName() {
         UserCommand command = createValidCommand();
         command.setFirstName("");
         command.setLastName("");
@@ -146,7 +146,7 @@ public class UserCommandValidatorTest {
     }
 
     @Test
-    void shouldRejectEmptyEmailAddress() throws Exception {
+    void shouldRejectEmptyEmailAddress() {
         UserCommand command = createValidCommand();
         command.setEmail("");
         BindException errors = new BindException(command, "command");
@@ -160,7 +160,7 @@ public class UserCommandValidatorTest {
     }
 
     @Test
-    void shouldRejectInvalidEmailAddress() throws Exception {
+    void shouldRejectInvalidEmailAddress() {
         UserCommand command = createValidCommand();
         command.setEmail("a@a");
         BindException errors = new BindException(command, "command");
@@ -174,7 +174,7 @@ public class UserCommandValidatorTest {
     }
 
     @Test
-    void shouldRejectEmptyBirthDate() throws Exception {
+    void shouldRejectEmptyBirthDate() {
         UserCommand command = createValidCommand();
         command.setBirthDate("");
         BindException errors = new BindException(command, "command");
@@ -188,7 +188,7 @@ public class UserCommandValidatorTest {
     }
 
     @Test
-    void shouldRejectInvalidBirthDate() throws Exception {
+    void shouldRejectInvalidBirthDate() {
         UserCommand command = createValidCommand();
         command.setBirthDate("10-10-2999");
         BindException errors = new BindException(command, "command");
@@ -203,7 +203,7 @@ public class UserCommandValidatorTest {
 
 
     @Test
-    void shouldRejectEmptyStreet() throws Exception {
+    void shouldRejectEmptyStreet() {
         UserCommand command = createValidCommand();
         command.setStreet("");
         BindException errors = new BindException(command, "command");
@@ -217,7 +217,7 @@ public class UserCommandValidatorTest {
     }
 
     @Test
-    void shouldRejectEmptyCity() throws Exception {
+    void shouldRejectEmptyCity() {
         UserCommand command = createValidCommand();
         command.setCity("");
         BindException errors = new BindException(command, "command");
@@ -231,7 +231,7 @@ public class UserCommandValidatorTest {
     }
 
     @Test
-    void shouldRejectEmptyCountry() throws Exception {
+    void shouldRejectEmptyCountry() {
         UserCommand command = createValidCommand();
         command.setCountry("");
         BindException errors = new BindException(command, "command");
@@ -244,7 +244,7 @@ public class UserCommandValidatorTest {
     }
 
     @Test
-    void shouldRejectNonExistingCountryCode() throws Exception {
+    void shouldRejectNonExistingCountryCode() {
         UserCommand command = createValidCommand();
         command.setCountry("ABC");
         BindException errors = new BindException(command, "command");
@@ -258,7 +258,7 @@ public class UserCommandValidatorTest {
     }
 
     @Test
-    void shouldRejectEmptyPostCode() throws Exception {
+    void shouldRejectEmptyPostCode() {
         UserCommand command = createValidCommand();
         command.setPostCode("");
         BindException errors = new BindException(command, "command");
@@ -272,7 +272,7 @@ public class UserCommandValidatorTest {
     }
 
     @Test
-    void shouldRejectInvalidPostCode() throws Exception {
+    void shouldRejectInvalidPostCode() {
         UserCommand command = createValidCommand();
         command.setPostCode("ABC");
         BindException errors = new BindException(command, "command");
@@ -286,7 +286,7 @@ public class UserCommandValidatorTest {
     }
 
     @Test
-    void shouldNotRejectPostCodeIfCountryIsEmpty() throws Exception {
+    void shouldNotRejectPostCodeIfCountryIsEmpty() {
         UserCommand command = createValidCommand();
         command.setPostCode("ABC");
         command.setCountry("");
@@ -300,7 +300,7 @@ public class UserCommandValidatorTest {
     }
 
     @Test
-    void shouldNotRejectPostCodeIfCountryCodeIsInvalid() throws Exception {
+    void shouldNotRejectPostCodeIfCountryCodeIsInvalid() {
         UserCommand command = createValidCommand();
         command.setPostCode("ABC");
         command.setCountry("RRR");
@@ -315,7 +315,7 @@ public class UserCommandValidatorTest {
     }
 
     @Test
-    void skipValidatePostCodeForNullCountry() throws Exception {
+    void skipValidatePostCodeForNullCountry() {
         UserCommand command = createValidCommand();
         BindException errors = new BindException(command, "command");
         validator.validatePostCode(errors, null, "W7 TD1");
@@ -323,7 +323,7 @@ public class UserCommandValidatorTest {
     }
 
     @Test
-    void skipValidatePostCodeForEmptyRegExp() throws Exception {
+    void skipValidatePostCodeForEmptyRegExp() {
         UserCommand command = createValidCommand();
         Country country = new Country("FR", "France", null);
         BindException errors = new BindException(command, "command");

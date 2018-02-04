@@ -13,17 +13,17 @@ class RoleTest {
     private Role role3 = new RoleBuilder().withId(2L).withName(RoleNameEnum.ROLE_USER).withDescription("Standard User2").build();
 
     @Test
-    void verifyEquals() throws Exception {
+    void verifyEquals() {
         EqualsTestHelper.verifyEquals(role1, role2, role3);
     }
 
     @Test
-    void verifyHashCode() throws Exception {
+    void verifyHashCode() {
         EqualsTestHelper.verifyHashCode(role1, role2, role3);
     }
 
     @Test
-    void verifyToString() throws Exception {
+    void verifyToString() {
         assertEquals("Role{name=ROLE_USER}", role1.toString());
     }
 }

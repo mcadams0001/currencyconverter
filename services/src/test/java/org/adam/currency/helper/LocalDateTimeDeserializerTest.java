@@ -8,7 +8,7 @@ import org.mockito.Mock;
 import java.time.LocalDateTime;
 import java.util.TimeZone;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
@@ -18,7 +18,7 @@ class LocalDateTimeDeserializerTest {
     private JsonParser mockJsonParser;
 
     @BeforeEach
-    void setUp() throws Exception {
+    void setUp() {
         initMocks(this);
         TimeZone.setDefault(TimeZone.getTimeZone("GMT"));
     }

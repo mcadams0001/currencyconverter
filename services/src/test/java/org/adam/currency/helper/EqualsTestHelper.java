@@ -1,19 +1,18 @@
 package org.adam.currency.helper;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class EqualsTestHelper {
     public static <T> void verifyEquals(T obj1, T obj2, T obj3) {
-        assertEquals("Object must be equal to itself", true, obj1.equals(obj1));
-        assertEquals("Two same object must be equal", true, obj1.equals(obj2));
-        assertEquals("Two different objects cannot be equal", false, obj1.equals(obj3));
-        assertEquals("Object must not be equal to null", false, obj1.equals(null));
-        assertEquals("Two different object types cannot be equal", false, obj1.equals(""));
+        assertTrue(obj1.equals(obj1), "Object must be equal to itself");
+        assertTrue(obj1.equals(obj2), "Two same object must be equal");
+        assertFalse(obj1.equals(obj3), "Two different objects cannot be equal");
+        assertFalse(obj1.equals(null), "Object must not be equal to null");
+        assertFalse(obj1.equals(""), "Two different object types cannot be equal");
     }
 
     public static <T> void verifyHashCode(T obj1, T obj2, T obj3) {
-        assertEquals("Hash code of two same object should be the same", obj2.hashCode(), obj1.hashCode());
+        assertEquals(obj2.hashCode(), obj1.hashCode(), "Hash code of two same object should be the same");
         assertFalse(obj3.hashCode() == obj1.hashCode(), "Hash code of two different objects must be different");
     }
 }

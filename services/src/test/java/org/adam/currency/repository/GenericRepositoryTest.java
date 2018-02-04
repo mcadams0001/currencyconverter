@@ -18,20 +18,20 @@ class GenericRepositoryTest extends BaseRepositoryTests {
     private GenericRepository genericRepository;
 
     @BeforeEach
-    void setUp() throws Exception {
+    void setUp() {
         initialSetup();
     }
 
 
     @Test
-    void testFindById() throws Exception {
+    void testFindById() {
         Country country = genericRepository.findById(Country.class, "GBR");
         assertNotNull(country);
         assertEquals("GBR", country.getCode());
     }
 
     @Test
-    void shouldFindByName() throws Exception {
+    void shouldFindByName() {
         Country uk = CountryFixture.UK;
         Country country = genericRepository.findByName(Country.class, "name", uk.getName());
         assertNotNull(country);
@@ -40,21 +40,21 @@ class GenericRepositoryTest extends BaseRepositoryTests {
 
 
     @Test
-    void testFindAll() throws Exception {
+    void testFindAll() {
         List<Country> countries = genericRepository.findAll(Country.class, "name");
         assertNotNull(countries);
         assertEquals(CountryFixture.COUNTRIES, countries);
     }
 
     @Test
-    void testFindAllWithNullOrder() throws Exception {
+    void testFindAllWithNullOrder() {
         List<Country> countries = genericRepository.findAll(Country.class);
         assertNotNull(countries);
         assertEquals(CountryFixture.COUNTRIES, countries);
     }
 
     @Test
-    void testSave() throws Exception {
+    void testSave() {
         Country country = new CountryBuilder().withCode("TST").withName("Test").build();
         genericRepository.save(country);
         Country actualCountry = genericRepository.findById(Country.class, "TST");

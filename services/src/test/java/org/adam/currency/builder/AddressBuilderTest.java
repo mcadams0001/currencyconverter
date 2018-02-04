@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class AddressBuilderTest {
     @Test
-    void createAddress() throws Exception {
+    void createAddress() {
         Address address = new Address(200L, "5 The SouthSea", "London", "W3 4TW", CountryFixture.UK, LocalDateTime.of(2017, 4, 28, 21, 8, 30));
         Address actualAddress = new AddressBuilder().withId(address.getId()).withStreet(address.getStreet())
                 .withCity(address.getCity()).withPostCode(address.getPostCode())

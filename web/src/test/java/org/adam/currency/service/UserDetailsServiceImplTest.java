@@ -16,8 +16,6 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.*;
@@ -43,7 +41,7 @@ class UserDetailsServiceImplTest {
 
 
     @Test
-    void testLoadUserByUsername() throws Exception {
+    void testLoadUserByUsername() {
         User user = new UserBuilder().withId(1L).withName("test_user").build();
         doReturn(user).when(service).getUserFromSession();
         doNothing().when(service).setUserInSession(isA(User.class));
@@ -53,7 +51,7 @@ class UserDetailsServiceImplTest {
     }
 
     @Test
-    void shouldLoadUserByUserNameFromDb() throws Exception {
+    void shouldLoadUserByUserNameFromDb() {
         User user = new UserBuilder().withId(1L).withName("test_user").build();
         doReturn(null).when(service).getUserFromSession();
         doNothing().when(service).setUserInSession(isA(User.class));
@@ -65,7 +63,7 @@ class UserDetailsServiceImplTest {
     }
 
     @Test
-    void shouldThrowExceptionOnNonExistingUser() throws Exception {
+    void shouldThrowExceptionOnNonExistingUser() {
         doReturn(null).when(service).getUserFromSession();
         assertThrows(UsernameNotFoundException.class, () -> {
             service.loadUserByUsername("test_user");
@@ -73,7 +71,7 @@ class UserDetailsServiceImplTest {
     }
 
     @Test
-    void testGetUserFromSession() throws Exception {
+    void testGetUserFromSession() {
         User user = new UserBuilder().withId(1L).withName("test_user").build();
         doReturn(mockSecurityContext).when(service).getSecurityContext();
         when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
@@ -85,27 +83,27 @@ class UserDetailsServiceImplTest {
     }
 
     @Test
-    void shouldGetUserFromSessionIfNotAuthenticated() throws Exception {
+    void shouldGetUserFromSessionIfNotAuthenticated() {
         doReturn(mockSecurityContext).when(service).getSecurityContext();
         when(mockSecurityContext.getAuthentication()).thenReturn(null);
         User actualUser = service.getUserFromSession();
         verify(mockSecurityContext).getAuthentication();
-        assertThat(actualUser, nullValue());
+        assertNull(actualUser);
     }
 
     @Test
-    void shouldGetUserFromSessionAndReturnNullOnWrongPrincipal() throws Exception {
+    void shouldGetUserFromSessionAndReturnNullOnWrongPrincipal() {
         doReturn(mockSecurityContext).when(service).getSecurityContext();
         when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
         when(mockAuthentication.getPrincipal()).thenReturn(1L);
         User actualUser = service.getUserFromSession();
         verify(mockSecurityContext).getAuthentication();
         verify(mockAuthentication).getPrincipal();
-        assertThat(actualUser, nullValue());
+        assertNull(actualUser);
     }
 
     @Test
-    void testSetUserInSession() throws Exception {
+    void testSetUserInSession() {
         User user = new UserBuilder().withId(1L).withName("test_user").build();
         doReturn(mockSecurityContext).when(service).getSecurityContext();
         service.setUserInSession(user);
@@ -118,7 +116,7 @@ class UserDetailsServiceImplTest {
     }
 
     @Test
-    void shouldGetSecurityContext() throws Exception {
+    void shouldGetSecurityContext() {
         doReturn(mockSecurityContextHelper).when(service).getSecurityContextHelper();
         when(mockSecurityContextHelper.getSecurityContext()).thenReturn(mockSecurityContext);
         SecurityContext securityContext = service.getSecurityContext();
@@ -127,7 +125,7 @@ class UserDetailsServiceImplTest {
     }
 
     @Test
-    void shouldGetSecurityContextHelper() throws Exception {
+    void shouldGetSecurityContextHelper() {
         SecurityContextHelper securityContextHelper = service.getSecurityContextHelper();
         assertNotNull(securityContextHelper);
     }

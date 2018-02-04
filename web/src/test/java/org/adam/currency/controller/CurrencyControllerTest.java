@@ -34,10 +34,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyDouble;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -67,7 +64,7 @@ class CurrencyControllerTest {
     private static final String SEPARATOR = System.getProperty("line.separator");
 
     @BeforeEach
-    void setUp() throws Exception {
+    void setUp() {
         initMocks(this);
         ReflectionTestUtils.setField(controller, "httpServletHelper", new HttpServletHelper());
         UserDetailsImpl userDetails = new UserDetailsImpl(user);
@@ -75,7 +72,7 @@ class CurrencyControllerTest {
     }
 
     @Test
-    void testDisplayCurrencies() throws Exception {
+    void testDisplayCurrencies() {
         ModelAndView mav = controller.displayCurrencies(mockAuthentication);
         assertNotNull(mav);
         assertEquals(ViewName.INDEX.getName(), mav.getViewName());
@@ -85,7 +82,7 @@ class CurrencyControllerTest {
     }
 
     @Test
-    void shouldGetCurrencies() throws Exception {
+    void shouldGetCurrencies() {
         List<Currency> currencies = CurrencyFixture.CURRENCIES;
         when(mockCurrencyService.findAll()).thenReturn(currencies);
         ResponseEntity<String> responseEntity = controller.displayForm(mockRequest);
@@ -95,7 +92,7 @@ class CurrencyControllerTest {
     }
 
     @Test
-    void testConvert() throws Exception {
+    void testConvert() {
         CurrencyCommand command = new CurrencyCommand();
         command.setFrom("GBP");
         command.setTo("EUR");
@@ -111,7 +108,7 @@ class CurrencyControllerTest {
     }
 
     @Test
-    void testNotConvert() throws Exception {
+    void testNotConvert() {
         CurrencyController spyController = spy(controller);
         CurrencyCommand command = new CurrencyCommand();
         command.setFrom("GBP");
@@ -122,11 +119,11 @@ class CurrencyControllerTest {
         ResponseEntity<String> responseEntity = spyController.convert(mockAuthentication, command, mockRequest);
         verify(mockCurrencyService, never()).convertCurrency(user, command.getFrom(), command.getTo(), Double.parseDouble(command.getAmount()), Optional.of(command.getDate()));
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertThat(responseEntity.getBody(), nullValue());
+        assertNull(responseEntity.getBody());
     }
 
     @Test
-    void shouldGetHistory() throws Exception {
+    void shouldGetHistory() {
         when(mockHistoryService.findByUser(isA(User.class))).thenReturn(Collections.singletonList(HistoryFixture.GBP_EUR_2016_1_30));
         ResponseEntity<String> responseEntity = controller.displayHistory(mockAuthentication, mockRequest);
         verify(mockHistoryService).findByUser(user);
@@ -134,7 +131,7 @@ class CurrencyControllerTest {
     }
 
     @Test
-    void shouldGetHistoryView() throws Exception {
+    void shouldGetHistoryView() {
         assertEquals("currencyHistoryEmpty", controller.getHistoryView(new ArrayList<>()));
         assertEquals("currencyHistory", controller.getHistoryView(Collections.singletonList(new HistoryDTO())));
     }

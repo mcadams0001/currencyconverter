@@ -16,12 +16,12 @@ class UserCommandTest {
     }
 
     @Test
-    void userCommandHashCode() throws Exception {
+    void userCommandHashCode() {
         EqualsTestHelper.verifyHashCode(userCommand, userCommand2, userCommand3);
     }
 
     @Test
-    void userToString() throws Exception {
+    void userToString() {
         assertEquals("UserCommand{name='user_name'}", userCommand.toString());
     }
 

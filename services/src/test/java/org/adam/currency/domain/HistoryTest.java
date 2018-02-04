@@ -16,7 +16,7 @@ class HistoryTest {
     private History h3;
 
     @BeforeEach
-    void setUp() throws Exception {
+    void setUp() {
         LocalDateTime timestamp = LocalDateTime.of(2017, 4, 30, 12, 0, 0);
         LocalDateTime createDate = LocalDateTime.of(2017, 4, 30, 10, 0, 0);
         User user = UserFixture.TEST_USER;
@@ -26,12 +26,12 @@ class HistoryTest {
     }
 
     @Test
-    void verifyEquals() throws Exception {
+    void verifyEquals() {
         EqualsTestHelper.verifyEquals(h1, h2, h3);
     }
 
     @Test
-    void verifyHashCode() throws Exception {
+    void verifyHashCode() {
         EqualsTestHelper.verifyHashCode(h1, h2, h3);
     }
 }

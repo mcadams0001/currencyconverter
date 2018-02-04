@@ -37,7 +37,7 @@ class SettingServiceImplTest {
     }
 
     @Test
-    void shouldGetNullIfDefaultValueIsNullForInteger() throws Exception {
+    void shouldGetNullIfDefaultValueIsNullForInteger() {
         when(mockGenericRepository.findByName(Setting.class, "name", SettingField.CURRENCY_SERVICE_URL)).thenReturn(null);
         int actual = service.getIntSetting(SettingField.CURRENCY_SERVICE_URL);
         verify(mockGenericRepository).findByName(Setting.class, "name", SettingField.CURRENCY_SERVICE_URL);
@@ -45,7 +45,7 @@ class SettingServiceImplTest {
     }
 
     @Test
-    void shouldGetIntSettingWithDefaultValue() throws Exception {
+    void shouldGetIntSettingWithDefaultValue() {
         when(mockGenericRepository.findByName(Setting.class, "name", SettingField.HISTORY_SHOW_LAST)).thenReturn(null);
         int actual = service.getIntSetting(SettingField.HISTORY_SHOW_LAST);
         verify(mockGenericRepository).findByName(Setting.class, "name", SettingField.HISTORY_SHOW_LAST);
@@ -53,7 +53,7 @@ class SettingServiceImplTest {
     }
 
     @Test
-    void shouldGetIntSetting() throws Exception {
+    void shouldGetIntSetting() {
         when(mockGenericRepository.findByName(Setting.class, "name", SettingField.HISTORY_SHOW_LAST)).thenReturn(SettingFixture.HISTORY_SHOW_LAST);
         int actual = service.getIntSetting(SettingField.HISTORY_SHOW_LAST);
         verify(mockGenericRepository).findByName(Setting.class, "name", SettingField.HISTORY_SHOW_LAST);
@@ -61,7 +61,7 @@ class SettingServiceImplTest {
     }
 
     @Test
-    void shouldGetConnectionTimeOut() throws Exception {
+    void shouldGetConnectionTimeOut() {
         when(mockGenericRepository.findByName(Setting.class, "name", SettingField.CONNECTION_TIMEOUT)).thenReturn(SettingFixture.CONNECTION_TIMEOUT);
         int connectionTimeout = service.getConnectionTimeout();
         verify(mockGenericRepository).findByName(Setting.class, "name", SettingField.CONNECTION_TIMEOUT);

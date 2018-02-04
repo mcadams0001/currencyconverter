@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class UserTest {
     private User user1 = new UserBuilder().withName("test_user").withPassword("1234567890").withFirstName("Test").withLastName("User").withEmailAddress("test_user@domain.com").withBirthDate(LocalDate.of(1981, 4, 1)).withAddress(AddressFixture.TEST_ADDRESS).withRoles(RoleFixture.ROLES).build();
@@ -17,17 +17,17 @@ class UserTest {
     private User user3 = UserFixture.TEST_USER2;
 
     @Test
-    void verifyEquals() throws Exception {
+    void verifyEquals() {
         EqualsTestHelper.verifyEquals(user1, user2, user3);
     }
 
     @Test
-    void verifyHashCode() throws Exception {
+    void verifyHashCode() {
         EqualsTestHelper.verifyHashCode(user1, user2, user3);
     }
 
     @Test
-    void verifyToString() throws Exception {
+    void verifyToString() {
         assertEquals("User{id=null, name='test_user'}", user1.toString());
     }
 }

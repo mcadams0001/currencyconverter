@@ -22,10 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
-import static org.hamcrest.Matchers.hasKey;
-import static org.junit.Assert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 
@@ -52,7 +49,7 @@ class RegistrationControllerTest {
     }
 
     @Test
-    void testShowForm() throws Exception {
+    void testShowForm() {
         List<Country> countries = CountryFixture.COUNTRIES;
         when(mockCountryService.findAll()).thenReturn(countries);
         ModelAndView mav = controller.showForm();
@@ -63,7 +60,7 @@ class RegistrationControllerTest {
     }
 
     @Test
-    void shouldRegisterUser() throws Exception {
+    void shouldRegisterUser() {
         ModelMap modelMap = new ModelMap();
         UserCommand command = new UserCommand();
         User user = UserFixture.TEST_USER;
@@ -71,22 +68,22 @@ class RegistrationControllerTest {
         String viewName = controller.registerUser(command, mockBindResult, modelMap);
         verify(mockUserService).createUser(command);
         assertEquals("registerSuccess", viewName);
-        assertThat(modelMap, hasKey(Parameters.USER.getName()));
+        assertTrue(modelMap.containsKey(Parameters.USER.getName()));
     }
 
     @Test
-    void shouldNotRegisterUser() throws Exception {
+    void shouldNotRegisterUser() {
         ModelMap modelMap = new ModelMap();
         UserCommand command = new UserCommand();
         when(mockBindResult.hasErrors()).thenReturn(true);
         String viewName = controller.registerUser(command, mockBindResult, modelMap);
         verify(mockUserService, never()).createUser(command);
         assertEquals("register", viewName);
-        assertThat(modelMap, hasKey(Parameters.COUNTRIES.getName()));
+        assertTrue(modelMap.containsKey(Parameters.COUNTRIES.getName()));
     }
 
     @Test
-    void shouldRegisterValidator() throws Exception {
+    void shouldRegisterValidator() {
         controller.initBinder(mockWebDataBinder);
         ArgumentCaptor<Validator> validatorArgumentCaptor = ArgumentCaptor.forClass(Validator.class);
         verify(mockWebDataBinder).addValidators(validatorArgumentCaptor.capture());
