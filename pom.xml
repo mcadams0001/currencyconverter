@@ -18,7 +18,7 @@
         <skip.db.assembly>true</skip.db.assembly>
         <maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
         <timestamp>${maven.build.timestamp}</timestamp>
-        <compiler.backend.version>1.9</compiler.backend.version>
+        <compiler.backend.version>1.8</compiler.backend.version>
         <spring.version>5.0.1.RELEASE</spring.version>
         <spring.security.version>4.2.3.RELEASE</spring.security.version>
         <hibernate.version>5.2.12.Final</hibernate.version>
@@ -34,7 +34,6 @@
         <sonar.organization>mcadams0001-github</sonar.organization>
         <sonar.exclusions>**/SecurityContextHelper*,**/common/**,**/js/jquery/**,**/js/handlebars/**</sonar.exclusions>
         <sonar.jacoco.reportPaths>${basedir}/target/jacoco.exec</sonar.jacoco.reportPaths>
-        <sonar.java.source>${compiler.backend.version}</sonar.java.source>
     </properties>
 
     <profiles>

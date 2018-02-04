@@ -8,7 +8,6 @@ import org.adam.currency.helper.EqualsTestHelper;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 import static org.junit.Assert.assertEquals;
 
@@ -24,9 +23,6 @@ class UserTest {
 
     @Test
     void verifyHashCode() throws Exception {
-        LocalDateTime now = LocalDateTime.now();
-        user1.setCreateDate(now);
-        user2.setCreateDate(now);
         EqualsTestHelper.verifyHashCode(user1, user2, user3);
     }
 
