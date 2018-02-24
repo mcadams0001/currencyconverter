@@ -97,7 +97,7 @@ public class UserCommandValidator implements Validator {
             Country country = countryService.findByCode(command.getCountry());
             if (country == null) {
                 errors.rejectValue("country", "error.select.value");
-                LOGGER.error("Country with code:" + command.getCountry() + " does not exist in COUNTRY table");
+                LOGGER.error("Country with code:{} does not exist in COUNTRY table", command.getCountry());
             } else {
                 return country;
             }

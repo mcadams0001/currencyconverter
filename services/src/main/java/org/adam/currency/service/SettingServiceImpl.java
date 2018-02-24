@@ -33,12 +33,13 @@ public class SettingServiceImpl implements SettingService {
         try {
             return Integer.parseInt(setting);
         } catch (NumberFormatException e) {
-            LOGGER.warn(FAILED_TO_RETRIEVE_SETTING + field.name());
+            String message = FAILED_TO_RETRIEVE_SETTING + field.name();
+            LOGGER.warn(message);
             if (field.isDefaultValueEmpty()) {
-                LOGGER.warn(FAILED_TO_RETRIEVE_SETTING + field.name() + ". Using default value: 0");
+                LOGGER.warn("{}. Using default value: 0", message);
                 return 0;
             }
-            LOGGER.warn(FAILED_TO_RETRIEVE_SETTING + field.name() + ". Using default value: " + field.getDefaultValue());
+            LOGGER.warn("{}. Using default value: {}", message, field.getDefaultValue());
             return Integer.parseInt(field.getDefaultValue());
         }
     }

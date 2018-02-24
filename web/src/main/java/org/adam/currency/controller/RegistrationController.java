@@ -52,7 +52,7 @@ public class RegistrationController {
         }
         User user = userService.createUser(command);
         modelMap.put(Parameters.USER.getName(), user);
-        LOGGER.info("User: " + user.getName() + " has completed registration");
+        LOGGER.info("User: {} has completed registration", user.getName());
         return "registerSuccess";
     }
 }

@@ -11,6 +11,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 class GenericRepositoryTest extends BaseRepositoryTests {
 
@@ -59,5 +60,11 @@ class GenericRepositoryTest extends BaseRepositoryTests {
         genericRepository.save(country);
         Country actualCountry = genericRepository.findById(Country.class, "TST");
         assertEquals(country, actualCountry);
+    }
+
+    @Test
+    void shouldReturnNullIfSingleElementCannotBeFound() {
+        Country actualCountry = genericRepository.findById(Country.class, "XYZ");
+        assertNull(actualCountry);
     }
 }
