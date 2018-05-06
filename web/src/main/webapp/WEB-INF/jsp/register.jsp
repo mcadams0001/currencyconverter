@@ -10,7 +10,7 @@
 <div id="formSection" class="container">
     <h1>Registration Form</h1>
     Please provide your details below:
-    <form:form action="/register.html" method="post" commandName="command" htmlEscape="true">
+    <form:form action="/register.html" method="post" modelAttribute="command" htmlEscape="true">
         <form:errors cssClass="error"/>
         <table class="registrationTable">
             <tr>
