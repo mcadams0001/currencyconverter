@@ -2,6 +2,9 @@ language: java
 sudo: true
 install: true
 addons:
+  apt:
+    packages:
+      - oracle-java10-installer
   sonarcloud:
     organization: "mcadams0001-github"
     token:
@@ -9,7 +12,7 @@ addons:
 jdk:
 - oraclejdk10
 script:
-  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar -Ptravis
+  - mvn clean install sonar:sonar -Ptravis
 cache:
   directories:
     - '$HOME/.m2/repository'
