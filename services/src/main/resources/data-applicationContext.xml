@@ -46,7 +46,7 @@
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
-    <tx:annotation-driven transaction-manager="transactionManager"/>
+    <tx:annotation-driven/>
 
     <context:component-scan base-package="org.adam.currency.repository"/>
 </beans>
