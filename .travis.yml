@@ -1,10 +1,8 @@
 language: java
 sudo: true
-install: true
+before_install: wget https://raw.githubusercontent.com/sormuras/bach/master/install-jdk.sh
+install: ./install-jdk.sh -F 10 -L GPL
 addons:
-  apt:
-    packages:
-      - oracle-java10-installer
   sonarcloud:
     organization: "mcadams0001-github"
     token:
