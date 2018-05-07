@@ -105,7 +105,7 @@ class CurrencyServiceImplTest {
         assertEquals(1.315174133, currencyResponse.getQuote(), 0.0001);
         assertEquals(LocalDateTime.of(2016, 1, 30, 18, 54, 30), currencyResponse.getTimestamp());
         assertEquals(157.82089596, currencyResponse.getResult(), 0.0001);
-        assertEquals(true, currencyResponse.isSuccess());
+        assertTrue(currencyResponse.isSuccess());
         assertEquals(120.0d, currencyResponse.getAmount(), 0.1);
         assertEquals("GBP", currencyResponse.getCurrencyFrom().getCode());
         assertEquals("EUR", currencyResponse.getCurrencyTo().getCode());
@@ -128,7 +128,7 @@ class CurrencyServiceImplTest {
         assertEquals(0.658443, currencyResponse.getQuote(), 0.000001);
         assertEquals(LocalDateTime.of(2016, 1, 30, 18, 54, 30), currencyResponse.getTimestamp());
         assertEquals(79.01316, currencyResponse.getResult(), 0.000001);
-        assertEquals(true, currencyResponse.isSuccess());
+        assertTrue(currencyResponse.isSuccess());
         assertEquals(120.0d, currencyResponse.getAmount(), 0.000001);
         assertEquals("GBP", currencyResponse.getCurrencyFrom().getCode());
         assertEquals("EUR", currencyResponse.getCurrencyTo().getCode());
@@ -149,7 +149,7 @@ class CurrencyServiceImplTest {
         assertEquals(0.658443, currencyResponse.getQuote(), 0.000001);
         assertEquals(LocalDateTime.of(2016, 1, 30, 18, 54, 30), currencyResponse.getTimestamp());
         assertEquals(79.01316, currencyResponse.getResult(), 0.000001);
-        assertEquals(true, currencyResponse.isSuccess());
+        assertTrue(currencyResponse.isSuccess());
     }
 
     @Test
@@ -166,7 +166,7 @@ class CurrencyServiceImplTest {
         assertNull(currencyResponse.getQuote());
         assertNull(currencyResponse.getTimestamp());
         assertNull(currencyResponse.getResult());
-        assertEquals(false, currencyResponse.isSuccess());
+        assertFalse(currencyResponse.isSuccess());
         assertEquals("Your monthly usage limit has been reached. Please upgrade your subscription plan.", currencyResponse.getError());
     }
 
@@ -201,45 +201,35 @@ class CurrencyServiceImplTest {
 
     @Test
     void shouldConvertCurrencyWhenNoneAreUSD() {
-        Map<String, Double> quotes = new HashMap<>();
-        quotes.put("USDGBP", 0.702050d);
-        quotes.put("USDEUR", 0.923318d);
+        Map<String, Double> quotes = Map.of("USDGBP",0.702050d, "USDEUR", 0.923318d);
         double quote = service.getQuote(quotes, "GBP", "EUR");
         assertEquals(1.315174133, quote);
     }
 
     @Test
     void shouldConvertCurrencyWhenSourceIsUSD() {
-        Map<String, Double> quotes = new HashMap<>();
-        quotes.put("USDGBP", 0.702050d);
-        quotes.put("USDEUR", 0.923318d);
+        Map<String, Double> quotes = Map.of("USDGBP",0.702050d, "USDEUR", 0.923318d);
         double quote = service.getQuote(quotes, "USD", "EUR");
         assertEquals(0.923318d, quote);
     }
 
     @Test
     void shouldConvertCurrencyWhenTargetIsUSD() {
-        Map<String, Double> quotes = new HashMap<>();
-        quotes.put("USDGBP", 0.702050d);
-        quotes.put("USDEUR", 0.923318d);
+        Map<String, Double> quotes = Map.of("USDGBP",0.702050d, "USDEUR", 0.923318d);
         double quote = service.getQuote(quotes, "EUR", "USD");
         assertEquals(1 / 0.923318d, quote);
     }
 
     @Test
     void shouldNotConfertIfBothAreUSD() {
-        Map<String, Double> quotes = new HashMap<>();
-        quotes.put("USDGBP", 0.702050d);
-        quotes.put("USDEUR", 0.923318d);
+        Map<String, Double> quotes = Map.of("USDGBP",0.702050d, "USDEUR", 0.923318d);
         double quote = service.getQuote(quotes, "USD", "USD");
         assertEquals(1.0d, quote);
     }
 
     @Test
     void shouldConvertEURtoUSD() {
-        Map<String, Double> quotes = new HashMap<>();
-        quotes.put("USDGBP", 0.702050d);
-        quotes.put("USDEUR", 0.923318d);
+        Map<String, Double> quotes = Map.of("USDGBP",0.702050d, "USDEUR", 0.923318d);
         double quote = service.getQuote(quotes, "EUR", "USD");
         assertEquals(1.083050476650515d, quote);
     }

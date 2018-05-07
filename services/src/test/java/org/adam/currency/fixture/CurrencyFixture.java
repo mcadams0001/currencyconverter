@@ -12,5 +12,5 @@ public class CurrencyFixture {
     public static final Currency USD = new CurrencyBuilder().withCode("USD").withName("US Dollar").withCountry(CountryFixture.US).build();
     public static final Currency GBP = new CurrencyBuilder().withCode("GBP").withName("British Pound").withCountry(CountryFixture.UK).build();
 
-    public static final List<Currency> CURRENCIES = Collections.unmodifiableList(Arrays.asList(EUR, USD, GBP));
+    public static final List<Currency> CURRENCIES = List.of(EUR, USD, GBP);
 }

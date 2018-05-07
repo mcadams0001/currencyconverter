@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.validation.BindException;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -34,12 +34,12 @@ class UserCommandValidatorTest {
 
     @Test
     void testSupports() {
-        assertEquals(true, validator.supports(UserCommand.class));
+        assertTrue(validator.supports(UserCommand.class));
     }
 
     @Test
     void shouldFailSupports() {
-        assertEquals(false, validator.supports(User.class));
+        assertFalse(validator.supports(User.class));
     }
 
 
@@ -51,7 +51,7 @@ class UserCommandValidatorTest {
         validator.validate(command, errors);
         verify(mockUserService).findUserByName(command.getName());
         verify(mockCountryService).findByCode(command.getCountry());
-        assertEquals(false, errors.hasErrors());
+        assertFalse(errors.hasErrors());
     }
 
     @Test
@@ -64,7 +64,7 @@ class UserCommandValidatorTest {
         verify(mockUserService).findUserByName(command.getName());
         verify(mockCountryService).findByCode(command.getCountry());
         assertEquals(1, errors.getErrorCount());
-        assertEquals(true, errors.hasFieldErrors("name"));
+        assertTrue(errors.hasFieldErrors("name"));
         assertEquals("error.name.already.exists", errors.getFieldError("name").getCode());
     }
 
@@ -78,7 +78,7 @@ class UserCommandValidatorTest {
         verify(mockUserService, never()).findUserByName(command.getName());
         verify(mockCountryService).findByCode(command.getCountry());
         assertEquals(1, errors.getErrorCount());
-        assertEquals(true, errors.hasFieldErrors("name"));
+        assertTrue(errors.hasFieldErrors("name"));
         assertEquals("error.blank", errors.getFieldError("name").getCode());
     }
 
@@ -93,7 +93,7 @@ class UserCommandValidatorTest {
         verify(mockUserService).findUserByName(command.getName());
         verify(mockCountryService).findByCode(command.getCountry());
         assertEquals(1, errors.getErrorCount());
-        assertEquals(true, errors.hasFieldErrors("password"));
+        assertTrue(errors.hasFieldErrors("password"));
         assertEquals("error.blank", errors.getFieldError("password").getCode());
     }
 
@@ -108,7 +108,7 @@ class UserCommandValidatorTest {
         verify(mockUserService).findUserByName(command.getName());
         verify(mockCountryService).findByCode(command.getCountry());
         assertEquals(1, errors.getErrorCount());
-        assertEquals(true, errors.hasFieldErrors("password"));
+        assertTrue(errors.hasFieldErrors("password"));
         assertEquals("error.password.too.short", errors.getFieldError("password").getCode());
     }
 
@@ -123,7 +123,7 @@ class UserCommandValidatorTest {
         verify(mockUserService).findUserByName(command.getName());
         verify(mockCountryService).findByCode(command.getCountry());
         assertEquals(1, errors.getErrorCount());
-        assertEquals(true, errors.hasFieldErrors("repeatPassword"));
+        assertTrue(errors.hasFieldErrors("repeatPassword"));
         assertEquals("error.repeated.password.different", errors.getFieldError("repeatPassword").getCode());
     }
 
@@ -139,9 +139,9 @@ class UserCommandValidatorTest {
         verify(mockUserService).findUserByName(command.getName());
         verify(mockCountryService).findByCode(command.getCountry());
         assertEquals(2, errors.getErrorCount());
-        assertEquals(true, errors.hasFieldErrors("firstName"));
+        assertTrue(errors.hasFieldErrors("firstName"));
         assertEquals("error.blank", errors.getFieldError("firstName").getCode());
-        assertEquals(true, errors.hasFieldErrors("lastName"));
+        assertTrue(errors.hasFieldErrors("lastName"));
         assertEquals("error.blank", errors.getFieldError("lastName").getCode());
     }
 
@@ -155,7 +155,7 @@ class UserCommandValidatorTest {
         verify(mockUserService).findUserByName(command.getName());
         verify(mockCountryService).findByCode(command.getCountry());
         assertEquals(1, errors.getErrorCount());
-        assertEquals(true, errors.hasFieldErrors("email"));
+        assertTrue(errors.hasFieldErrors("email"));
         assertEquals("error.blank", errors.getFieldError("email").getCode());
     }
 
@@ -169,7 +169,7 @@ class UserCommandValidatorTest {
         verify(mockUserService).findUserByName(command.getName());
         verify(mockCountryService).findByCode(command.getCountry());
         assertEquals(1, errors.getErrorCount());
-        assertEquals(true, errors.hasFieldErrors("email"));
+        assertTrue(errors.hasFieldErrors("email"));
         assertEquals("error.email.not.valid", errors.getFieldError("email").getCode());
     }
 
@@ -183,7 +183,7 @@ class UserCommandValidatorTest {
         verify(mockUserService).findUserByName(command.getName());
         verify(mockCountryService).findByCode(command.getCountry());
         assertEquals(1, errors.getErrorCount());
-        assertEquals(true, errors.hasFieldErrors("birthDate"));
+        assertTrue(errors.hasFieldErrors("birthDate"));
         assertEquals("error.blank", errors.getFieldError("birthDate").getCode());
     }
 
@@ -197,7 +197,7 @@ class UserCommandValidatorTest {
         verify(mockUserService).findUserByName(command.getName());
         verify(mockCountryService).findByCode(command.getCountry());
         assertEquals(1, errors.getErrorCount());
-        assertEquals(true, errors.hasFieldErrors("birthDate"));
+        assertTrue(errors.hasFieldErrors("birthDate"));
         assertEquals("error.invalid.date.format", errors.getFieldError("birthDate").getCode());
     }
 
@@ -212,7 +212,7 @@ class UserCommandValidatorTest {
         verify(mockUserService).findUserByName(command.getName());
         verify(mockCountryService).findByCode(command.getCountry());
         assertEquals(1, errors.getErrorCount());
-        assertEquals(true, errors.hasFieldErrors("street"));
+        assertTrue(errors.hasFieldErrors("street"));
         assertEquals("error.blank", errors.getFieldError("street").getCode());
     }
 
@@ -226,7 +226,7 @@ class UserCommandValidatorTest {
         verify(mockUserService).findUserByName(command.getName());
         verify(mockCountryService).findByCode(command.getCountry());
         assertEquals(1, errors.getErrorCount());
-        assertEquals(true, errors.hasFieldErrors("city"));
+        assertTrue(errors.hasFieldErrors("city"));
         assertEquals("error.blank", errors.getFieldError("city").getCode());
     }
 
@@ -239,7 +239,7 @@ class UserCommandValidatorTest {
         verify(mockUserService).findUserByName(command.getName());
         verify(mockCountryService, never()).findByCode(command.getCountry());
         assertEquals(1, errors.getErrorCount());
-        assertEquals(true, errors.hasFieldErrors("country"));
+        assertTrue(errors.hasFieldErrors("country"));
         assertEquals("error.select.value", errors.getFieldError("country").getCode());
     }
 
@@ -253,7 +253,7 @@ class UserCommandValidatorTest {
         verify(mockUserService).findUserByName(command.getName());
         verify(mockCountryService).findByCode(command.getCountry());
         assertEquals(1, errors.getErrorCount());
-        assertEquals(true, errors.hasFieldErrors("country"));
+        assertTrue(errors.hasFieldErrors("country"));
         assertEquals("error.select.value", errors.getFieldError("country").getCode());
     }
 
@@ -267,7 +267,7 @@ class UserCommandValidatorTest {
         verify(mockUserService).findUserByName(command.getName());
         verify(mockCountryService).findByCode(command.getCountry());
         assertEquals(1, errors.getErrorCount());
-        assertEquals(true, errors.hasFieldErrors("postCode"));
+        assertTrue(errors.hasFieldErrors("postCode"));
         assertEquals("error.blank", errors.getFieldError("postCode").getCode());
     }
 
@@ -281,7 +281,7 @@ class UserCommandValidatorTest {
         verify(mockUserService).findUserByName(command.getName());
         verify(mockCountryService).findByCode(command.getCountry());
         assertEquals(1, errors.getErrorCount());
-        assertEquals(true, errors.hasFieldErrors("postCode"));
+        assertTrue(errors.hasFieldErrors("postCode"));
         assertEquals("error.invalid.postCode", errors.getFieldError("postCode").getCode());
     }
 
@@ -295,7 +295,7 @@ class UserCommandValidatorTest {
         verify(mockUserService).findUserByName(command.getName());
         verify(mockCountryService, never()).findByCode(command.getCountry());
         assertEquals(1, errors.getErrorCount());
-        assertEquals(true, errors.hasFieldErrors("country"));
+        assertTrue(errors.hasFieldErrors("country"));
         assertEquals("error.select.value", errors.getFieldError("country").getCode());
     }
 
@@ -310,7 +310,7 @@ class UserCommandValidatorTest {
         verify(mockUserService).findUserByName(command.getName());
         verify(mockCountryService).findByCode(command.getCountry());
         assertEquals(1, errors.getErrorCount());
-        assertEquals(true, errors.hasFieldErrors("country"));
+        assertTrue(errors.hasFieldErrors("country"));
         assertEquals("error.select.value", errors.getFieldError("country").getCode());
     }
 
