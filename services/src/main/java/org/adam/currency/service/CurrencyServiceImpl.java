@@ -24,6 +24,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
@@ -163,14 +164,16 @@ public class CurrencyServiceImpl implements CurrencyService {
     }
 
     double getQuote(Map<String, Double> quotes, String currencyFrom, String currencyTo) {
-        if (!isUSD(currencyFrom) && !isUSD(currencyTo)) {
-            return new BigDecimal(quotes.get("USD" + currencyTo)).divide(new BigDecimal(quotes.get("USD" + currencyFrom)), 9, BigDecimal.ROUND_CEILING).doubleValue();
+        Double currencyFromValue = quotes.get("USD" + currencyFrom);
+        Double currencyToValue = quotes.get("USD" + currencyTo);
+        if (!isUSD(currencyFrom) && !isUSD(currencyTo) && currencyFromValue != null && currencyToValue != null) {
+            return BigDecimal.valueOf(currencyToValue).divide(BigDecimal.valueOf(currencyFromValue), 9, RoundingMode.CEILING).doubleValue();
         } else if (isUSD(currencyFrom) && isUSD(currencyTo)) {
             return 1.0d;
-        } else if (isUSD(currencyFrom)) {
-            return quotes.get("USD" + currencyTo);
+        } else if (isUSD(currencyFrom) && currencyToValue != null) {
+            return currencyToValue;
         }
-        return 1.0 / quotes.get("USD" + currencyFrom);
+        return currencyFromValue != null ? 1.0 / currencyFromValue : 0.0;
     }
 
     private boolean isUSD(String currencyFrom) {
@@ -178,7 +181,7 @@ public class CurrencyServiceImpl implements CurrencyService {
     }
 
 
-    double calculateResult(Double amount, Double quote) {
-        return new BigDecimal(amount).multiply(new BigDecimal(quote)).doubleValue();
+    double calculateResult(double amount, double quote) {
+        return BigDecimal.valueOf(amount).multiply(BigDecimal.valueOf(quote)).doubleValue();
     }
 }

@@ -34,6 +34,8 @@
         <sonar.organization>mcadams0001-github</sonar.organization>
         <sonar.exclusions>**/SecurityContextHelper*,**/common/**,**/js/jquery/**,**/js/handlebars/**</sonar.exclusions>
         <sonar.jacoco.reportPaths>${basedir}/target/jacoco.exec</sonar.jacoco.reportPaths>
+        <sonar.coverage.exclusions>**/*.js</sonar.coverage.exclusions>
+
     </properties>
 
     <profiles>
