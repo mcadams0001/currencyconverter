@@ -3,16 +3,18 @@ package org.adam.currency.helper;
 import com.fasterxml.jackson.core.JsonGenerator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
 import java.util.TimeZone;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
-import static org.mockito.MockitoAnnotations.initMocks;
 
+@ExtendWith(MockitoExtension.class)
 class LocalDateSerializerTest {
 
     @Mock
@@ -20,7 +22,6 @@ class LocalDateSerializerTest {
 
     @BeforeEach
     void setup() {
-        initMocks(this);
         TimeZone.setDefault(TimeZone.getTimeZone("GMT"));
     }
 

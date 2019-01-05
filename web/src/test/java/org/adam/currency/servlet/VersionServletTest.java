@@ -1,9 +1,10 @@
 package org.adam.currency.servlet;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Spy;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -15,8 +16,8 @@ import java.io.IOException;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
-import static org.mockito.MockitoAnnotations.initMocks;
 
+@ExtendWith(MockitoExtension.class)
 class VersionServletTest {
 
     @Spy
@@ -30,11 +31,6 @@ class VersionServletTest {
     private ServletOutputStream mockServletOutputStream;
     @Mock
     private ServletConfig mockServletConfig;
-
-    @BeforeEach
-    void setup() {
-        initMocks(this);
-    }
 
     @Test
     void getVersion() throws IOException, ServletException {

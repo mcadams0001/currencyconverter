@@ -13,25 +13,31 @@ import org.adam.currency.fixture.UserFixture;
 import org.adam.currency.repository.GenericRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.TimeZone;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyDouble;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.ArgumentMatchers.isA;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.*;
-import static org.mockito.MockitoAnnotations.initMocks;
 
+@ExtendWith(MockitoExtension.class)
 class CurrencyServiceImplTest {
 
     private static final String RESPONSE = "{\n" +
@@ -73,7 +79,6 @@ class CurrencyServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        initMocks(this);
         TimeZone.setDefault(TimeZone.getTimeZone("GMT"));
         ReflectionTestUtils.setField(service, "accessKey", "abcd");
     }
@@ -94,14 +99,14 @@ class CurrencyServiceImplTest {
         Currency currencyTo = CurrencyFixture.EUR;
         when(mockSettingService.getSetting(SettingField.CURRENCY_SERVICE_URL)).thenReturn(SettingFixture.CURRENCY_SERVICE_URL.getValue());
         when(mockRestTemplate.getForObject(anyString(), eq(String.class))).thenReturn(RESPONSE);
-        when(mockGenericRepository.findById(eq(Currency.class), eq("GBP"))).thenReturn(currencyFrom);
-        when(mockGenericRepository.findById(eq(Currency.class), eq("EUR"))).thenReturn(currencyTo);
+        doReturn(currencyFrom).when(mockGenericRepository).findById(eq(Currency.class), eq("GBP"));
+        doReturn(currencyTo).when(mockGenericRepository).findById(eq(Currency.class), eq("EUR"));
         CurrencyResponseDTO currencyResponse = service.convertCurrency(user, "GBP", "EUR", 120.0d, Optional.of(asOfDate));
         verify(mockSettingService).getSetting(SettingField.CURRENCY_SERVICE_URL);
-        verify(mockHistoryService).findRecent(isA(Currency.class), isA(Currency.class));
-        verify(mockHistoryService, never()).findBy(isA(Currency.class), isA(Currency.class), isA(LocalDate.class));
+        verify(mockHistoryService).findRecent(any(Currency.class), any(Currency.class));
+        verify(mockHistoryService, never()).findBy(any(Currency.class), any(Currency.class), any(LocalDate.class));
         verify(mockRestTemplate).getForObject(anyString(), eq(String.class));
-        verify(mockHistoryService).saveHistory(eq(user), eq(currencyFrom), eq(currencyTo), eq(120.0d), eq(asOfDate), isA(CurrencyResponse.class), eq(CallTypeEnum.WEB_SERVICE));
+        verify(mockHistoryService).saveHistory(eq(user), eq(currencyFrom), eq(currencyTo), eq(120.0d), eq(asOfDate), any(CurrencyResponse.class), eq(CallTypeEnum.WEB_SERVICE));
         assertEquals(1.315174133, currencyResponse.getQuote(), 0.0001);
         assertEquals(LocalDateTime.of(2016, 1, 30, 18, 54, 30), currencyResponse.getTimestamp());
         assertEquals(157.82089596, currencyResponse.getResult(), 0.0001);
@@ -116,15 +121,15 @@ class CurrencyServiceImplTest {
         LocalDate asOfDate = LocalDate.now();
         Currency currencyFrom = CurrencyFixture.GBP;
         Currency currencyTo = CurrencyFixture.EUR;
-        when(mockGenericRepository.findById(eq(Currency.class), eq("GBP"))).thenReturn(currencyFrom);
-        when(mockGenericRepository.findById(eq(Currency.class), eq("EUR"))).thenReturn(currencyTo);
-        when(mockHistoryService.findRecent(isA(Currency.class), isA(Currency.class))).thenReturn(HistoryFixture.GBP_EUR_2016_1_30);
+        doReturn(currencyFrom).when(mockGenericRepository).findById(eq(Currency.class), eq("GBP"));
+        doReturn(currencyTo).when(mockGenericRepository).findById(eq(Currency.class), eq("EUR"));
+        when(mockHistoryService.findRecent(any(Currency.class), any(Currency.class))).thenReturn(HistoryFixture.GBP_EUR_2016_1_30);
         CurrencyResponseDTO currencyResponse = service.convertCurrency(user, "GBP", "EUR", 120.0d, Optional.of(asOfDate));
-        verify(mockSettingService, never()).getSetting(isA(SettingField.class));
+        verify(mockSettingService, never()).getSetting(any(SettingField.class));
         verify(mockHistoryService).findRecent(currencyFrom, currencyTo);
-        verify(mockHistoryService, never()).findBy(isA(Currency.class), isA(Currency.class), isA(LocalDate.class));
+        verify(mockHistoryService, never()).findBy(any(Currency.class), any(Currency.class), any(LocalDate.class));
         verify(mockRestTemplate, never()).getForObject(anyString(), eq(String.class));
-        verify(mockHistoryService).saveHistory(eq(user), eq(currencyFrom), eq(currencyTo), eq(120.0d), eq(asOfDate), isA(CurrencyResponse.class), eq(CallTypeEnum.DATABASE));
+        verify(mockHistoryService).saveHistory(eq(user), eq(currencyFrom), eq(currencyTo), eq(120.0d), eq(asOfDate), any(CurrencyResponse.class), eq(CallTypeEnum.DATABASE));
         assertEquals(0.658443, currencyResponse.getQuote(), 0.000001);
         assertEquals(LocalDateTime.of(2016, 1, 30, 18, 54, 30), currencyResponse.getTimestamp());
         assertEquals(79.01316, currencyResponse.getResult(), 0.000001);
@@ -138,12 +143,12 @@ class CurrencyServiceImplTest {
     @Test
     void testConvertCurrencyFromDataBase() {
         LocalDate asOfDate = LocalDate.of(2016, 1, 30);
-        when(mockGenericRepository.findById(eq(Currency.class), eq("GBP"))).thenReturn(CurrencyFixture.GBP);
-        when(mockGenericRepository.findById(eq(Currency.class), eq("EUR"))).thenReturn(CurrencyFixture.EUR);
-        when(mockHistoryService.findBy(isA(Currency.class), isA(Currency.class), isA(LocalDate.class))).thenReturn(HistoryFixture.GBP_EUR_2016_1_30);
+        doReturn(CurrencyFixture.GBP).when(mockGenericRepository).findById(eq(Currency.class), eq("GBP"));
+        doReturn(CurrencyFixture.EUR).when(mockGenericRepository).findById(eq(Currency.class), eq("EUR"));
+        when(mockHistoryService.findBy(any(Currency.class), any(Currency.class), any(LocalDate.class))).thenReturn(HistoryFixture.GBP_EUR_2016_1_30);
         CurrencyResponseDTO currencyResponse = service.convertCurrency(user, "GBP", "EUR", 120.0d, Optional.of(asOfDate));
-        verify(mockHistoryService).findBy(isA(Currency.class), isA(Currency.class), isA(LocalDate.class));
-        verify(mockHistoryService).saveHistory(eq(user), eq(CurrencyFixture.GBP), eq(CurrencyFixture.EUR), eq(120.0d), eq(asOfDate), isA(CurrencyResponse.class), eq(CallTypeEnum.DATABASE));
+        verify(mockHistoryService).findBy(any(Currency.class), any(Currency.class), any(LocalDate.class));
+        verify(mockHistoryService).saveHistory(eq(user), eq(CurrencyFixture.GBP), eq(CurrencyFixture.EUR), eq(120.0d), eq(asOfDate), any(CurrencyResponse.class), eq(CallTypeEnum.DATABASE));
         verify(mockSettingService, never()).getSetting(SettingField.CURRENCY_SERVICE_URL);
         verify(mockRestTemplate, never()).getForObject(anyString(), eq(String.class));
         assertEquals(0.658443, currencyResponse.getQuote(), 0.000001);
@@ -157,12 +162,12 @@ class CurrencyServiceImplTest {
         LocalDate asOfDate = LocalDate.now();
         when(mockSettingService.getSetting(SettingField.CURRENCY_SERVICE_URL)).thenReturn(SettingFixture.CURRENCY_SERVICE_URL.getValue());
         when(mockRestTemplate.getForObject(anyString(), eq(String.class))).thenReturn(ERROR_RESPONSE);
-        when(mockGenericRepository.findById(eq(Currency.class), eq("GBP"))).thenReturn(CurrencyFixture.GBP);
-        when(mockGenericRepository.findById(eq(Currency.class), eq("EUR"))).thenReturn(CurrencyFixture.EUR);
+        doReturn(CurrencyFixture.GBP).when(mockGenericRepository).findById(eq(Currency.class), eq("GBP"));
+        doReturn(CurrencyFixture.EUR).when(mockGenericRepository).findById(eq(Currency.class), eq("EUR"));
         CurrencyResponseDTO currencyResponse = service.convertCurrency(user, "GBP", "EUR", 120.0d, Optional.of(asOfDate));
         verify(mockSettingService).getSetting(SettingField.CURRENCY_SERVICE_URL);
         verify(mockRestTemplate).getForObject(anyString(), eq(String.class));
-        verify(mockHistoryService, never()).saveHistory(isA(User.class), isA(Currency.class), isA(Currency.class), anyDouble(), isA(LocalDate.class), isA(CurrencyResponse.class), isA(CallTypeEnum.class));
+        verify(mockHistoryService, never()).saveHistory(any(User.class), any(Currency.class), any(Currency.class), anyDouble(), any(LocalDate.class), any(CurrencyResponse.class), any(CallTypeEnum.class));
         assertNull(currencyResponse.getQuote());
         assertNull(currencyResponse.getTimestamp());
         assertNull(currencyResponse.getResult());
@@ -175,8 +180,8 @@ class CurrencyServiceImplTest {
         LocalDate asOfDate = LocalDate.now();
         when(mockSettingService.getSetting(SettingField.CURRENCY_SERVICE_URL)).thenReturn(SettingFixture.CURRENCY_SERVICE_URL.getValue());
         when(mockRestTemplate.getForObject(anyString(), eq(String.class))).thenThrow(new RestClientException("Call failure"));
-        when(mockGenericRepository.findById(eq(Currency.class), eq("GBP"))).thenReturn(CurrencyFixture.GBP);
-        when(mockGenericRepository.findById(eq(Currency.class), eq("EUR"))).thenReturn(CurrencyFixture.EUR);
+        doReturn(CurrencyFixture.GBP).when(mockGenericRepository).findById(eq(Currency.class), eq("GBP"));
+        doReturn(CurrencyFixture.EUR).when(mockGenericRepository).findById(eq(Currency.class), eq("EUR"));
         CurrencyResponseDTO currencyResponse = service.convertCurrency(user, "GBP", "EUR", 120.0d, Optional.of(asOfDate));
         verify(mockSettingService).getSetting(SettingField.CURRENCY_SERVICE_URL);
         verify(mockRestTemplate).getForObject(anyString(), eq(String.class));
@@ -199,41 +204,24 @@ class CurrencyServiceImplTest {
         assertEquals(CurrencyServiceImpl.MSG_INVALID_RESPONSE, response.getError().getInfo());
     }
 
-    @Test
-    void shouldConvertCurrencyWhenNoneAreUSD() {
-        Map<String, Double> quotes = Map.of("USDGBP",0.702050d, "USDEUR", 0.923318d);
-        double quote = service.getQuote(quotes, "GBP", "EUR");
-        assertEquals(1.315174133, quote);
+    @ParameterizedTest
+    @MethodSource(value = "currencySource")
+    void shouldConvertCurrency(String currencyFrom, String currencyTo, double expectedQuote) {
+        Map<String, Double> quotes = Map.of("USDGBP", 0.702050d, "USDEUR", 0.923318d);
+        double quote = service.getQuote(quotes, currencyFrom, currencyTo);
+        assertEquals(expectedQuote, quote);
     }
 
-    @Test
-    void shouldConvertCurrencyWhenSourceIsUSD() {
-        Map<String, Double> quotes = Map.of("USDGBP",0.702050d, "USDEUR", 0.923318d);
-        double quote = service.getQuote(quotes, "USD", "EUR");
-        assertEquals(0.923318d, quote);
+    private static Stream<Arguments> currencySource() {
+        return Stream.of(
+                Arguments.of("GBP","EUR",1.315174133),
+                Arguments.of("USD","EUR",0.923318),
+                Arguments.of("EUR","USD",1 / 0.923318d),
+                Arguments.of("USD","USD",1.0d),
+                Arguments.of("EUR","USD",1.083050476650515d)
+        );
     }
-
-    @Test
-    void shouldConvertCurrencyWhenTargetIsUSD() {
-        Map<String, Double> quotes = Map.of("USDGBP",0.702050d, "USDEUR", 0.923318d);
-        double quote = service.getQuote(quotes, "EUR", "USD");
-        assertEquals(1 / 0.923318d, quote);
-    }
-
-    @Test
-    void shouldNotConfertIfBothAreUSD() {
-        Map<String, Double> quotes = Map.of("USDGBP",0.702050d, "USDEUR", 0.923318d);
-        double quote = service.getQuote(quotes, "USD", "USD");
-        assertEquals(1.0d, quote);
-    }
-
-    @Test
-    void shouldConvertEURtoUSD() {
-        Map<String, Double> quotes = Map.of("USDGBP",0.702050d, "USDEUR", 0.923318d);
-        double quote = service.getQuote(quotes, "EUR", "USD");
-        assertEquals(1.083050476650515d, quote);
-    }
-
+    
     @Test
     void getErrorIfHistoryIsNotAvailable() {
         CurrencyResponse response = service.getResultForPastDaysFromDatabase(user, 100.0d, LocalDate.of(2016, 4, 30), CurrencyFixture.GBP, CurrencyFixture.EUR);

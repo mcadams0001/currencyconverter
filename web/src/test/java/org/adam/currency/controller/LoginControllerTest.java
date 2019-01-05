@@ -5,10 +5,9 @@ import org.adam.currency.common.ViewName;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.servlet.ModelAndView;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
- class LoginControllerTest {
+class LoginControllerTest {
 
     private LoginController controller = new LoginController();
 
@@ -17,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
         ModelAndView mav = controller.displayLoginPage(null);
         assertNotNull(mav);
         assertEquals(ViewName.LOGIN.getName(), mav.getViewName());
-        assertEquals(false, mav.getModel().containsKey(Parameters.ERROR.getName()));
+        assertFalse(mav.getModel().containsKey(Parameters.ERROR.getName()));
     }
 
     @Test

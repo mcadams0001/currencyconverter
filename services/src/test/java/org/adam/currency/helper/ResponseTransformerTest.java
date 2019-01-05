@@ -25,7 +25,7 @@ class ResponseTransformerTest {
     }
 
     @Test
-    void shouldTransformNullResponseToEmptyCurrencyDTO() throws Exception {
+    void shouldTransformNullResponseToEmptyCurrencyDTO() {
         assertEquals(new CurrencyResponseDTO(), new ResponseTransformer().apply(null));
     }
 

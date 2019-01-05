@@ -17,8 +17,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 class UserDetailsImplTest {
 
@@ -53,22 +52,22 @@ class UserDetailsImplTest {
 
     @Test
     void testIsAccountNonExpired() {
-        assertEquals(true, userDetails.isAccountNonExpired());
+        assertTrue(userDetails.isAccountNonExpired());
     }
 
     @Test
     void testIsAccountNonLocked() {
-        assertEquals(true, userDetails.isAccountNonLocked());
+        assertTrue(userDetails.isAccountNonLocked());
     }
 
     @Test
     void testIsCredentialsNonExpired() {
-        assertEquals(true, userDetails.isCredentialsNonExpired());
+        assertTrue(userDetails.isCredentialsNonExpired());
     }
 
     @Test
     void testIsEnabled() {
-        assertEquals(true, userDetails.isEnabled());
+        assertTrue(userDetails.isEnabled());
     }
 
     @Test

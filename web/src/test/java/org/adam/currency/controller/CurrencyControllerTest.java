@@ -12,14 +12,16 @@ import org.adam.currency.dto.UserDTO;
 import org.adam.currency.fixture.CurrencyFixture;
 import org.adam.currency.fixture.HistoryFixture;
 import org.adam.currency.fixture.UserFixture;
+import org.adam.currency.helper.AuthenticationHelper;
 import org.adam.currency.helper.HttpServletHelper;
-import org.adam.currency.security.UserDetailsImpl;
 import org.adam.currency.service.CurrencyService;
 import org.adam.currency.service.HistoryService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -35,13 +37,10 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyDouble;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.isA;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
-import static org.mockito.MockitoAnnotations.initMocks;
 
+@ExtendWith(MockitoExtension.class)
 class CurrencyControllerTest {
 
     @InjectMocks
@@ -65,14 +64,12 @@ class CurrencyControllerTest {
 
     @BeforeEach
     void setUp() {
-        initMocks(this);
         ReflectionTestUtils.setField(controller, "httpServletHelper", new HttpServletHelper());
-        UserDetailsImpl userDetails = new UserDetailsImpl(user);
-        when(mockAuthentication.getPrincipal()).thenReturn(userDetails);
     }
 
     @Test
     void testDisplayCurrencies() {
+        AuthenticationHelper.setupPrincipalForUserDetails(user, mockAuthentication);
         ModelAndView mav = controller.displayCurrencies(mockAuthentication);
         assertNotNull(mav);
         assertEquals(ViewName.INDEX.getName(), mav.getViewName());
@@ -93,6 +90,7 @@ class CurrencyControllerTest {
 
     @Test
     void testConvert() {
+        AuthenticationHelper.setupPrincipalForUserDetails(user, mockAuthentication);
         CurrencyCommand command = new CurrencyCommand();
         command.setFrom("GBP");
         command.setTo("EUR");
@@ -100,7 +98,7 @@ class CurrencyControllerTest {
         command.setDate(LocalDate.of(2016, 1, 30));
         CurrencyResponseDTO response = new CurrencyDTOBuilder().withSuccess(true).withResult(125.50d).withQuote(0.7d).withTimestamp(LocalDateTime.of(2016, 1, 30, 19, 14, 30)).build();
         when(mockCurrencyService.findAll()).thenReturn(CurrencyFixture.CURRENCIES);
-        when(mockCurrencyService.convertCurrency(isA(User.class), anyString(), anyString(), anyDouble(), any())).thenReturn(response);
+        when(mockCurrencyService.convertCurrency(any(User.class), anyString(), anyString(), anyDouble(), any())).thenReturn(response);
         ResponseEntity<String> responseEntity = controller.convert(mockAuthentication, command, mockRequest);
         verify(mockCurrencyService).convertCurrency(user, command.getFrom(), command.getTo(), Double.parseDouble(command.getAmount()), Optional.of(command.getDate()));
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
@@ -109,6 +107,7 @@ class CurrencyControllerTest {
 
     @Test
     void testNotConvert() {
+        AuthenticationHelper.setupPrincipalForUserDetails(user, mockAuthentication);
         CurrencyController spyController = spy(controller);
         CurrencyCommand command = new CurrencyCommand();
         command.setFrom("GBP");
@@ -124,7 +123,8 @@ class CurrencyControllerTest {
 
     @Test
     void shouldGetHistory() {
-        when(mockHistoryService.findByUser(isA(User.class))).thenReturn(Collections.singletonList(HistoryFixture.GBP_EUR_2016_1_30));
+        AuthenticationHelper.setupPrincipalForUserDetails(user, mockAuthentication);
+        when(mockHistoryService.findByUser(any(User.class))).thenReturn(Collections.singletonList(HistoryFixture.GBP_EUR_2016_1_30));
         ResponseEntity<String> responseEntity = controller.displayHistory(mockAuthentication, mockRequest);
         verify(mockHistoryService).findByUser(user);
         assertEquals("{\r\n  \"viewName\" : \"currencyHistory\",\r\n  \"historyList\" : [ {\r\n    \"id\" : null,\r\n    \"currencyFrom\" : {\r\n      \"code\" : \"GBP\",\r\n      \"name\" : \"British Pound\",\r\n      \"country\" : \"United Kingdom\"\r\n    },\r\n    \"currencyTo\" : {\r\n      \"code\" : \"EUR\",\r\n      \"name\" : \"Euro\",\r\n      \"country\" : \"Germany\"\r\n    },\r\n    \"date\" : \"30-Jan-2016\",\r\n    \"rate\" : \"0.658443\",\r\n    \"timeStamp\" : \"30-Jan-2016 18:54:30\",\r\n    \"result\" : \"300.0\",\r\n    \"amount\" : \"200.0\"\r\n  } ]\r\n}".replace("\r\n", SEPARATOR), responseEntity.getBody());

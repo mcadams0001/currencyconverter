@@ -1,9 +1,10 @@
 package org.adam.currency.jmx;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.userdetails.User;
@@ -16,8 +17,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.mockito.MockitoAnnotations.initMocks;
 
+@ExtendWith(MockitoExtension.class)
 class StatusMBeanImplTest {
 
     @InjectMocks
@@ -25,11 +26,6 @@ class StatusMBeanImplTest {
 
     @Mock
     private SessionRegistry mockSessionRegistry;
-
-    @BeforeEach
-    void setup() {
-        initMocks(this);
-    }
 
     @Test
     void testGetCurrentActiveUsers() {

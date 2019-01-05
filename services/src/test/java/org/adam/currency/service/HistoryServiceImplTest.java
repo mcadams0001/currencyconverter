@@ -11,10 +11,11 @@ import org.adam.currency.fixture.CurrencyResponseFixture;
 import org.adam.currency.fixture.UserFixture;
 import org.adam.currency.repository.GenericRepository;
 import org.adam.currency.repository.HistoryRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -25,8 +26,8 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.mockito.MockitoAnnotations.initMocks;
 
+@ExtendWith(MockitoExtension.class)
 class HistoryServiceImplTest {
 
     @InjectMocks
@@ -40,11 +41,6 @@ class HistoryServiceImplTest {
 
     @Mock
     private SettingService mockSettingService;
-
-    @BeforeEach
-    void setup() {
-        initMocks(this);
-    }
 
     @Test
     void testFindBy() {

@@ -3,7 +3,9 @@ package org.adam.currency.helper;
 import com.fasterxml.jackson.core.JsonParser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 import java.util.TimeZone;
@@ -12,6 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
+@ExtendWith(MockitoExtension.class)
 class LocalDateTimeDeserializerTest {
 
     @Mock
@@ -19,7 +22,6 @@ class LocalDateTimeDeserializerTest {
 
     @BeforeEach
     void setUp() {
-        initMocks(this);
         TimeZone.setDefault(TimeZone.getTimeZone("GMT"));
     }
 

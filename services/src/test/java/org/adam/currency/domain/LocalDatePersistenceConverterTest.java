@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -16,7 +17,7 @@ class LocalDatePersistenceConverterTest {
     @Test
     void testConvertToDatabaseColumn() {
         Date date = converter.convertToDatabaseColumn(LocalDate.of(2015, 6, 18));
-        assertEquals(new GregorianCalendar(2015, 5, 18).getTime(), date);
+        assertEquals(new GregorianCalendar(2015, Calendar.JUNE, 18).getTime(), date);
     }
 
     @Test
@@ -27,7 +28,7 @@ class LocalDatePersistenceConverterTest {
 
     @Test
     void testConvertToEntityAttribute() {
-        LocalDate localDate = converter.convertToEntityAttribute(new Date(new GregorianCalendar(2015, 5, 18).getTime().getTime()));
+        LocalDate localDate = converter.convertToEntityAttribute(new Date(new GregorianCalendar(2015, Calendar.JUNE, 18).getTime().getTime()));
         assertEquals(LocalDate.of(2015, 6, 18), localDate);
     }
 

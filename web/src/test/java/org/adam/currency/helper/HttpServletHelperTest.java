@@ -4,9 +4,10 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import org.adam.currency.fixture.CurrencyFixture;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 
@@ -16,8 +17,8 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
-import static org.mockito.MockitoAnnotations.initMocks;
 
+@ExtendWith(MockitoExtension.class)
 class HttpServletHelperTest {
 
     private static final String SEPARATOR = System.getProperty("line.separator");
@@ -29,11 +30,6 @@ class HttpServletHelperTest {
 
     @Mock
     private ObjectWriter mockObjectMapper;
-
-    @BeforeEach
-    void setup() {
-        initMocks(this);
-    }
 
     @Test
     void createJsonResponseHeaders() {

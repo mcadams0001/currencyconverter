@@ -8,7 +8,9 @@ import org.adam.currency.service.CountryService;
 import org.adam.currency.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.validation.BindException;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -16,6 +18,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 
+@ExtendWith(MockitoExtension.class)
 class UserCommandValidatorTest {
 
     private UserCommandValidator validator;
@@ -28,7 +31,6 @@ class UserCommandValidatorTest {
 
     @BeforeEach
     void setup() {
-        initMocks(this);
         validator = new UserCommandValidator(mockUserService, mockCountryService);
     }
 

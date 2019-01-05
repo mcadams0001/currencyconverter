@@ -4,12 +4,13 @@ import org.adam.currency.builder.UserBuilder;
 import org.adam.currency.domain.User;
 import org.adam.currency.security.SecurityContextHelper;
 import org.adam.currency.security.UserDetailsImpl;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -19,8 +20,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.*;
-import static org.mockito.MockitoAnnotations.initMocks;
 
+@ExtendWith(MockitoExtension.class)
 class UserDetailsServiceImplTest {
     @InjectMocks
     @Spy
@@ -33,12 +34,6 @@ class UserDetailsServiceImplTest {
     private Authentication mockAuthentication;
     @Mock
     private SecurityContextHelper mockSecurityContextHelper;
-
-    @BeforeEach
-    void setup() {
-        initMocks(this);
-    }
-
 
     @Test
     void testLoadUserByUsername() {

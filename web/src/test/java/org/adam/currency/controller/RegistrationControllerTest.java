@@ -9,11 +9,12 @@ import org.adam.currency.fixture.CountryFixture;
 import org.adam.currency.fixture.UserFixture;
 import org.adam.currency.service.CountryService;
 import org.adam.currency.service.UserService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Validator;
@@ -24,8 +25,8 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-import static org.mockito.MockitoAnnotations.initMocks;
 
+@ExtendWith(MockitoExtension.class)
 class RegistrationControllerTest {
 
     @InjectMocks
@@ -42,11 +43,6 @@ class RegistrationControllerTest {
 
     @Mock
     private BindingResult mockBindResult;
-
-    @BeforeEach
-    void setup() {
-        initMocks(this);
-    }
 
     @Test
     void testShowForm() {
@@ -88,7 +84,7 @@ class RegistrationControllerTest {
         ArgumentCaptor<Validator> validatorArgumentCaptor = ArgumentCaptor.forClass(Validator.class);
         verify(mockWebDataBinder).addValidators(validatorArgumentCaptor.capture());
         Validator actualValidator = validatorArgumentCaptor.getValue();
-        assertEquals(true, actualValidator instanceof UserCommandValidator);
+        assertTrue(actualValidator instanceof UserCommandValidator);
     }
 
 

@@ -7,8 +7,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.TimeZone;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 class DateHelperTest {
 
@@ -39,9 +38,9 @@ class DateHelperTest {
 
     @Test
     void testIsCorrectDate() {
-        assertEquals(true, DateHelper.isCorrectDate("12-DEC-2015"));
-        assertEquals(false, DateHelper.isCorrectDate(null));
-        assertEquals(false, DateHelper.isCorrectDate("abc"));
+        assertTrue(DateHelper.isCorrectDate("12-DEC-2015"));
+        assertFalse(DateHelper.isCorrectDate(null));
+        assertFalse(DateHelper.isCorrectDate("abc"));
     }
 
     @Test
@@ -92,16 +91,16 @@ class DateHelperTest {
 
     @Test
     void shouldBeInThePast() {
-        assertEquals(true, DateHelper.isPastDate(LocalDate.of(2000, 1, 1)));
+        assertTrue(DateHelper.isPastDate(LocalDate.of(2000, 1, 1)));
     }
 
     @Test
     void todaysDateIsNotInThePast() {
-        assertEquals(false, DateHelper.isPastDate(LocalDate.now()));
+        assertFalse(DateHelper.isPastDate(LocalDate.now()));
     }
 
     @Test
     void nullIsTrueInThePast() {
-        assertEquals(true, DateHelper.isPastDate(null));
+        assertTrue(DateHelper.isPastDate(null));
     }
 }
