@@ -5,13 +5,16 @@ import org.adam.currency.fixture.CurrencyFixture;
 import org.adam.currency.service.CurrencyService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.validation.BindException;
+import org.springframework.validation.FieldError;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
-import static org.mockito.MockitoAnnotations.initMocks;
 
+@ExtendWith(MockitoExtension.class)
 class CurrencyCommandValidatorTest {
 
     @Mock
@@ -21,25 +24,24 @@ class CurrencyCommandValidatorTest {
 
     @BeforeEach
     void setUp() {
-        initMocks(this);
         validator = new CurrencyCommandValidator(mockCurrencyService);
-        when(mockCurrencyService.findAll()).thenReturn(CurrencyFixture.CURRENCIES);
     }
 
     @Test
     void testSupports() {
-        assertEquals(true, validator.supports(CurrencyCommand.class));
+        assertTrue(validator.supports(CurrencyCommand.class));
     }
 
     @Test
     void shouldFailSupports() {
-        assertEquals(false, validator.supports(User.class));
+        assertFalse(validator.supports(User.class));
     }
 
     @Test
     void testValidate() {
         CurrencyCommand command = createCurrencyCommand();
         BindException errors = new BindException(command, "command");
+        when(mockCurrencyService.findAll()).thenReturn(CurrencyFixture.CURRENCIES);
         validator.validate(command, errors);
         assertEquals(0, errors.getErrorCount());
     }
@@ -49,9 +51,12 @@ class CurrencyCommandValidatorTest {
         CurrencyCommand command = createCurrencyCommand();
         command.setAmount(null);
         BindException errors = new BindException(command, "command");
+        when(mockCurrencyService.findAll()).thenReturn(CurrencyFixture.CURRENCIES);
         validator.validate(command, errors);
         assertEquals(1, errors.getErrorCount());
-        assertEquals("error.blank", errors.getFieldError("amount").getCode());
+        FieldError amountError = errors.getFieldError("amount");
+        assertNotNull(amountError);
+        assertEquals("error.blank", amountError.getCode());
     }
 
     @Test
@@ -59,9 +64,12 @@ class CurrencyCommandValidatorTest {
         CurrencyCommand command = createCurrencyCommand();
         command.setAmount("abc");
         BindException errors = new BindException(command, "command");
+        when(mockCurrencyService.findAll()).thenReturn(CurrencyFixture.CURRENCIES);
         validator.validate(command, errors);
         assertEquals(1, errors.getErrorCount());
-        assertEquals("error.positive.numeric.value", errors.getFieldError("amount").getCode());
+        FieldError amountError = errors.getFieldError("amount");
+        assertNotNull(amountError);
+        assertEquals("error.positive.numeric.value", amountError.getCode());
     }
 
     @Test
@@ -71,7 +79,9 @@ class CurrencyCommandValidatorTest {
         BindException errors = new BindException(command, "command");
         validator.validate(command, errors);
         assertEquals(1, errors.getErrorCount());
-        assertEquals("error.select.currency", errors.getFieldError("from").getCode());
+        FieldError fromError = errors.getFieldError("from");
+        assertNotNull(fromError);
+        assertEquals("error.select.currency", fromError.getCode());
     }
 
     @Test
@@ -81,7 +91,9 @@ class CurrencyCommandValidatorTest {
         BindException errors = new BindException(command, "command");
         validator.validate(command, errors);
         assertEquals(1, errors.getErrorCount());
-        assertEquals("error.valid.currency", errors.getFieldError("from").getCode());
+        FieldError fromError = errors.getFieldError("from");
+        assertNotNull(fromError);
+        assertEquals("error.valid.currency", fromError.getCode());
     }
 
     @Test
@@ -89,9 +101,12 @@ class CurrencyCommandValidatorTest {
         CurrencyCommand command = createCurrencyCommand();
         command.setTo(null);
         BindException errors = new BindException(command, "command");
+        when(mockCurrencyService.findAll()).thenReturn(CurrencyFixture.CURRENCIES);
         validator.validate(command, errors);
         assertEquals(1, errors.getErrorCount());
-        assertEquals("error.select.currency", errors.getFieldError("to").getCode());
+        FieldError toError = errors.getFieldError("to");
+        assertNotNull(toError);
+        assertEquals("error.select.currency", toError.getCode());
     }
 
     @Test
@@ -99,9 +114,12 @@ class CurrencyCommandValidatorTest {
         CurrencyCommand command = createCurrencyCommand();
         command.setTo("AAA");
         BindException errors = new BindException(command, "command");
+        when(mockCurrencyService.findAll()).thenReturn(CurrencyFixture.CURRENCIES);
         validator.validate(command, errors);
         assertEquals(1, errors.getErrorCount());
-        assertEquals("error.valid.currency", errors.getFieldError("to").getCode());
+        FieldError toError = errors.getFieldError("to");
+        assertNotNull(toError);
+        assertEquals("error.valid.currency", toError.getCode());
     }
 
     @Test
@@ -109,9 +127,12 @@ class CurrencyCommandValidatorTest {
         CurrencyCommand command = createCurrencyCommand();
         command.setTo("GBP");
         BindException errors = new BindException(command, "command");
+        when(mockCurrencyService.findAll()).thenReturn(CurrencyFixture.CURRENCIES);
         validator.validate(command, errors);
         assertEquals(1, errors.getErrorCount());
-        assertEquals("error.select.diff.currencies", errors.getFieldError("to").getCode());
+        FieldError toError = errors.getFieldError("to");
+        assertNotNull(toError);
+        assertEquals("error.select.diff.currencies", toError.getCode());
     }
 
     private CurrencyCommand createCurrencyCommand() {

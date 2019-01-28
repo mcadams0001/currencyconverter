@@ -60,9 +60,7 @@ class UserDetailsServiceImplTest {
     @Test
     void shouldThrowExceptionOnNonExistingUser() {
         doReturn(null).when(service).getUserFromSession();
-        assertThrows(UsernameNotFoundException.class, () -> {
-            service.loadUserByUsername("test_user");
-        });
+        assertThrows(UsernameNotFoundException.class, () -> service.loadUserByUsername("test_user"));
     }
 
     @Test
