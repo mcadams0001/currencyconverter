@@ -8,6 +8,7 @@ import org.springframework.validation.Validator;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 import static java.util.stream.Collectors.toMap;
 
@@ -31,7 +32,7 @@ public class CurrencyCommandValidator implements Validator {
     public void validate(Object o, Errors errors) {
         CurrencyCommand command = (CurrencyCommand) o;
         List<Currency> currencies = currencyService.findAll();
-        Map<String, Currency> map = currencies.stream().collect(toMap(Currency::getCode, c -> c));
+        Map<String, Currency> map = currencies.stream().collect(toMap(Currency::getCode, Function.identity()));
         validateAmount(command.getAmount(), errors);
         if (validateCurrency(map, command.getFrom(), errors, "from") && validateCurrency(map, command.getTo(), errors, "to") && command.getFrom().equalsIgnoreCase(command.getTo())) {
             errors.rejectValue("to", "error.select.diff.currencies");
