@@ -4,7 +4,6 @@ import org.adam.currency.common.SettingField;
 import org.adam.currency.domain.Setting;
 import org.adam.currency.fixture.SettingFixture;
 import org.adam.currency.repository.GenericRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -14,7 +13,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.mockito.MockitoAnnotations.initMocks;
 
 @ExtendWith(MockitoExtension.class)
 class SettingServiceImplTest {
@@ -25,11 +23,6 @@ class SettingServiceImplTest {
     private GenericRepository mockGenericRepository;
 
     private static final String SERVICE_ADDRESS = "http://localhost:7001/api";
-
-    @BeforeEach
-    void setup() {
-        initMocks(this);
-    }
 
     @Test
     void testShouldGetTheConfiguredSettingValueForTheSettingTypePassedIn() {

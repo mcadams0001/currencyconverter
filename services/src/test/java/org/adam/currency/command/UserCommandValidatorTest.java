@@ -12,11 +12,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.validation.BindException;
+import org.springframework.validation.FieldError;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
-import static org.mockito.MockitoAnnotations.initMocks;
 
 @ExtendWith(MockitoExtension.class)
 class UserCommandValidatorTest {
@@ -65,9 +65,7 @@ class UserCommandValidatorTest {
         validator.validate(command, errors);
         verify(mockUserService).findUserByName(command.getName());
         verify(mockCountryService).findByCode(command.getCountry());
-        assertEquals(1, errors.getErrorCount());
-        assertTrue(errors.hasFieldErrors("name"));
-        assertEquals("error.name.already.exists", errors.getFieldError("name").getCode());
+        assertOneErrorFor(errors, 1, "name", "error.name.already.exists");
     }
 
     @Test
@@ -79,9 +77,7 @@ class UserCommandValidatorTest {
         validator.validate(command, errors);
         verify(mockUserService, never()).findUserByName(command.getName());
         verify(mockCountryService).findByCode(command.getCountry());
-        assertEquals(1, errors.getErrorCount());
-        assertTrue(errors.hasFieldErrors("name"));
-        assertEquals("error.blank", errors.getFieldError("name").getCode());
+        assertOneErrorFor(errors, 1, "name", "error.blank");
     }
 
     @Test
@@ -95,8 +91,9 @@ class UserCommandValidatorTest {
         verify(mockUserService).findUserByName(command.getName());
         verify(mockCountryService).findByCode(command.getCountry());
         assertEquals(1, errors.getErrorCount());
-        assertTrue(errors.hasFieldErrors("password"));
-        assertEquals("error.blank", errors.getFieldError("password").getCode());
+        FieldError fieldError = errors.getFieldError("password");
+        assertNotNull(fieldError);
+        assertEquals("error.blank", fieldError.getCode());
     }
 
     @Test
@@ -109,9 +106,7 @@ class UserCommandValidatorTest {
         validator.validate(command, errors);
         verify(mockUserService).findUserByName(command.getName());
         verify(mockCountryService).findByCode(command.getCountry());
-        assertEquals(1, errors.getErrorCount());
-        assertTrue(errors.hasFieldErrors("password"));
-        assertEquals("error.password.too.short", errors.getFieldError("password").getCode());
+        assertOneErrorFor(errors, 1, "password", "error.password.too.short");
     }
 
     @Test
@@ -124,9 +119,7 @@ class UserCommandValidatorTest {
         validator.validate(command, errors);
         verify(mockUserService).findUserByName(command.getName());
         verify(mockCountryService).findByCode(command.getCountry());
-        assertEquals(1, errors.getErrorCount());
-        assertTrue(errors.hasFieldErrors("repeatPassword"));
-        assertEquals("error.repeated.password.different", errors.getFieldError("repeatPassword").getCode());
+        assertOneErrorFor(errors, 1, "repeatPassword", "error.repeated.password.different");
     }
 
     @Test
@@ -140,11 +133,11 @@ class UserCommandValidatorTest {
         validator.validate(command, errors);
         verify(mockUserService).findUserByName(command.getName());
         verify(mockCountryService).findByCode(command.getCountry());
-        assertEquals(2, errors.getErrorCount());
-        assertTrue(errors.hasFieldErrors("firstName"));
-        assertEquals("error.blank", errors.getFieldError("firstName").getCode());
+        assertOneErrorFor(errors, 2, "firstName", "error.blank");
         assertTrue(errors.hasFieldErrors("lastName"));
-        assertEquals("error.blank", errors.getFieldError("lastName").getCode());
+        FieldError lastNameFieldError = errors.getFieldError("lastName");
+        assertNotNull(lastNameFieldError);
+        assertEquals("error.blank", lastNameFieldError.getCode());
     }
 
     @Test
@@ -156,9 +149,15 @@ class UserCommandValidatorTest {
         validator.validate(command, errors);
         verify(mockUserService).findUserByName(command.getName());
         verify(mockCountryService).findByCode(command.getCountry());
-        assertEquals(1, errors.getErrorCount());
-        assertTrue(errors.hasFieldErrors("email"));
-        assertEquals("error.blank", errors.getFieldError("email").getCode());
+        assertOneErrorFor(errors, 1, "email", "error.blank");
+    }
+
+    private void assertOneErrorFor(BindException errors, int i, String email, String s) {
+        assertEquals(i, errors.getErrorCount());
+        assertTrue(errors.hasFieldErrors(email));
+        FieldError fieldError = errors.getFieldError(email);
+        assertNotNull(fieldError);
+        assertEquals(s, fieldError.getCode());
     }
 
     @Test
@@ -170,9 +169,7 @@ class UserCommandValidatorTest {
         validator.validate(command, errors);
         verify(mockUserService).findUserByName(command.getName());
         verify(mockCountryService).findByCode(command.getCountry());
-        assertEquals(1, errors.getErrorCount());
-        assertTrue(errors.hasFieldErrors("email"));
-        assertEquals("error.email.not.valid", errors.getFieldError("email").getCode());
+        assertOneErrorFor(errors, 1, "email", "error.email.not.valid");
     }
 
     @Test
@@ -184,9 +181,7 @@ class UserCommandValidatorTest {
         validator.validate(command, errors);
         verify(mockUserService).findUserByName(command.getName());
         verify(mockCountryService).findByCode(command.getCountry());
-        assertEquals(1, errors.getErrorCount());
-        assertTrue(errors.hasFieldErrors("birthDate"));
-        assertEquals("error.blank", errors.getFieldError("birthDate").getCode());
+        assertOneErrorFor(errors, 1, "birthDate", "error.blank");
     }
 
     @Test
@@ -198,9 +193,7 @@ class UserCommandValidatorTest {
         validator.validate(command, errors);
         verify(mockUserService).findUserByName(command.getName());
         verify(mockCountryService).findByCode(command.getCountry());
-        assertEquals(1, errors.getErrorCount());
-        assertTrue(errors.hasFieldErrors("birthDate"));
-        assertEquals("error.invalid.date.format", errors.getFieldError("birthDate").getCode());
+        assertOneErrorFor(errors, 1, "birthDate", "error.invalid.date.format");
     }
 
 
@@ -213,9 +206,7 @@ class UserCommandValidatorTest {
         validator.validate(command, errors);
         verify(mockUserService).findUserByName(command.getName());
         verify(mockCountryService).findByCode(command.getCountry());
-        assertEquals(1, errors.getErrorCount());
-        assertTrue(errors.hasFieldErrors("street"));
-        assertEquals("error.blank", errors.getFieldError("street").getCode());
+        assertOneErrorFor(errors, 1, "street", "error.blank");
     }
 
     @Test
@@ -227,9 +218,7 @@ class UserCommandValidatorTest {
         validator.validate(command, errors);
         verify(mockUserService).findUserByName(command.getName());
         verify(mockCountryService).findByCode(command.getCountry());
-        assertEquals(1, errors.getErrorCount());
-        assertTrue(errors.hasFieldErrors("city"));
-        assertEquals("error.blank", errors.getFieldError("city").getCode());
+        assertOneErrorFor(errors, 1, "city", "error.blank");
     }
 
     @Test
@@ -240,9 +229,7 @@ class UserCommandValidatorTest {
         validator.validate(command, errors);
         verify(mockUserService).findUserByName(command.getName());
         verify(mockCountryService, never()).findByCode(command.getCountry());
-        assertEquals(1, errors.getErrorCount());
-        assertTrue(errors.hasFieldErrors("country"));
-        assertEquals("error.select.value", errors.getFieldError("country").getCode());
+        assertOneErrorFor(errors, 1, "country", "error.select.value");
     }
 
     @Test
@@ -254,9 +241,7 @@ class UserCommandValidatorTest {
         validator.validate(command, errors);
         verify(mockUserService).findUserByName(command.getName());
         verify(mockCountryService).findByCode(command.getCountry());
-        assertEquals(1, errors.getErrorCount());
-        assertTrue(errors.hasFieldErrors("country"));
-        assertEquals("error.select.value", errors.getFieldError("country").getCode());
+        assertOneErrorFor(errors, 1, "country", "error.select.value");
     }
 
     @Test
@@ -268,9 +253,7 @@ class UserCommandValidatorTest {
         validator.validate(command, errors);
         verify(mockUserService).findUserByName(command.getName());
         verify(mockCountryService).findByCode(command.getCountry());
-        assertEquals(1, errors.getErrorCount());
-        assertTrue(errors.hasFieldErrors("postCode"));
-        assertEquals("error.blank", errors.getFieldError("postCode").getCode());
+        assertOneErrorFor(errors, 1, "postCode", "error.blank");
     }
 
     @Test
@@ -282,9 +265,7 @@ class UserCommandValidatorTest {
         validator.validate(command, errors);
         verify(mockUserService).findUserByName(command.getName());
         verify(mockCountryService).findByCode(command.getCountry());
-        assertEquals(1, errors.getErrorCount());
-        assertTrue(errors.hasFieldErrors("postCode"));
-        assertEquals("error.invalid.postCode", errors.getFieldError("postCode").getCode());
+        assertOneErrorFor(errors, 1, "postCode", "error.invalid.postCode");
     }
 
     @Test
@@ -296,9 +277,7 @@ class UserCommandValidatorTest {
         validator.validate(command, errors);
         verify(mockUserService).findUserByName(command.getName());
         verify(mockCountryService, never()).findByCode(command.getCountry());
-        assertEquals(1, errors.getErrorCount());
-        assertTrue(errors.hasFieldErrors("country"));
-        assertEquals("error.select.value", errors.getFieldError("country").getCode());
+        assertOneErrorFor(errors, 1, "country", "error.select.value");
     }
 
     @Test
@@ -311,9 +290,7 @@ class UserCommandValidatorTest {
         validator.validate(command, errors);
         verify(mockUserService).findUserByName(command.getName());
         verify(mockCountryService).findByCode(command.getCountry());
-        assertEquals(1, errors.getErrorCount());
-        assertTrue(errors.hasFieldErrors("country"));
-        assertEquals("error.select.value", errors.getFieldError("country").getCode());
+        assertOneErrorFor(errors, 1, "country", "error.select.value");
     }
 
     @Test
